@@ -1,0 +1,20 @@
+<div class="w-100 header py-1 flex-center">
+    <img src="../assets/logo/logo_slogan_hd.png" alt="" style="height: 35px;">
+</div>
+
+<div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" (click)="interact()">
+</div>
+<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage()">Change image</button>
+
+<ng-container [ngSwitch]="selectedNavigation">
+    <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral left"
+        [position]="'left'" #nav_left (clicked)="syncLateralnavigations($event)"></app-navigation-lateral>
+    <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral right"
+        [position]="'right'" #nav_right (clicked)="syncLateralnavigations($event)"></app-navigation-lateral>
+    <app-navigation-inferior *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"
+        class="navigation bottom"></app-navigation-inferior>
+    <app-navigation-superior *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"
+        class="navigation top"></app-navigation-superior>
+</ng-container>
+
+<app-dynamic-footer></app-dynamic-footer>

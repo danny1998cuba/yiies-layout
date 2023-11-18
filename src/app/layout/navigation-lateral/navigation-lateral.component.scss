@@ -1,0 +1,8 @@
+.btn-translate {
+    transform: translateX(calc(120px * var(--nav-lat-position)));
+    transition: transform 200ms ease-in-out;
+
+    &.opened {
+        transform: translateX(0px);
+    }
+}
