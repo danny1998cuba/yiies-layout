@@ -1,28 +1,7 @@
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
-</div>
-<div class="btn btn-icon glass-btn p-1 btn-translate" style="--nav-lat-position: {{position === 'left' ? -1 : 1}}"
-    [ngClass]="{'opened': opened}" (click)="$event.stopPropagation()">
-    <img src="./assets/images/volvo.webp" alt="" class="h-100">
+<div class="d-flex flex-column-reverse w-100 btn-translate" [ngClass]="{'opened': opened}"
+    style="--nav-lat-position: {{position === 'left' ? -1 : 1}}">
+    <ng-container *ngFor="let m of _menu">
+        <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
+            *ngIf="m.show"></app-button-menu>
+    </ng-container>
 </div>

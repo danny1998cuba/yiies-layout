@@ -72,3 +72,14 @@
 
     &.bottom {}
 }
+
+.content {
+    position: absolute;
+    z-index: 2;
+    content: '';
+    width: calc(100% - 120px);
+    /* height: calc(100% - 98px); */
+    bottom: 55px;
+    left: 0;
+    margin: 0 60px;
+}

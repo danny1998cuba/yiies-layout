@@ -1,0 +1,41 @@
+:host {
+    position: relative;
+    margin: .25rem 0;
+    transform: translateY(0px);
+    transition: opacity 400ms 200ms, transform 200ms;
+
+    .main-icon {
+        height: 100%;
+        transition: all 200ms;
+    }
+
+    .collapse-wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.5s ease-out;
+    }
+
+    .options {
+        opacity: 0;
+        overflow: hidden;
+        transition: opacity 100ms;
+    }
+
+    &.ellapsed {
+        height: auto;
+        transform: translateY(calc(calc(45px + 0.5rem) * var(--index-btn)));
+
+        .collapse-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .options {
+            opacity: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-icon {
+            transform: scale(0.75);
+        }
+    }
+}

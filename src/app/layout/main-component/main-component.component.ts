@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChildren, AfterViewInit, AfterContentInit, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
+import { menu_example } from 'src/app/data/mock-data';
+import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 
 @Component({
   selector: 'app-main-component',
@@ -20,6 +22,10 @@ export class MainComponentComponent implements OnInit {
 
   @ViewChild('nav_left') navLeft!: NavigationLateralComponent
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
+  @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
+
+  // Menus
+  menus = menu_example
 
   constructor(
     private _route: ActivatedRoute,
@@ -54,5 +60,22 @@ export class MainComponentComponent implements OnInit {
     if (options.position === 'right' && options.opened && this.navLeft.isOpen) {
       this.navLeft.toggleOpen()
     }
+  }
+
+  syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }) {
+    if (options.src === 'left') this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+    if (options.src === 'right') this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+  }
+
+  toggleVisibilityOnCollapse(token: string) {
+    console.log('expanding', token);
+
+    this.buttons.forEach((bt, index) => {
+      if (bt.buttonData.token !== token) {
+        bt.element.nativeElement.classList.add('opacity-0');
+      } else {
+
+      }
+    })
   }
 }
