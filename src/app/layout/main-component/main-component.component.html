@@ -1,20 +1,43 @@
+<!-- Begin::Header -->
 <div class="w-100 header py-1 flex-center">
     <img src="../assets/logo/logo_slogan_hd.png" alt="" style="height: 35px;">
 </div>
+<!-- End::Header -->
 
+<!-- Begin::Background -->
 <div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" (click)="interact()">
 </div>
-<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage()">Change image</button>
+<!-- End::Background -->
 
+<!-- Begin::Navigation -->
 <ng-container [ngSwitch]="selectedNavigation">
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral left"
-        [position]="'left'" #nav_left (clicked)="syncLateralnavigations($event)"></app-navigation-lateral>
+        [position]="'left'" #nav_left (clicked)="syncLateralnavigations($event)"
+        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"></app-navigation-lateral>
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral right"
-        [position]="'right'" #nav_right (clicked)="syncLateralnavigations($event)"></app-navigation-lateral>
+        [position]="'right'" #nav_right (clicked)="syncLateralnavigations($event)"
+        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"></app-navigation-lateral>
     <app-navigation-inferior *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"
         class="navigation bottom"></app-navigation-inferior>
     <app-navigation-superior *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"
         class="navigation top"></app-navigation-superior>
 </ng-container>
+<!-- End::Navigation -->
 
+<!-- Begin::Content -->
+<div class="content" [ngSwitch]="selectedNavigation">
+    <ng-container *ngSwitchCase="NAVIGATION_POSITION.LATERAL">
+        <!-- <div class="d-flex flex-column-reverse align-items-center w-100">
+            <app-button-menu *ngFor="let menu of menus" [button-data]="menu"
+                (expanding)="toggleVisibilityOnCollapse($event)"></app-button-menu>
+        </div> -->
+    </ng-container>
+    <ng-container *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"></ng-container>
+    <ng-container *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"></ng-container>
+</div>
+<!-- End::Content -->
+
+<!-- Begin::Footer -->
+<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage()">Change image</button>
 <app-dynamic-footer></app-dynamic-footer>
+<!-- End::Footer -->

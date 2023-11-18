@@ -9,7 +9,7 @@ body {
 .flex-center {
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .glass-btn {
@@ -23,7 +23,14 @@ body {
 
     display: flex;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
+}
+
+.glass {
+    background: rgba(230, 230, 230, .35);
+    backdrop-filter: blur(6px);
+    border: none;
+    outline: none;
 }
 
 .custom-footer {
@@ -34,5 +41,117 @@ body {
     left: 0;
     height: 55px;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
+}
+
+// Font Sizes
+$font-size-base: 1rem !default; // Assumes the browser default, typically `13px`
+$font-size-lg: $font-size-base * 1.075 !default; // 14.04px
+$font-size-sm: $font-size-base * .925 !default; // 12.025px
+
+$h1-font-size: $font-size-base * 1.75 !default; // 22.75px
+$h2-font-size: $font-size-base * 1.5 !default; // 19.50px
+$h3-font-size: $font-size-base * 1.35 !default; // 17.55px
+$h4-font-size: $font-size-base * 1.25 !default; // 16.25px
+$h5-font-size: $font-size-base * 1.15 !default; // 14.95px
+$h6-font-size: $font-size-base * 1.075 !default; // 13.97px
+
+$font-sizes: (
+    1: $h1-font-size,
+    // 22.75px
+    2: $h2-font-size,
+    // 19.50px
+    3: $h3-font-size,
+    // 17.55px
+    4: $h4-font-size,
+    // 16.25px
+    5: $h5-font-size,
+    // 14.95px
+    6: $h6-font-size,
+    // 13.95px
+
+    7: $font-size-base * 0.95,
+    // 12.35px
+    8: $font-size-base * 0.85,
+    // 11.05px
+    9: $font-size-base * 0.75,
+    // 9.75px
+    10: $font-size-base * 0.5,
+    // 6.50px
+
+    base: $font-size-base,
+    // 13px
+    fluid: 100%,
+    // 100%
+
+    2x: $font-size-base * 2,
+    // 26px
+    2qx: $font-size-base * 2.25,
+    // 29.25px
+    2hx: $font-size-base * 2.5,
+    // 32.5px
+    2tx: $font-size-base * 2.75,
+    // 35.75px
+
+    3x: $font-size-base * 3,
+    // 39px
+    3qx: $font-size-base * 3.25,
+    // 42.25px
+    3hx: $font-size-base * 3.5,
+    // 45.5px
+    3tx: $font-size-base * 3.75,
+    // 48.75px
+
+    4x: $font-size-base * 4,
+    // 52px
+    4qx: $font-size-base * 4.25,
+    // 55.25px
+    4hx: $font-size-base * 4.5,
+    // 58.5px
+    4tx: $font-size-base * 4.75,
+    // 61.75px
+
+    5x: $font-size-base * 5,
+    // 65px
+    5qx: $font-size-base * 5.25,
+    // 68.25px
+    5hx: $font-size-base * 5.5,
+    // 71.5px
+    5tx: $font-size-base * 5.75 // 74.75px
+    ) !default;
+
+// icons
+.svg-icon {
+    line-height: 1;
+
+    @each $name, $value in $font-sizes {
+        &.svg-icon-#{$name} {
+            svg {
+                height: $value !important;
+                width: $value !important;
+            }
+        }
+    }
+
+    &.svg-icon-orange {
+        color: var(--kt-yiies-orange
+        );
+}
+
+&.svg-icon-blue-yiies {
+    color: var(--kt-blue-yiies);
+}
+
+&.svg-icon-blue-madu {
+    color: var(--kt-blue-madu);
+}
+}
+
+:root {
+    --kt-blue-yiies: #00b7ff;
+    --kt-blue-yiies-light: #bdecff;
+    --kt-blue-madu: #0052a4;
+    --kt-blue-madu-light: #bdecff;
+    --kt-yiies-orange: #ff5e00;
+    --kt-yiies-orange-light: rgb(255, 218, 196);
 }

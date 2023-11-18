@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +9,9 @@ import { NavigationLateralComponent } from './layout/navigation-lateral/navigati
 import { NavigationSuperiorComponent } from './layout/navigation-superior/navigation-superior.component';
 import { NavigationInferiorComponent } from './layout/navigation-inferior/navigation-inferior.component';
 import { MainComponentComponent } from './layout/main-component/main-component.component';
+import { IconComponent } from './components/icon/icon.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonMenuComponent } from './components/button-menu/button-menu.component';
 
 @NgModule({
   declarations: [
@@ -16,11 +20,15 @@ import { MainComponentComponent } from './layout/main-component/main-component.c
     NavigationLateralComponent,
     NavigationSuperiorComponent,
     NavigationInferiorComponent,
-    MainComponentComponent
+    MainComponentComponent,
+    IconComponent,
+    ButtonMenuComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
