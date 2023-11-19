@@ -3914,26 +3914,31 @@ export const menu_example: IButtonMenuData[] = [
             {
                 icon: 'gridFill',   // Change icon
                 token: 'menu-location',
+                name: 'Menu Location',
                 show: true, index: 0
             },
             {
                 icon: 'gridFill',   // Change icon
                 token: 'gestures',
+                name: 'Gestures',
                 show: true, index: 1
             },
             {
                 icon: 'adExtend',   // Change icon
-                token: 'posting-position',
+                token: 'posting-position',                
+                name: 'Posting Options',
                 show: true, index: 2
             },
             {
                 icon: 'settings',
                 token: 'settings1',
+                name: 'Setting A',
                 show: true, index: 3
             },
             {
                 icon: 'settings',
                 token: 'settings2',
+                name: 'Setting B',
                 show: true, index: 4
             }
         ]

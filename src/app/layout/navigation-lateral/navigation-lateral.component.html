@@ -2,6 +2,6 @@
     style="--nav-lat-position: {{position === 'left' ? -1 : 1}}">
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
-            *ngIf="m.show"></app-button-menu>
+            [@hideMenu]="m.show ? 'opened-menu' : 'hidden-menu'"></app-button-menu>
     </ng-container>
 </div>

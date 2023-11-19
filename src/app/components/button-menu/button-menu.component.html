@@ -11,6 +11,7 @@
         }">
         <div *ngFor="let item of buttonData.subOptions">
             <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
+            <div class="text" *ngIf="!!item.name">{{item.name}}</div>
         </div>
     </div>
 </div>

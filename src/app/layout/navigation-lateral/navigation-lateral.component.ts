@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
+import { animations } from 'src/app/data/animations';
 
 @Component({
   selector: 'app-navigation-lateral',
   templateUrl: './navigation-lateral.component.html',
-  styleUrls: ['./navigation-lateral.component.scss']
+  styleUrls: ['./navigation-lateral.component.scss'],
+  animations: [animations]
 })
 export class NavigationLateralComponent implements OnInit {
   @HostListener('click', ['$event'])
@@ -46,9 +48,11 @@ export class NavigationLateralComponent implements OnInit {
     this.buttons.forEach(bt => {
       if (bt.buttonData.token !== options.token) {
         if (!options.isColladpsed) {
-          bt.element.nativeElement.classList.add('opacity-0')
+          // bt.element.nativeElement.classList.add('hidden-button')
+          bt.buttonData.show = false
         } else {
-          bt.element.nativeElement.classList.remove('opacity-0');
+          bt.buttonData.show = true
+          // bt.element.nativeElement.classList.remove('hidden-button');
         }
       }
     })

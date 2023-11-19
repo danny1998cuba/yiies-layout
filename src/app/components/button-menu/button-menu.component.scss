@@ -1,7 +1,6 @@
 :host {
     position: relative;
     margin: .25rem 0;
-    transform: translateY(0px);
     transition: opacity 400ms 200ms, transform 200ms;
 
     .main-icon {
@@ -12,18 +11,22 @@
     .collapse-wrapper {
         display: grid;
         grid-template-rows: 0fr;
-        transition: grid-template-rows 0.5s ease-out;
+        transition: grid-template-rows 0.5s;
     }
 
     .options {
         opacity: 0;
         overflow: hidden;
         transition: opacity 100ms;
+
+        .text {
+            font-size: .55rem;
+            font-weight: bold;
+        }
     }
 
     &.ellapsed {
         height: auto;
-        transform: translateY(calc(calc(45px + 0.5rem) * var(--index-btn)));
 
         .collapse-wrapper {
             grid-template-rows: 1fr;
@@ -37,5 +40,13 @@
         .main-icon {
             transform: scale(0.75);
         }
+    }
+
+    &.hidden-button {
+        height: 0px !important;
+        overflow: hidden;
+        min-height: 0px;
+        padding: 0;
+        margin: 0 !important;
     }
 }
