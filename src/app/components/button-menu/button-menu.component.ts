@@ -22,13 +22,15 @@ export class ButtonMenuComponent implements OnInit {
   @HostListener('click', ['$event'])
   click($event: PointerEvent) {
     $event.stopPropagation()
-    this.isAction ? this.action() : this.collapsed ? this.expand('click') : null
+    this.expand('click')
+    if (this.isAction) this.action(this.buttonData)
   }
 
   @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true }
   @Input() direction: 'vertical' | 'horizontal' = 'vertical'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
+  @Output() selectedAction: EventEmitter<IButtonMenuData> = new EventEmitter()
 
   isAction: boolean = true
   collapsed: boolean = true
@@ -46,8 +48,8 @@ export class ButtonMenuComponent implements OnInit {
     this.index = this.buttonData.index
   }
 
-  action() {
-    console.log('Action');
+  action(data: IButtonMenuData) {
+    this.selectedAction.emit(data)
   }
 
   expand(from: 'click' | 'remote') {

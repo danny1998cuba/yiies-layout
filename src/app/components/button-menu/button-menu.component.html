@@ -9,7 +9,7 @@
             'flex-row': direction === 'horizontal',
             'flex-column-reverse': direction === 'vertical'
         }">
-        <div *ngFor="let item of buttonData.subOptions">
+        <div *ngFor="let item of buttonData.subOptions" (click)="action(item)">
             <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
             <div class="text" *ngIf="!!item.name">{{item.name}}</div>
         </div>

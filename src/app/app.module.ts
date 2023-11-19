@@ -12,6 +12,7 @@ import { MainComponentComponent } from './layout/main-component/main-component.c
 import { IconComponent } from './components/icon/icon.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonMenuComponent } from './components/button-menu/button-menu.component';
+import { ActionPanelComponent } from './components/action-panel/action-panel.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ButtonMenuComponent } from './components/button-menu/button-menu.compon
     NavigationInferiorComponent,
     MainComponentComponent,
     IconComponent,
-    ButtonMenuComponent
+    ButtonMenuComponent,
+    ActionPanelComponent
   ],
   imports: [
     BrowserModule,

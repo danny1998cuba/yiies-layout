@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef } from '@angular/core';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
 
@@ -16,6 +16,7 @@ export class NavigationLateralComponent implements OnInit {
   }
   @HostListener('document:click') clickOut() {
     this.opened = false
+    this.toggleContent(null)
   }
 
   @Input() position: 'left' | 'right' = 'left'
@@ -35,24 +36,33 @@ export class NavigationLateralComponent implements OnInit {
     return this.opened
   }
 
-  constructor() { }
+  protected activeButton: IButtonMenuData | null = null
+
+  constructor(
+    private ref: ElementRef
+  ) { }
 
   ngOnInit(): void { }
 
   public toggleOpen() {
     this.opened = !this.opened
+    if (!this.opened) {
+      this.toggleContent(null)
+    }
     this.clicked.emit({ position: this.position, opened: this.opened })
   }
 
   toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote') {
+    if (options.isColladpsed) {
+      this.toggleContent(null)
+    }
+
     this.buttons.forEach(bt => {
       if (bt.buttonData.token !== options.token) {
         if (!options.isColladpsed) {
-          // bt.element.nativeElement.classList.add('hidden-button')
           bt.buttonData.show = false
         } else {
           bt.buttonData.show = true
-          // bt.element.nativeElement.classList.remove('hidden-button');
         }
       }
     })
@@ -69,5 +79,32 @@ export class NavigationLateralComponent implements OnInit {
     const button = this.buttons.find(bt => bt.buttonData.token === token)
     isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
     this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+  }
+
+  optionSelected(data: IButtonMenuData) {
+    if (!this.activeButton) {
+      this.toggleContent(data)
+    } else {
+      if (data.token !== this.activeButton.token) {
+        this.toggleContent(data)
+      } else {
+        this.toggleContent(null)
+      }
+    }
+  }
+
+  toggleContent(token: IButtonMenuData | null) {
+    if (!!token) {
+      this.ref.nativeElement.classList.remove('show-content')
+      setTimeout(() => {
+        this.activeButton = token
+        this.ref.nativeElement.classList.add('show-content')
+      }, 200);
+    } else {
+      this.ref.nativeElement.classList.remove('show-content')
+      setTimeout(() => {
+        this.activeButton = null
+      }, 200);
+    }
   }
 }
