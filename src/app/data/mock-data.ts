@@ -3793,201 +3793,275 @@ export const menu_example: IButtonMenuData[] = [
     {
         icon: 'yiies',
         token: 'functionalities',
-        show: true, index: 0,
+        show: true,
+        active: false,
+        index: 0,
         subOptions: [
             {
                 icon: 'tooliit',
                 token: 'tooliit',
-                show: true, index: 0
+                show: true,
+                active: false,
+                index: 0
             },
             {
                 icon: 'serviice',
                 token: 'serviice',
-                show: true, index: 1
+                show: true,
+                active: false,
+                index: 1
             },
             {
                 icon: 'pharmii',
                 token: 'pharmii',
-                show: true, index: 2
+                show: true,
+                active: false,
+                index: 2
             },
             {
                 icon: 'listiit',
                 token: 'listiit',
-                show: true, index: 3
+                show: true,
+                active: false,
+                index: 3
             },
             {
                 icon: 'yummii',
                 token: 'yummii',
-                show: true, index: 4
+                show: true,
+                active: false,
+                index: 4
             },
             {
                 icon: 'propertiiWelcomii',
                 token: 'welcomii',
-                show: true, index: 5
+                show: true,
+                active: false,
+                index: 5
             },
             {
                 icon: 'riidePiiople',
                 token: 'riidePiiople',
-                show: true, index: 6
+                show: true,
+                active: false,
+                index: 6
             },
             {
                 icon: 'riideThiings',
                 token: 'riideThiings',
-                show: true, index: 6
+                show: true,
+                active: false,
+                index: 6
             },
             {
                 icon: 'yoiin',
                 token: 'yoiin',
-                show: true, index: 7
+                show: true,
+                active: false,
+                index: 7
             }
         ]
     },
     {
         icon: 'other',
         token: 'other',
-        show: true, index: 1,
+        show: true,
+        active: false,
+        index: 1,
         subOptions: [
             {
                 icon: 'info',
                 token: 'info',
-                show: true, index: 0
+                show: true,
+                active: false,
+                index: 0
             },
             {
                 icon: 'editItem',
                 token: 'in',
-                show: true, index: 1
+                show: true,
+                active: false,
+                index: 1
             },
             {
                 icon: 'deleteItem',
                 token: 'out',
-                show: true, index: 2
+                show: true,
+                active: false,
+                index: 2
             },
             {
                 icon: 'text',
                 token: 'chat',
-                show: true, index: 3
+                show: true,
+                active: false,
+                index: 3
             },
             {
                 icon: 'share',
                 token: 'share',
-                show: true, index: 4
+                show: true,
+                active: false,
+                index: 4
             },
             {
                 icon: 'alertTriangle',
                 token: 'report',
-                show: true, index: 5
+                show: true,
+                active: false,
+                index: 5
             },
             {
                 icon: 'date',
                 token: 'calendar',
-                show: true, index: 6
+                show: true,
+                active: false,
+                index: 6
             }
         ]
     },
     {
         icon: 'addItem',
         token: 'posting',
-        show: true, index: 2,
+        show: true,
+        active: false,
+        index: 2,
         subOptions: [
             {
                 icon: 'addItem',
                 token: 'add',
-                show: true, index: 0
+                show: true,
+                active: false,
+                index: 0
             },
             {
                 icon: 'editItem',
                 token: 'edit',
-                show: true, index: 1
+                show: true,
+                active: false,
+                index: 1
             },
             {
                 icon: 'deleteItem',
                 token: 'delete',
-                show: true, index: 2
+                show: true,
+                active: false,
+                index: 2
             }
         ]
     },
     {
         icon: 'settings',
         token: 'settings',
-        show: true, index: 3,
+        show: true,
+        active: false,
+        index: 3,
         subOptions: [
             {
                 icon: 'gridFill',   // Change icon
                 token: 'menu-location',
                 name: 'Menu Location',
-                show: true, index: 0
+                show: true,
+                active: false,
+                index: 0
             },
             {
                 icon: 'gridFill',   // Change icon
                 token: 'gestures',
                 name: 'Gestures',
-                show: true, index: 1
+                show: true,
+                active: false,
+                index: 1
             },
             {
                 icon: 'adExtend',   // Change icon
-                token: 'posting-position',                
+                token: 'posting-position',
                 name: 'Posting Options',
-                show: true, index: 2
+                show: true,
+                active: false,
+                index: 2
             },
             {
                 icon: 'settings',
                 token: 'settings1',
                 name: 'Setting A',
-                show: true, index: 3
+                show: true,
+                active: false,
+                index: 3
             },
             {
                 icon: 'settings',
                 token: 'settings2',
                 name: 'Setting B',
-                show: true, index: 4
+                show: true,
+                active: false,
+                index: 4
             }
         ]
     },
     {
         icon: 'search',
         token: 'search',
-        show: true, index: 4
+        show: true,
+        active: false,
+        index: 4
     },
     {
         icon: 'user',
         token: 'user',
-        show: true, index: 5,
+        show: true,
+        active: false,
+        index: 5,
         subOptions: [
             {
                 icon: 'bag',
                 token: 'mylist',
-                show: true, index: 0
+                show: true,
+                active: false,
+                index: 0
             },
             {
                 icon: 'text',
                 token: 'chat',
-                show: true, index: 1
+                show: true,
+                active: false,
+                index: 1
             },
             {
                 icon: 'date',
                 token: 'calendar',
-                show: true, index: 2
+                show: true,
+                active: false,
+                index: 2
             },
             {
                 icon: 'graphPie',
                 token: 'data',
-                show: true, index: 3
+                show: true,
+                active: false,
+                index: 3
             },
             {
                 icon: 'tuggles',
                 token: 'inout',
-                show: true, index: 4
+                show: true,
+                active: false,
+                index: 4
             },
             {
                 icon: 'qrCode',
                 token: 'qr',
-                show: true, index: 5
+                show: true,
+                active: false,
+                index: 5
             }
         ]
     },
     {
         icon: 'showList',
         token: 'navbar',
-        show: true, index: 6
+        show: true,
+        active: false,
+        index: 6
     }
 ]

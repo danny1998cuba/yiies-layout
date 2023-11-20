@@ -1,16 +1,19 @@
-<div class="main-icon">
+<div class="bm-main-icon">
     <app-icon [icon]="buttonData.icon" class="svg-icon svg-icon-2x"></app-icon>
     <app-icon [icon]="direction === 'vertical' ? 'bottomArrow' : 'arrowLeft'" class="main-icon svg-icon svg-icon-1"
         *ngIf="!collapsed" (click)="collapse($event, 'click')"></app-icon>
 </div>
 
-<div class="collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">
-    <div class="d-flex gap-3 options align-items-center" [ngClass]="{
+<div class="bm-collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">
+    <div class="d-flex gap-3 bm-options align-items-center" [ngClass]="{
             'flex-row': direction === 'horizontal',
             'flex-column-reverse': direction === 'vertical'
         }">
-        <div *ngFor="let item of buttonData.subOptions" (click)="action(item, $event)">
-            <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
+        <div *ngFor="let item of buttonData.subOptions" (click)="action(item, $event)" class="bm-option"
+            [class.active]="item.active" style="--nav-lat-position: {{position === 'left' ? 1 : -1}}">
+            <div class="bm-icon-wrapper">
+                <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
+            </div>
             <div class="text" *ngIf="!!item.name">{{item.name}}</div>
         </div>
     </div>

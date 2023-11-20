@@ -8,6 +8,7 @@ export interface IButtonMenuData {
   index: number;
   name?: string;
   show: boolean;
+  active: boolean;
   subOptions?: IButtonMenuData[];
 }
 
@@ -28,8 +29,9 @@ export class ButtonMenuComponent implements OnInit {
     if (this.isAction) this.action(this.buttonData, $event)
   }
 
-  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true }
+  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true, active: false }
   @Input() direction: 'vertical' | 'horizontal' = 'vertical'
+  @Input() position: 'left' | 'right' = 'left'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
   @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
@@ -51,6 +53,7 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   action(data: IButtonMenuData, $event: Event) {
+    $event.stopPropagation()
     const target = $event.currentTarget as Element
     this.selectedAction.emit({
       button: data,

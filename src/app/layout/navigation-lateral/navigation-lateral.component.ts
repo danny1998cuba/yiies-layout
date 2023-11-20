@@ -2,6 +2,7 @@ import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
 import { IActionButton } from 'src/app/data/utils.model';
+import { clearActive } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -50,6 +51,7 @@ export class NavigationLateralComponent implements OnInit {
   public toggleOpen() {
     this.opened = !this.opened
     if (!this.opened) {
+      clearActive(this._menu)
       this.toggleContent(null)
     }
     this.clicked.emit({ position: this.position, opened: this.opened })
@@ -57,6 +59,7 @@ export class NavigationLateralComponent implements OnInit {
 
   toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote') {
     if (options.isColladpsed) {
+      clearActive(this._menu)
       this.toggleContent(null)
     }
 
@@ -86,11 +89,15 @@ export class NavigationLateralComponent implements OnInit {
 
   optionSelected(data: IActionButton) {
     if (!this.activeButton) {
+      data.button.active = true
       this.toggleContent(data)
     } else {
       if (data.button.token !== this.activeButton.button.token) {
+        clearActive(this._menu)
+        data.button.active = true
         this.toggleContent(data)
       } else {
+        data.button.active = false
         this.toggleContent(null)
       }
     }
