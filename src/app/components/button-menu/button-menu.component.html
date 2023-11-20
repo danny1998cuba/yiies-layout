@@ -1,7 +1,9 @@
 <div class="bm-main-icon">
-    <app-icon [icon]="buttonData.icon" class="svg-icon svg-icon-2x"></app-icon>
-    <app-icon [icon]="direction === 'vertical' ? 'bottomArrow' : 'arrowLeft'" class="main-icon svg-icon svg-icon-1"
-        *ngIf="!collapsed" (click)="collapse($event, 'click')"></app-icon>
+    <div class="bm-main-icon-container w-100 h-100">
+        <app-icon [icon]="buttonData.icon" class="svg-icon svg-icon-2x"></app-icon>
+        <app-icon [icon]="direction === 'vertical' ? 'bottomArrow' : 'arrowLeft'" class="main-icon svg-icon svg-icon-1"
+            *ngIf="!collapsed" (click)="collapse($event, 'click')"></app-icon>
+    </div>
 </div>
 
 <div class="bm-collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">

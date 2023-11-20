@@ -18,6 +18,7 @@ export class NavigationLateralComponent implements OnInit {
   }
   @HostListener('document:click') clickOut() {
     this.opened = false
+    clearActive(this._menu)
     this.toggleContent(null)
   }
 

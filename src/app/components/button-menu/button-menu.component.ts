@@ -18,7 +18,7 @@ export interface IButtonMenuData {
   styleUrls: ['./button-menu.component.scss']
 })
 export class ButtonMenuComponent implements OnInit {
-  @HostBinding('class') class = 'btn glass-btn d-flex flex-column-reverse align-items-center px-0'
+  @HostBinding('class') class = 'glass-btn d-flex flex-column-reverse align-items-center'
   @HostBinding('style') style: any = { width: '45px' }
   @HostBinding('style.--index-btn') index: number = 0
 
