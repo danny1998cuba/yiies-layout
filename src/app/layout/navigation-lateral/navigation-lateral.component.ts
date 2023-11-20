@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
+import { IActionButton } from 'src/app/data/utils.model';
+import { clearActive } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -16,6 +18,7 @@ export class NavigationLateralComponent implements OnInit {
   }
   @HostListener('document:click') clickOut() {
     this.opened = false
+    this.toggleContent(null)
   }
 
   @Input() position: 'left' | 'right' = 'left'
@@ -29,30 +32,43 @@ export class NavigationLateralComponent implements OnInit {
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
+  @ViewChild('options') options!: ElementRef
 
   protected opened = false
   public get isOpen(): boolean {
     return this.opened
   }
 
-  constructor() { }
+  protected activeButton: IActionButton | null = null
+  protected styleContent: any = {}
+
+  constructor(
+    private ref: ElementRef
+  ) { }
 
   ngOnInit(): void { }
 
   public toggleOpen() {
     this.opened = !this.opened
+    if (!this.opened) {
+      clearActive(this._menu)
+      this.toggleContent(null)
+    }
     this.clicked.emit({ position: this.position, opened: this.opened })
   }
 
   toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote') {
+    if (options.isColladpsed) {
+      clearActive(this._menu)
+      this.toggleContent(null)
+    }
+
     this.buttons.forEach(bt => {
       if (bt.buttonData.token !== options.token) {
         if (!options.isColladpsed) {
-          // bt.element.nativeElement.classList.add('hidden-button')
           bt.buttonData.show = false
         } else {
           bt.buttonData.show = true
-          // bt.element.nativeElement.classList.remove('hidden-button');
         }
       }
     })
@@ -69,5 +85,41 @@ export class NavigationLateralComponent implements OnInit {
     const button = this.buttons.find(bt => bt.buttonData.token === token)
     isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
     this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+  }
+
+  optionSelected(data: IActionButton) {
+    if (!this.activeButton) {
+      data.button.active = true
+      this.toggleContent(data)
+    } else {
+      if (data.button.token !== this.activeButton.button.token) {
+        clearActive(this._menu)
+        data.button.active = true
+        this.toggleContent(data)
+      } else {
+        data.button.active = false
+        this.toggleContent(null)
+      }
+    }
+  }
+
+  toggleContent(token: IActionButton | null) {
+    if (!!token) {
+      this.ref.nativeElement.classList.remove('show-content')
+      setTimeout(() => {
+        this.activeButton = null
+        setTimeout(() => {
+          this.activeButton = token
+          this.ref.nativeElement.classList.add('show-content')
+          this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
+        }, 50);
+
+      }, 200);
+    } else {
+      this.ref.nativeElement.classList.remove('show-content')
+      setTimeout(() => {
+        this.activeButton = null
+      }, 200);
+    }
   }
 }

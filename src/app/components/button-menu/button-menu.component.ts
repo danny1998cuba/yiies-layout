@@ -1,4 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output } from '@angular/core';
+import { reference } from '@popperjs/core';
+import { IActionButton } from 'src/app/data/utils.model';
 
 export interface IButtonMenuData {
   icon: string;
@@ -6,6 +8,7 @@ export interface IButtonMenuData {
   index: number;
   name?: string;
   show: boolean;
+  active: boolean;
   subOptions?: IButtonMenuData[];
 }
 
@@ -22,13 +25,16 @@ export class ButtonMenuComponent implements OnInit {
   @HostListener('click', ['$event'])
   click($event: PointerEvent) {
     $event.stopPropagation()
-    this.isAction ? this.action() : this.collapsed ? this.expand('click') : null
+    this.expand('click')
+    if (this.isAction) this.action(this.buttonData, $event)
   }
 
-  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true }
+  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true, active: false }
   @Input() direction: 'vertical' | 'horizontal' = 'vertical'
+  @Input() position: 'left' | 'right' = 'left'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
+  @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
 
   isAction: boolean = true
   collapsed: boolean = true
@@ -46,8 +52,13 @@ export class ButtonMenuComponent implements OnInit {
     this.index = this.buttonData.index
   }
 
-  action() {
-    console.log('Action');
+  action(data: IButtonMenuData, $event: Event) {
+    $event.stopPropagation()
+    const target = $event.currentTarget as Element
+    this.selectedAction.emit({
+      button: data,
+      bound: target.getBoundingClientRect()
+    })
   }
 
   expand(from: 'click' | 'remote') {
