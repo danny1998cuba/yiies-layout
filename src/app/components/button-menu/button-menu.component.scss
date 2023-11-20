@@ -16,6 +16,7 @@
         transition: all 200ms;
         border-bottom-left-radius: 0.375rem;
         border-bottom-right-radius: 0.375rem;
+        transition: border-radius 200ms;
 
         &-container {
             transition: all 200ms;
@@ -88,6 +89,7 @@
     background-color: rgba(120, 120, 120, .75);
 
     .bm-main-icon {
+        border-radius: 0px;
         background: rgba(255, 94, 0, .55);
     }
 }
