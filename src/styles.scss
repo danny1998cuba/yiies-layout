@@ -7,7 +7,7 @@
 
 body {
     overflow: hidden;
-    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .flex-center {
@@ -41,7 +41,7 @@ body {
     position: absolute;
     content: '';
     width: 100%;
-    bottom: 0;
+    bottom: calc(100svh - 100dvh);
     left: 0;
     height: 55px;
     display: flex;
