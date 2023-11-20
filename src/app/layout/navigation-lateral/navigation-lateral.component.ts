@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
+import { IActionButton } from 'src/app/data/utils.model';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -30,13 +31,15 @@ export class NavigationLateralComponent implements OnInit {
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
+  @ViewChild('options') options!: ElementRef
 
   protected opened = false
   public get isOpen(): boolean {
     return this.opened
   }
 
-  protected activeButton: IButtonMenuData | null = null
+  protected activeButton: IActionButton | null = null
+  protected styleContent: any = {}
 
   constructor(
     private ref: ElementRef
@@ -81,11 +84,11 @@ export class NavigationLateralComponent implements OnInit {
     this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
   }
 
-  optionSelected(data: IButtonMenuData) {
+  optionSelected(data: IActionButton) {
     if (!this.activeButton) {
       this.toggleContent(data)
     } else {
-      if (data.token !== this.activeButton.token) {
+      if (data.button.token !== this.activeButton.button.token) {
         this.toggleContent(data)
       } else {
         this.toggleContent(null)
@@ -93,12 +96,17 @@ export class NavigationLateralComponent implements OnInit {
     }
   }
 
-  toggleContent(token: IButtonMenuData | null) {
+  toggleContent(token: IActionButton | null) {
     if (!!token) {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
-        this.activeButton = token
-        this.ref.nativeElement.classList.add('show-content')
+        this.activeButton = null
+        setTimeout(() => {
+          this.activeButton = token
+          this.ref.nativeElement.classList.add('show-content')
+          this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
+        }, 50);
+
       }, 200);
     } else {
       this.ref.nativeElement.classList.remove('show-content')

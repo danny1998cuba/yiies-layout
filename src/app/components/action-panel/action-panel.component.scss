@@ -14,13 +14,31 @@
 
     &.left {
         padding-left: 45px;
+
+        .ap-content {
+            right: 0;
+        }
     }
 
     &.right {
         padding-right: 45px;
+
+        .ap-content {
+            left: 0;
+        }
     }
 
     .ap-content {
         transform: translateY(var(--translate));
+        position: absolute;
+        bottom: 0;
+        width: calc(100% - 45px) !important;
+        transition: bottom 200ms, min-height 200ms, height 200ms;
+
+        background: rgba(256, 256, 256, .35);
+        backdrop-filter: blur(6px);
+
+        display: flex;
+        flex-direction: column-reverse;
     }
 }

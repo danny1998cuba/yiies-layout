@@ -1,6 +1,5 @@
-import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
-import { IButtonMenuData } from '../button-menu/button-menu.component';
-import { remToPixels } from 'src/app/utils/utils';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { IActionButton } from 'src/app/data/utils.model';
 
 @Component({
   selector: 'app-action-panel',
@@ -13,11 +12,7 @@ export class ActionPanelComponent implements OnInit {
     $event.stopPropagation()
   }
 
-  _data!: IButtonMenuData
-  @Input() set data(val: IButtonMenuData) {
-    this._data = val
-    this.initialize()
-  }
+  @Input() data!: IActionButton
 
   _position!: 'left' | 'right'
   @Input() set position(val: 'left' | 'right') {
@@ -25,22 +20,36 @@ export class ActionPanelComponent implements OnInit {
     this._position = val
   }
 
-  translate: number = 0
-  translatePx: string = '0'
+  @Input('min-heigh-opened') minHeightOpened: number = 0
+
+  @ViewChild('content') content!: ElementRef
+
+  styleInner: any = {}
+  styleCollapsible: any = {}
 
   constructor(
     private ref: ElementRef
   ) { }
 
   ngOnInit(): void {
+    this.initialize()
   }
 
   initialize() {
-    console.log('initialized', this._data.index);
+    // TODO: When min-heigh-opened is smaller than 40%, set it as 40%
 
-    const down = 60.4 + remToPixels(1.875)
-    this.translate = -1 * ((this._data.index) * 45) - down;
-    this.translatePx = `${this.translate}px`
+    const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+    const translate = (vpHeight - 55 - this.data.bound.bottom)
+    this.styleCollapsible['height'] = this.minHeightOpened
+
+    this.styleInner['--translate'] = `-${translate}px`
+    this.styleInner['minHeight'] = `${this.data.bound.height}px`
+    this.styleInner['height'] = `${this.data.bound.height}px`
+
+    setTimeout(() => {
+      this.styleInner['height'] = this.minHeightOpened
+      this.styleInner['bottom'] = `-${translate}px`
+    }, 150);
   }
 
 }
