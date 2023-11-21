@@ -33,13 +33,6 @@ export class MainComponentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.selectNavigation()
-
-    console.log(this.navLeft);
-    console.log(this.navRight);
-  }
-
-  selectNavigation() {
     this.selectedNavigation = this._route.snapshot.url[0].path
     this._cdr.detectChanges()
   }
@@ -47,10 +40,6 @@ export class MainComponentComponent implements OnInit {
   changeImage() {
     this.selectedImage++
     this.selectedImage = this.selectedImage % 2
-  }
-
-  interact() {
-    console.log('Interacting with background');
   }
 
   syncLateralnavigations(options: { position: string, opened: boolean }) {
@@ -68,8 +57,6 @@ export class MainComponentComponent implements OnInit {
   }
 
   toggleVisibilityOnCollapse(token: string) {
-    console.log('expanding', token);
-
     this.buttons.forEach((bt, index) => {
       if (bt.buttonData.token !== token) {
         bt.element.nativeElement.classList.add('opacity-0');

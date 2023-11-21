@@ -12,6 +12,7 @@
     border-radius: 0.375rem;
 
     .bm-main-icon {
+        color: #5f5f5f;
         height: 100%;
         transition: all 200ms;
         border-bottom-left-radius: 0.375rem;
@@ -36,6 +37,7 @@
 
         .bm-option {
             transition: color 200ms, transform 200ms;
+            color: #5f5f5f;
 
             .text {
                 font-size: .55rem;
@@ -64,7 +66,7 @@
         }
 
         .bm-main-icon {
-            background: rgba(255, 94, 0, .35);
+            background: rgba(255, 94, 0, .55);
             backdrop-filter: blur(6px);
             transform: translateY(0.375rem);
 
@@ -86,7 +88,7 @@
 
 .show-content :host.ellapsed {
     border-radius: 0px;
-    background-color: rgba(120, 120, 120, .75);
+    background-color: rgba(200, 200, 200, .75);
 
     .bm-main-icon {
         border-radius: 0px;
