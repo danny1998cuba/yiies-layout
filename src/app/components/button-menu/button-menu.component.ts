@@ -39,6 +39,8 @@ export class ButtonMenuComponent implements OnInit {
   isAction: boolean = true
   collapsed: boolean = true
 
+  optionsStyle: any = {}
+
   constructor(
     private ref: ElementRef
   ) { }
@@ -72,6 +74,16 @@ export class ButtonMenuComponent implements OnInit {
     this.collapsed = true
     this.element.nativeElement.classList.remove('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: true })
+  }
+
+  adaptContentHeight(height: number | null) {
+    if (height) {
+      this.optionsStyle['height'] = `${height}px`
+      this.optionsStyle['minHeight'] = `${height}px`
+    } else {
+      delete this.optionsStyle['height']
+    }
+    console.log(this.optionsStyle);
   }
 
 }

@@ -3,9 +3,10 @@
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
             [@hideMenu]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
-            (selectedAction)="optionSelected($event)"></app-button-menu>
+            (selectedAction)="optionSelected($event)" ></app-button-menu>
     </ng-container>
 </div>
 
 <app-action-panel *ngIf="!!activeButton" class="action-panel" [position]="position" [data]="activeButton"
-    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"></app-action-panel>
+    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
+    (emitHeight)="updateHeightAfterContentChange($event)"></app-action-panel>

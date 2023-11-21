@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IActionButton } from 'src/app/data/utils.model';
 
 @Component({
@@ -7,11 +7,6 @@ import { IActionButton } from 'src/app/data/utils.model';
   styleUrls: ['./action-panel.component.scss']
 })
 export class ActionPanelComponent implements OnInit {
-  @HostListener('click', ['$event'])
-  click($event: PointerEvent) {
-    $event.stopPropagation()
-  }
-
   @Input() data!: IActionButton
 
   _position!: 'left' | 'right'
@@ -20,12 +15,12 @@ export class ActionPanelComponent implements OnInit {
     this._position = val
   }
 
-  @Input('min-heigh-opened') minHeightOpened: number = 0
+  @Input('min-heigh-opened') minHeightOpened: string = ''
+  @Output() emitHeight: EventEmitter<number> = new EventEmitter()
 
   @ViewChild('content') content!: ElementRef
 
   styleInner: any = {}
-  styleCollapsible: any = {}
 
   constructor(
     private ref: ElementRef
@@ -36,20 +31,31 @@ export class ActionPanelComponent implements OnInit {
   }
 
   initialize() {
-    // TODO: When min-heigh-opened is smaller than 40%, set it as 40%
+    // TODO: When height based on content height up to 70%
 
     const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
     const translate = (vpHeight - 55 - this.data.bound.bottom)
-    this.styleCollapsible['height'] = this.minHeightOpened
+    const forty = 0.4 * (vpHeight - 98)
 
     this.styleInner['--translate'] = `-${translate}px`
     this.styleInner['minHeight'] = `${this.data.bound.height}px`
     this.styleInner['height'] = `${this.data.bound.height}px`
 
     setTimeout(() => {
-      this.styleInner['height'] = this.minHeightOpened
+      let height = 0
+      if (parseFloat(this.minHeightOpened) < forty) {
+        height = forty
+        this.emitHeight.emit(height)
+      } else {
+        height = parseFloat(this.minHeightOpened)
+      }
+      this.styleInner['height'] = `${height}px`
       this.styleInner['bottom'] = `-${translate}px`
     }, 150);
+  }
+
+  click($event: Event) {
+    $event.stopPropagation()
   }
 
 }

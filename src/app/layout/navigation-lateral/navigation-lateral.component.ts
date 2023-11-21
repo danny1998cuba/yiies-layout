@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
 import { IActionButton } from 'src/app/data/utils.model';
-import { clearActive } from 'src/app/utils/utils';
+import { clearActive, remToPixels } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -41,6 +41,7 @@ export class NavigationLateralComponent implements OnInit {
   }
 
   protected activeButton: IActionButton | null = null
+  protected selectedButton: ButtonMenuComponent | null = null
   protected styleContent: any = {}
 
   constructor(
@@ -59,9 +60,19 @@ export class NavigationLateralComponent implements OnInit {
   }
 
   toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote') {
+    const button = this.buttons.find(bt => bt.buttonData.token === options.token)
+    if (src === 'event') this.menuSelected.emit({
+      data: button?.buttonData || null,
+      isColladpsed: options.isColladpsed,
+      src: this.position
+    })
+
     if (options.isColladpsed) {
       clearActive(this._menu)
       this.toggleContent(null)
+      this.selectedButton = null
+    } else {
+      if (button) this.selectedButton = button
     }
 
     this.buttons.forEach(bt => {
@@ -72,13 +83,6 @@ export class NavigationLateralComponent implements OnInit {
           bt.buttonData.show = true
         }
       }
-    })
-
-    const button = this.buttons.find(bt => bt.buttonData.token === options.token)
-    if (src === 'event') this.menuSelected.emit({
-      data: button?.buttonData || null,
-      isColladpsed: options.isColladpsed,
-      src: this.position
     })
   }
 
@@ -109,6 +113,7 @@ export class NavigationLateralComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         this.activeButton = null
+        this.selectedButton?.adaptContentHeight(null)
         setTimeout(() => {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
@@ -120,7 +125,13 @@ export class NavigationLateralComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         this.activeButton = null
+        this.selectedButton?.adaptContentHeight(null)
       }, 200);
     }
+  }
+
+  updateHeightAfterContentChange(height: number) {
+    const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
+    this.selectedButton?.adaptContentHeight(h)
   }
 }
