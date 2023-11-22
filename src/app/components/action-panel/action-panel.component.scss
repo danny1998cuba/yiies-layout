@@ -1,8 +1,6 @@
 :host {
     width: 100%;
     height: inherit;
-    min-height: 40%;
-    max-height: 70%;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -39,6 +37,6 @@
         backdrop-filter: blur(6px);
 
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
 }

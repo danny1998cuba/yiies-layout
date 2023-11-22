@@ -87,7 +87,6 @@ export class ButtonMenuComponent implements OnInit {
 
   adaptContentHeight(height: number | null) {
     this.optionsStyle['height'] = height ? `${height}px` : this.expandedHeight
-    console.log(this.optionsStyle);
   }
 
 }
