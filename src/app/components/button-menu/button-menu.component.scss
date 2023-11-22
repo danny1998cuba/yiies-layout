@@ -33,7 +33,7 @@
     .bm-options {
         opacity: 0;
         overflow: hidden;
-        transition: opacity 100ms, height 100ms, min-height 100ms;
+        transition: opacity 100ms, height 200ms;
 
         .bm-option {
             transition: color 200ms, transform 200ms;

@@ -112,8 +112,8 @@ export class NavigationLateralComponent implements OnInit {
     if (!!token) {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
+        if (this.activeButton) this.selectedButton?.adaptContentHeight(null)
         this.activeButton = null
-        this.selectedButton?.adaptContentHeight(null)
         setTimeout(() => {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')

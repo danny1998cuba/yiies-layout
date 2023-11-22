@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { reference } from '@popperjs/core';
 import { IActionButton } from 'src/app/data/utils.model';
 
@@ -36,8 +36,11 @@ export class ButtonMenuComponent implements OnInit {
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
   @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
 
+  @ViewChild('options') options!: ElementRef
+
   isAction: boolean = true
   collapsed: boolean = true
+  expandedHeight: string = '0px'
 
   optionsStyle: any = {}
 
@@ -67,6 +70,9 @@ export class ButtonMenuComponent implements OnInit {
     this.collapsed = false
     this.element.nativeElement.classList.add('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: false })
+
+    this.expandedHeight = getComputedStyle(this.options.nativeElement).height
+    this.optionsStyle['height'] = this.expandedHeight
   }
 
   collapse($event: MouseEvent | null, from: 'click' | 'remote') {
@@ -74,15 +80,13 @@ export class ButtonMenuComponent implements OnInit {
     this.collapsed = true
     this.element.nativeElement.classList.remove('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: true })
+
+    this.expandedHeight = ''
+    delete this.optionsStyle['height']
   }
 
   adaptContentHeight(height: number | null) {
-    if (height) {
-      this.optionsStyle['height'] = `${height}px`
-      this.optionsStyle['minHeight'] = `${height}px`
-    } else {
-      delete this.optionsStyle['height']
-    }
+    this.optionsStyle['height'] = height ? `${height}px` : this.expandedHeight
     console.log(this.optionsStyle);
   }
 
