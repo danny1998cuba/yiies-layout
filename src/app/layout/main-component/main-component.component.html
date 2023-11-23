@@ -4,25 +4,29 @@
 </div>
 <!-- End::Header -->
 
-<!-- Begin::Background -->
-<div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'">
-</div>
-<!-- End::Background -->
-
 <!-- Begin::Navigation -->
 <ng-container [ngSwitch]="selectedNavigation">
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral left"
         [position]="'left'" #nav_left (clicked)="syncLateralnavigations($event)"
-        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"></app-navigation-lateral>
+        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+        (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral right"
         [position]="'right'" #nav_right (clicked)="syncLateralnavigations($event)"
-        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"></app-navigation-lateral>
+        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+        (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
     <app-navigation-inferior *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"
         class="navigation bottom"></app-navigation-inferior>
     <app-navigation-superior *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"
         class="navigation top"></app-navigation-superior>
 </ng-container>
 <!-- End::Navigation -->
+
+<!-- Begin::Background -->
+<div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" (click)="interact()">
+</div>
+<div class="background-sm-component" [style.background-image]="'url(' + images[selectedImage] + ')'" id="back2">
+</div>
+<!-- End::Background -->
 
 <!-- Begin::Content -->
 <div class="content" [ngSwitch]="selectedNavigation">

@@ -31,6 +31,7 @@ export class NavigationLateralComponent implements OnInit {
 
   @Output() clicked: EventEmitter<{ position: string, opened: boolean }> = new EventEmitter()
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }> = new EventEmitter()
+  @Output() emitHeight: EventEmitter<number> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
   @ViewChild('options') options!: ElementRef
@@ -130,7 +131,10 @@ export class NavigationLateralComponent implements OnInit {
           setTimeout(() => {
             // Scroll to the bottom when opening
             const options_pane = document.getElementById(`options_${this.position}`)
-            if (options_pane) { options_pane.scrollIntoView({ behavior: 'smooth' }) }
+            if (options_pane) {
+              options_pane.scrollIntoView({ behavior: 'smooth' })
+              this.emitHeight.emit(parseFloat(getComputedStyle(options_pane).height));
+            }
           }, 350);
         }, 50);
       }, 200);
@@ -139,6 +143,7 @@ export class NavigationLateralComponent implements OnInit {
       setTimeout(() => {
         this.activeButton = null
         this.selectedButton?.adaptContentHeight(null)
+        this.emitHeight.emit(0);
       }, 200);
     }
   }

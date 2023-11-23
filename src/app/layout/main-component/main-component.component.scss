@@ -9,7 +9,8 @@
     z-index: 1;
 }
 
-.background-component {
+.background-component,
+.background-sm-component {
     width: 100%;
     height: 100%;
     min-height: 100dvh;
@@ -22,6 +23,15 @@
     background-clip: padding-box;
     background-size: cover;
     z-index: 0;
+
+    transition: filter 200ms;
+}
+
+.background-sm-component {
+    height: 1dvh;
+    opacity: 0;
+    transition: opacity 100ms, height 200ms, min-height 200ms;
+    z-index: -1;
 }
 
 .change-btn {
@@ -73,6 +83,17 @@
             padding: 0;
             z-index: 10;
             overflow: hidden;
+
+            &~.background-component {
+                filter: blur(15px);
+            }
+
+            &~.background-sm-component {
+                opacity: 1;
+                // z-index: 0;
+                height: calc(100dvh - 55px - var(--navigation-content-height));
+                min-height: calc(100dvh - 55px - var(--navigation-content-height));
+            }
         }
     }
 
