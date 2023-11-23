@@ -30,7 +30,7 @@
 .background-sm-component {
     height: 1dvh;
     opacity: 0;
-    transition: opacity 100ms, height 200ms, min-height 200ms;
+    transition: opacity 100ms, height 100ms, min-height 100ms;
     z-index: -1;
 }
 
@@ -89,8 +89,6 @@
             }
 
             &~.background-sm-component {
-                opacity: 1;
-                // z-index: 0;
                 height: calc(100dvh - 55px - var(--navigation-content-height));
                 min-height: calc(100dvh - 55px - var(--navigation-content-height));
             }

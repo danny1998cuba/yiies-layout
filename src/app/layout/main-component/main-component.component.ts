@@ -27,6 +27,7 @@ export class MainComponentComponent implements OnInit {
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
 
   selectedButton: ButtonMenuComponent | null = null
+  protected _orientation!: 'portrait' | 'landscape'
 
   // Menus
   menus = menu_example
@@ -38,6 +39,12 @@ export class MainComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedNavigation = this._route.snapshot.url[0].path
+
+    this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
+    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+      this._orientation = e.matches ? 'portrait' : 'landscape'
+    });
+
     this._cdr.detectChanges()
   }
 
@@ -67,12 +74,18 @@ export class MainComponentComponent implements OnInit {
   innerHeightChanged(height: number) {
     this.navContentHeight = `${height}px`
     const back2 = document.getElementById('back2')
-    if (height !== 0) {
+    if (height !== 0 && this._orientation === 'portrait') {
       setTimeout(() => {
-        if (back2) back2.style.zIndex = '0'
+        if (back2) {
+          back2.style.zIndex = '0'
+          back2.style.opacity = '1'
+        }
       }, 10);
     } else {
-      if (back2) back2.style.zIndex = '-1'
+      if (back2) {
+        back2.style.zIndex = '-1'
+        back2.style.opacity = '0'
+      }
     }
   }
 }

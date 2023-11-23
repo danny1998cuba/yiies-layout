@@ -7,11 +7,11 @@
 <!-- Begin::Navigation -->
 <ng-container [ngSwitch]="selectedNavigation">
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral left"
-        [position]="'left'" #nav_left (clicked)="syncLateralnavigations($event)"
+        [position]="'left'" [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
         (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
         (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
     <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral right"
-        [position]="'right'" #nav_right (clicked)="syncLateralnavigations($event)"
+        [position]="'right'" [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
         (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
         (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
     <app-navigation-inferior *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"
@@ -42,6 +42,7 @@
 <!-- End::Content -->
 
 <!-- Begin::Footer -->
-<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage()">Change image</button>
+<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage(); $event.stopPropagation()">Change
+    image</button>
 <app-dynamic-footer></app-dynamic-footer>
 <!-- End::Footer -->
