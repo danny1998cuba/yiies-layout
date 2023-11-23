@@ -118,8 +118,13 @@ export class NavigationLateralComponent implements OnInit {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
           this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
-        }, 50);
 
+          setTimeout(() => {
+            // Scroll to the bottom when opening
+            const options_pane = document.getElementById(`options_${this.position}`)
+            if (options_pane) { options_pane.scrollIntoView({ behavior: 'smooth' }) }
+          }, 300);
+        }, 50);
       }, 200);
     } else {
       this.ref.nativeElement.classList.remove('show-content')

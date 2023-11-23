@@ -73,6 +73,9 @@ export class ButtonMenuComponent implements OnInit {
 
     this.expandedHeight = getComputedStyle(this.options.nativeElement).height
     this.optionsStyle['height'] = this.expandedHeight
+    setTimeout(() => {
+      this.ref.nativeElement.style.overflow = 'scroll'
+    }, 250);
   }
 
   collapse($event: MouseEvent | null, from: 'click' | 'remote') {
@@ -83,6 +86,8 @@ export class ButtonMenuComponent implements OnInit {
 
     this.expandedHeight = ''
     delete this.optionsStyle['height']
+
+    this.ref.nativeElement.style.overflow = 'visible'
   }
 
   adaptContentHeight(height: number | null) {

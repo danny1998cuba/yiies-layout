@@ -31,6 +31,8 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // TODO: When it's landscape, change max to 100%
+
     setTimeout(() => {
       const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
       const translate = (vpHeight - 55 - this.data.bound.bottom)
