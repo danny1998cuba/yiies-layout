@@ -36,7 +36,6 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    console.log(this._orientation);
     this.initialize();
   }
 

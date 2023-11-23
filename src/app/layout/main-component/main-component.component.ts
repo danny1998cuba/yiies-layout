@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChildren, AfterViewInit, AfterContentInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChildren, AfterViewInit, AfterContentInit, ViewChildren, HostBinding } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
 import { menu_example } from 'src/app/data/mock-data';
@@ -10,6 +10,8 @@ import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-
   styleUrls: ['./main-component.component.scss']
 })
 export class MainComponentComponent implements OnInit {
+  @HostBinding('style.--navigation-content-height') navContentHeight = '0px'
+
   protected images = ['../assets/images/yoiin_2.jpg', '../assets/images/Triip_1.webp']
   protected selectedImage = 0
 
@@ -24,6 +26,9 @@ export class MainComponentComponent implements OnInit {
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
 
+  selectedButton: ButtonMenuComponent | null = null
+  protected _orientation!: 'portrait' | 'landscape'
+
   // Menus
   menus = menu_example
 
@@ -34,6 +39,12 @@ export class MainComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedNavigation = this._route.snapshot.url[0].path
+
+    this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
+    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+      this._orientation = e.matches ? 'portrait' : 'landscape'
+    });
+
     this._cdr.detectChanges()
   }
 
@@ -51,18 +62,30 @@ export class MainComponentComponent implements OnInit {
     }
   }
 
+  interact() {
+    console.log('back Int');
+  }
+
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }) {
     if (options.src === 'left') this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
     if (options.src === 'right') this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
   }
 
-  toggleVisibilityOnCollapse(token: string) {
-    this.buttons.forEach((bt, index) => {
-      if (bt.buttonData.token !== token) {
-        bt.element.nativeElement.classList.add('opacity-0');
-      } else {
-
+  innerHeightChanged(height: number) {
+    this.navContentHeight = `${height}px`
+    const back2 = document.getElementById('back2')
+    if (height !== 0 && this._orientation === 'portrait') {
+      setTimeout(() => {
+        if (back2) {
+          back2.style.zIndex = '0'
+          back2.style.opacity = '1'
+        }
+      }, 10);
+    } else {
+      if (back2) {
+        back2.style.zIndex = '-1'
+        back2.style.opacity = '0'
       }
-    })
+    }
   }
 }

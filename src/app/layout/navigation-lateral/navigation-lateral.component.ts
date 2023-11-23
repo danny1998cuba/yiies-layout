@@ -29,8 +29,15 @@ export class NavigationLateralComponent implements OnInit {
     this._menu = value
   }
 
+  _orientation!: 'portrait' | 'landscape'
+  @Input() set orientation(val: 'portrait' | 'landscape') {
+    this._orientation = val
+    if (this.activeButton) this.toggleContent(this.activeButton)
+  }
+
   @Output() clicked: EventEmitter<{ position: string, opened: boolean }> = new EventEmitter()
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }> = new EventEmitter()
+  @Output() emitHeight: EventEmitter<number> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
   @ViewChild('options') options!: ElementRef
@@ -43,20 +50,12 @@ export class NavigationLateralComponent implements OnInit {
   protected activeButton: IActionButton | null = null
   protected selectedButton: ButtonMenuComponent | null = null
   protected styleContent: any = {}
-  protected _orientation!: 'portrait' | 'landscape'
 
   constructor(
     private ref: ElementRef
   ) { }
 
-  ngOnInit(): void {
-    this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
-    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-      this._orientation = e.matches ? 'portrait' : 'landscape'
-
-      if (this.activeButton) this.toggleContent(this.activeButton)
-    });
-  }
+  ngOnInit(): void { }
 
   public toggleOpen() {
     this.opened = !this.opened
@@ -130,7 +129,10 @@ export class NavigationLateralComponent implements OnInit {
           setTimeout(() => {
             // Scroll to the bottom when opening
             const options_pane = document.getElementById(`options_${this.position}`)
-            if (options_pane) { options_pane.scrollIntoView({ behavior: 'smooth' }) }
+            if (options_pane) {
+              options_pane.scrollIntoView({ behavior: 'smooth' })
+              this.emitHeight.emit(parseFloat(getComputedStyle(options_pane).height));
+            }
           }, 350);
         }, 50);
       }, 200);
@@ -139,6 +141,7 @@ export class NavigationLateralComponent implements OnInit {
       setTimeout(() => {
         this.activeButton = null
         this.selectedButton?.adaptContentHeight(null)
+        this.emitHeight.emit(0);
       }, 200);
     }
   }
