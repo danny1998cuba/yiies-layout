@@ -10,7 +10,7 @@
     <div class="d-flex gap-3 bm-options align-items-center" [ngClass]="{
             'flex-row': direction === 'horizontal',
             'flex-column-reverse': direction === 'vertical'
-        }">
+        }" [ngStyle]="optionsStyle" #options>
         <div *ngFor="let item of buttonData.subOptions" (click)="action(item, $event)" class="bm-option"
             [class.active]="item.active" style="--nav-lat-position: {{position === 'left' ? 1 : -1}}">
             <div class="bm-icon-wrapper">

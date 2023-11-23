@@ -1,5 +1,5 @@
 <div #options class="d-flex flex-column-reverse btn-translate" [ngClass]="{'opened': opened}"
-    style="--nav-lat-position: {{position === 'left' ? -1 : 1}}">
+    style="--nav-lat-position: {{position === 'left' ? -1 : 1}}" id="options_{{position}}">
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
             [@hideMenu]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
@@ -8,4 +8,5 @@
 </div>
 
 <app-action-panel *ngIf="!!activeButton" class="action-panel" [position]="position" [data]="activeButton"
-    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"></app-action-panel>
+    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
+    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>

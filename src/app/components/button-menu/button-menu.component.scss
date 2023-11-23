@@ -33,7 +33,7 @@
     .bm-options {
         opacity: 0;
         overflow: hidden;
-        transition: opacity 100ms;
+        transition: opacity 100ms, height 200ms;
 
         .bm-option {
             transition: color 200ms, transform 200ms;
@@ -93,5 +93,9 @@
     .bm-main-icon {
         border-radius: 0px;
         background: rgba(255, 94, 0, .55);
+    }
+
+    .bm-options .bm-option:last-child {
+        padding-top: 0.5rem;
     }
 }
