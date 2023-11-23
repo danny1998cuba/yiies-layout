@@ -15,29 +15,49 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
     this._position = val
   }
 
+  _orientation!: 'portrait' | 'landscape'
+  @Input() set orientation(val: 'portrait' | 'landscape') {
+    this._orientation = val
+  }
+
   @Input('min-heigh-opened') minHeightOpened: string = ''
   @Output() emitHeight: EventEmitter<number> = new EventEmitter()
 
   @ViewChild('component') component!: ElementRef
 
   styleInner: any = {}
+  vpHeight: number = 0
+  minPercent = { portrait: 0.4, landscape: 0.75 }
+  maxPercent = { portrait: 0.75, landscape: 1 }
 
   constructor(
     private ref: ElementRef
   ) { }
 
   ngOnInit(): void {
-    this.initialize()
+    this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+    console.log(this._orientation);
+    this.initialize();
   }
 
   ngAfterViewInit(): void {
     // TODO: When it's landscape, change max to 100%
+    this.adjustHeight()
+  }
 
+  initialize() {
+    const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+
+    this.styleInner['--translate'] = `-${translate}px`
+    this.styleInner['minHeight'] = `${this.data.bound.height}px`
+    this.styleInner['height'] = `${this.data.bound.height}px`
+  }
+
+  adjustHeight() {
     setTimeout(() => {
-      const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-      const translate = (vpHeight - 55 - this.data.bound.bottom)
-      const min = 0.4 * (vpHeight - 98)
-      const max = 0.75 * (vpHeight - 98)
+      const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+      const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
+      const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
 
       let contentHeight = this.component.nativeElement.offsetHeight
       if (this.component.nativeElement?.style?.height) {
@@ -62,15 +82,6 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
       this.styleInner['height'] = `${height}px`
       this.styleInner['bottom'] = `-${translate}px`
     }, 150);
-  }
-
-  initialize() {
-    const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    const translate = (vpHeight - 55 - this.data.bound.bottom)
-
-    this.styleInner['--translate'] = `-${translate}px`
-    this.styleInner['minHeight'] = `${this.data.bound.height}px`
-    this.styleInner['height'] = `${this.data.bound.height}px`
   }
 
   click($event: Event) {

@@ -43,12 +43,20 @@ export class NavigationLateralComponent implements OnInit {
   protected activeButton: IActionButton | null = null
   protected selectedButton: ButtonMenuComponent | null = null
   protected styleContent: any = {}
+  protected _orientation!: 'portrait' | 'landscape'
 
   constructor(
     private ref: ElementRef
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
+    window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+      this._orientation = e.matches ? 'portrait' : 'landscape'
+
+      if (this.activeButton) this.toggleContent(this.activeButton)
+    });
+  }
 
   public toggleOpen() {
     this.opened = !this.opened
@@ -123,7 +131,7 @@ export class NavigationLateralComponent implements OnInit {
             // Scroll to the bottom when opening
             const options_pane = document.getElementById(`options_${this.position}`)
             if (options_pane) { options_pane.scrollIntoView({ behavior: 'smooth' }) }
-          }, 300);
+          }, 350);
         }, 50);
       }, 200);
     } else {
