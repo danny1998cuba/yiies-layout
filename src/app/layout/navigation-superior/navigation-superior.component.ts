@@ -137,14 +137,6 @@ export class NavigationSuperiorComponent implements OnInit {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
           this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
-
-          setTimeout(() => {
-            // Scroll to the bottom when opening
-            const options_pane = document.getElementById(`options_top`)
-            if (options_pane) {
-              options_pane.scrollIntoView({ behavior: 'smooth' }) // FIXME: Safari scrolls different
-            }
-          }, 350);
         }, 50);
       }, 200);
     } else {

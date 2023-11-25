@@ -4,25 +4,12 @@ import { MainComponentComponent } from './layout/main-component/main-component.c
 
 const routes: Routes = [
   {
-    path: 'lateral',
-    component: MainComponentComponent
-  },
-  {
-    path: 'superior',
-    component: MainComponentComponent
-  },
-  {
-    path: 'inferior',
-    component: MainComponentComponent
-  },
-  {
     path: '',
-    redirectTo: '/lateral',
-    pathMatch: 'full',
+    component: MainComponentComponent
   },
   {
     path: '**',
-    redirectTo: '/lateral',
+    redirectTo: '/',
     pathMatch: 'full'
   }
 ];

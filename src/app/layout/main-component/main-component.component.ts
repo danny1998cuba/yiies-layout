@@ -4,6 +4,7 @@ import { NavigationLateralComponent } from '../navigation-lateral/navigation-lat
 import { menu_example } from 'src/app/data/mock-data';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { POSITION, Position } from 'src/app/data/utils.model';
+import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
 
 @Component({
   selector: 'app-main-component',
@@ -17,15 +18,9 @@ export class MainComponentComponent implements OnInit {
   protected images = ['../assets/images/yoiin_2.jpg', '../assets/images/Triip_1.webp']
   protected selectedImage = 0
 
-  protected selectedNavigation: string = 'lateral'
-  protected NAVIGATION_POSITION = {
-    LATERAL: 'lateral',
-    SUPERIOR: 'superior',
-    INFERIOR: 'inferior'
-  }
-
   @ViewChild('nav_left') navLeft!: NavigationLateralComponent
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
+  @ViewChild('nav_top') navTop!: NavigationSuperiorComponent
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
 
   selectedButton: ButtonMenuComponent | null = null
@@ -41,8 +36,6 @@ export class MainComponentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.selectedNavigation = this._route.snapshot.url[0].path
-
     this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
     window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
       this._orientation = e.matches ? 'portrait' : 'landscape'
@@ -57,15 +50,18 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigations(options: { position: Position, opened: boolean }) {
-    if (options.position === POSITION.LEFT && options.opened && this.navRight.isOpen) {
-      this.navRight.toggleOpen()
+    if (options.position === POSITION.LEFT && options.opened) {
+      if (this.navRight.isOpen) this.navRight.toggleOpen()
+      if (this.navTop.isOpen) this.navTop.toggleOpen()
     }
-    if (options.position === POSITION.RIGHT && options.opened && this.navLeft.isOpen) {
-      this.navLeft.toggleOpen()
+    if (options.position === POSITION.RIGHT && options.opened) {
+      if (this.navLeft.isOpen) this.navLeft.toggleOpen()
+      if (this.navTop.isOpen) this.navTop.toggleOpen()
     }
     if (options.position === POSITION.TOP) {
       if (options.opened) {
-        // Check for the rest of navigations
+        if (this.navRight.isOpen) this.navRight.toggleOpen()
+        if (this.navLeft.isOpen) this.navLeft.toggleOpen()
         this.hideHeader = true
       } else {
         this.hideHeader = false
@@ -83,11 +79,15 @@ export class MainComponentComponent implements OnInit {
     switch (options.src) {
       case POSITION.LEFT:
         this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.RIGHT:
         this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.TOP:
+        this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.BOTTOM:
         break;
