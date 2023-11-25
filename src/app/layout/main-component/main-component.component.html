@@ -22,9 +22,10 @@
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->
-<div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" (click)="interact()">
+<div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" id="back2"
+    (click)="interact()">
 </div>
-<div class="background-sm-component" [style.background-image]="'url(' + images[selectedImage] + ')'" id="back2">
+<div class="secondary-background" [style.background-image]="'url(' + images[selectedImage] + ')'">
 </div>
 <!-- End::Background -->
 
