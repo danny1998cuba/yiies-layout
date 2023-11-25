@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { reference } from '@popperjs/core';
-import { IActionButton } from 'src/app/data/utils.model';
+import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 
 export interface IButtonMenuData {
   icon: string;
@@ -18,8 +17,7 @@ export interface IButtonMenuData {
   styleUrls: ['./button-menu.component.scss']
 })
 export class ButtonMenuComponent implements OnInit {
-  @HostBinding('class') class = 'glass-btn d-flex flex-column-reverse align-items-center'
-  @HostBinding('style') style: any = { width: '45px' }
+  @HostBinding('class') class = 'glass-btn d-flex align-items-center'
   @HostBinding('style.--index-btn') index: number = 0
 
   @HostListener('click', ['$event'])
@@ -31,7 +29,7 @@ export class ButtonMenuComponent implements OnInit {
 
   @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true, active: false }
   @Input() direction: 'vertical' | 'horizontal' = 'vertical'
-  @Input() position: 'left' | 'right' = 'left'
+  @Input() position: Position = 'left'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
   @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
@@ -55,6 +53,7 @@ export class ButtonMenuComponent implements OnInit {
   ngOnInit(): void {
     this.isAction = !this.buttonData.subOptions || this.buttonData.subOptions.length === 0
     this.index = this.buttonData.index
+    this.class += (this.position === POSITION.TOP || this.position === POSITION.BOTTOM) ? ' flex-row' : ' flex-column-reverse'
     this.class += ` ${this.position}`
   }
 
@@ -72,8 +71,11 @@ export class ButtonMenuComponent implements OnInit {
     this.element.nativeElement.classList.add('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: false })
 
-    this.expandedHeight = getComputedStyle(this.options.nativeElement).height
-    this.optionsStyle['height'] = this.expandedHeight
+    if (this.direction === 'vertical') {
+      this.expandedHeight = getComputedStyle(this.options.nativeElement).height
+      this.optionsStyle['height'] = this.expandedHeight
+    }
+
     setTimeout(() => {
       this.ref.nativeElement.style.overflow = 'scroll'
     }, 250);
@@ -85,8 +87,10 @@ export class ButtonMenuComponent implements OnInit {
     this.element.nativeElement.classList.remove('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: true })
 
-    this.expandedHeight = ''
-    delete this.optionsStyle['height']
+    if (this.direction === 'vertical') {
+      this.expandedHeight = ''
+      delete this.optionsStyle['height']
+    }
 
     this.ref.nativeElement.style.overflow = 'visible'
   }

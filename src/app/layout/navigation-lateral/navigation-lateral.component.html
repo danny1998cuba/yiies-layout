@@ -2,7 +2,7 @@
     style="--nav-lat-position: {{position === 'left' ? -1 : 1}}" id="options_{{position}}">
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
-            [@hideMenu]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
+            [@hideMenuVartical]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
             (selectedAction)="optionSelected($event)"></app-button-menu>
     </ng-container>
 </div>

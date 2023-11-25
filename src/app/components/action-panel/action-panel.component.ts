@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { IActionButton } from 'src/app/data/utils.model';
+import { IActionButton, Position } from 'src/app/data/utils.model';
 
 @Component({
   selector: 'app-action-panel',
@@ -9,8 +9,8 @@ import { IActionButton } from 'src/app/data/utils.model';
 export class ActionPanelComponent implements OnInit, AfterViewInit {
   @Input() data!: IActionButton
 
-  _position!: 'left' | 'right'
-  @Input() set position(val: 'left' | 'right') {
+  _position!: Position
+  @Input() set position(val: Position) {
     this.ref.nativeElement.classList.add(val)
     this._position = val
   }
@@ -40,7 +40,6 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // TODO: When it's landscape, change max to 100%
     this.adjustHeight()
   }
 
