@@ -88,9 +88,17 @@
 
 .show-content :host.ellapsed {
     border-radius: 0px;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
     background-color: rgba(200, 200, 200, .75);
+
+    &.left {
+        border-top-left-radius: 0.75rem;
+        border-bottom-left-radius: 0.75rem;
+    }
+
+    &.right {
+        border-top-right-radius: 0.75rem;
+        border-bottom-right-radius: 0.75rem;
+    }
 
     .bm-main-icon {
         border-radius: 0px;

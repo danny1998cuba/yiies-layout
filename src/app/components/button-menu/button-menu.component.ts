@@ -55,6 +55,7 @@ export class ButtonMenuComponent implements OnInit {
   ngOnInit(): void {
     this.isAction = !this.buttonData.subOptions || this.buttonData.subOptions.length === 0
     this.index = this.buttonData.index
+    this.class += ` ${this.position}`
   }
 
   action(data: IButtonMenuData, $event: Event) {
