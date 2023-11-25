@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
-import { IActionButton } from 'src/app/data/utils.model';
+import { IActionButton, Position } from 'src/app/data/utils.model';
 import { clearActive, remToPixels } from 'src/app/utils/utils';
 
 @Component({
@@ -22,7 +22,7 @@ export class NavigationLateralComponent implements OnInit {
     this.toggleContent(null)
   }
 
-  @Input() position: 'left' | 'right' = 'left'
+  @Input() position: Position = 'left'
 
   protected _menu!: IButtonMenuData[]
   @Input() set menu(value: IButtonMenuData[]) {
@@ -35,8 +35,8 @@ export class NavigationLateralComponent implements OnInit {
     if (this.activeButton) this.toggleContent(this.activeButton)
   }
 
-  @Output() clicked: EventEmitter<{ position: string, opened: boolean }> = new EventEmitter()
-  @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: 'left' | 'right' }> = new EventEmitter()
+  @Output() clicked: EventEmitter<{ position: Position, opened: boolean }> = new EventEmitter()
+  @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: Position }> = new EventEmitter()
   @Output() emitHeight: EventEmitter<number> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
@@ -131,7 +131,7 @@ export class NavigationLateralComponent implements OnInit {
             // Scroll to the bottom when opening
             const options_pane = document.getElementById(`options_${this.position}`)
             if (options_pane) {
-              options_pane.scrollIntoView({ behavior: 'smooth' })
+              options_pane.scrollIntoView({ behavior: 'smooth' }) // FIXME: Safari scrolls different
             }
           }, 350);
         }, 50);
@@ -147,7 +147,7 @@ export class NavigationLateralComponent implements OnInit {
   }
 
   updateHeightAfterContentChange(height: number) {
-    this.emitHeight.emit(height);
+    this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
     const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
     this.selectedButton?.adaptContentHeight(h)
   }

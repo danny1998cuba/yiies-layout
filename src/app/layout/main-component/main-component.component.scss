@@ -7,6 +7,11 @@
 .header {
     position: relative;
     z-index: 1;
+    transition: transform 200ms;
+
+    &.hidden {
+        transform: translateY(-70px);
+    }
 }
 
 .background-component,
@@ -26,7 +31,7 @@
 }
 
 .background-component {
-    transition: opacity 200ms, height 200ms, min-height 200ms, border-radius 200ms;
+    transition: opacity 200ms, height 200ms, min-height 200ms, border-radius 200ms, top 200ms;
 }
 
 .secondary-background {
@@ -100,7 +105,38 @@
 
 
     &.top {
-        position: relative;
+        position: absolute !important;
+        content: '';
+        top: 0;
+        left: 0;
+        height: calc(45px + 0.5rem);
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0.25rem 0;
+
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        transition: height 200ms, padding 200ms;
+
+        &.show-content {
+            height: calc(100dvh - 55px) !important;
+            padding: 0;
+            z-index: 10;
+            overflow: hidden;
+
+            &~.background-component {
+                height: calc(100dvh - var(--navigation-content-height));
+                min-height: calc(100dvh - var(--navigation-content-height));
+                border-radius: 0.75rem;
+                top: calc(var(--navigation-content-top));
+            }
+
+            &~.secondary-background {
+                filter: blur(15px);
+            }
+        }
     }
 
     &.bottom {

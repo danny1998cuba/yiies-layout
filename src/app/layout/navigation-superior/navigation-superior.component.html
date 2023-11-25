@@ -1,1 +1,15 @@
-<p>navigation-superior works!</p>
+<div #options class="w-100 d-flex flex-row btn-translate" [ngClass]="{
+    'opened': opened,
+    'justify-content-center' : isCentered,
+    'justify-content-start' : !isCentered
+    }" id="options_top">
+    <ng-container *ngFor="let m of _menu">
+        <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
+            [@hideMenuHorizontal]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
+            (selectedAction)="optionSelected($event)" [direction]="'horizontal'"></app-button-menu>
+    </ng-container>
+</div>
+
+<app-action-panel *ngIf="!!activeButton" class="action-panel" [position]="position" [data]="activeButton"
+    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
+    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>

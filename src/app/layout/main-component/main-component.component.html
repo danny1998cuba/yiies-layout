@@ -1,24 +1,20 @@
 <!-- Begin::Header -->
-<div class="w-100 header py-1 flex-center">
+<div class="w-100 header py-1 flex-center" [ngClass]="{'hidden' : hideHeader}">
     <img src="../assets/logo/logo_slogan_hd.png" alt="" style="height: 35px;">
 </div>
 <!-- End::Header -->
 
 <!-- Begin::Navigation -->
-<ng-container [ngSwitch]="selectedNavigation">
-    <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral left"
-        [position]="'left'" [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
-        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-        (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-    <app-navigation-lateral *ngSwitchCase="NAVIGATION_POSITION.LATERAL" class="navigation lateral right"
-        [position]="'right'" [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
-        (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-        (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-    <app-navigation-inferior *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"
-        class="navigation bottom"></app-navigation-inferior>
-    <app-navigation-superior *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"
-        class="navigation top"></app-navigation-superior>
-</ng-container>
+<app-navigation-lateral class="navigation lateral left" [position]="'left'" [orientation]="_orientation" #nav_left
+    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
+<app-navigation-lateral class="navigation lateral right" [position]="'right'" [orientation]="_orientation" #nav_right
+    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
+<!-- <app-navigation-inferior class="navigation bottom"></app-navigation-inferior> -->
+<app-navigation-superior class="navigation top" [orientation]="_orientation" #nav_top
+    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+    (emitHeight)="innerHeightChanged($event)"></app-navigation-superior>
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->
@@ -30,15 +26,8 @@
 <!-- End::Background -->
 
 <!-- Begin::Content -->
-<div class="content" [ngSwitch]="selectedNavigation">
-    <ng-container *ngSwitchCase="NAVIGATION_POSITION.LATERAL">
-        <!-- <div class="d-flex flex-column-reverse align-items-center w-100">
-            <app-button-menu *ngFor="let menu of menus" [button-data]="menu"
-                (expanding)="toggleVisibilityOnCollapse($event)"></app-button-menu>
-        </div> -->
-    </ng-container>
-    <ng-container *ngSwitchCase=" NAVIGATION_POSITION.INFERIOR"></ng-container>
-    <ng-container *ngSwitchCase="NAVIGATION_POSITION.SUPERIOR"></ng-container>
+<div class="content">
+    <router-outlet></router-outlet>
 </div>
 <!-- End::Content -->
 
