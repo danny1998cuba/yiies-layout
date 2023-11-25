@@ -32,6 +32,7 @@ export class NavigationSuperiorComponent implements OnInit {
   @Input() set orientation(val: 'portrait' | 'landscape') {
     this._orientation = val
     if (this.activeButton) this.toggleContent(this.activeButton)
+    if (this._menu) this.centerButtons()
   }
 
   @Output() clicked: EventEmitter<{ position: Position, opened: boolean }> = new EventEmitter()
@@ -50,14 +51,23 @@ export class NavigationSuperiorComponent implements OnInit {
   protected selectedButton: ButtonMenuComponent | null = null
   protected styleContent: any = {}
   position: Position = 'top'
+  isCentered: boolean = true
 
   constructor(
     private ref: ElementRef
   ) { }
 
   ngOnInit(): void {
+    this.centerButtons()
   }
 
+  centerButtons() {
+    const vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
+    const btnWidht = (45 + remToPixels(0.5))
+    const btnsCount = this._menu.length
+
+    this.isCentered = vpWidth > btnWidht * btnsCount
+  }
 
   public toggleOpen() {
     this.opened = !this.opened
@@ -121,7 +131,6 @@ export class NavigationSuperiorComponent implements OnInit {
     if (!!token) {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
-        if (this.activeButton) this.selectedButton?.adaptContentHeight(null)
         this.emitHeight.emit(0);
         this.activeButton = null
         setTimeout(() => {
@@ -142,7 +151,6 @@ export class NavigationSuperiorComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         this.activeButton = null
-        this.selectedButton?.adaptContentHeight(null)
         this.emitHeight.emit(0);
       }, 200);
     }
@@ -150,8 +158,6 @@ export class NavigationSuperiorComponent implements OnInit {
 
   updateHeightAfterContentChange(height: number) {
     this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
-    const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
-    this.selectedButton?.adaptContentHeight(h)
   }
 
 }

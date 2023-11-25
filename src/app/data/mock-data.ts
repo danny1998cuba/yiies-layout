@@ -4063,5 +4063,19 @@ export const menu_example: IButtonMenuData[] = [
         show: true,
         active: false,
         index: 6
+    },
+    {
+        icon: 'showList',
+        token: 'navbar',
+        show: true,
+        active: false,
+        index: 6
+    },
+    {
+        icon: 'showList',
+        token: 'navbar',
+        show: true,
+        active: false,
+        index: 6
     }
 ]

@@ -12,6 +12,7 @@ import { POSITION, Position } from 'src/app/data/utils.model';
 })
 export class MainComponentComponent implements OnInit {
   @HostBinding('style.--navigation-content-height') navContentHeight = '0px'
+  @HostBinding('style.--navigation-content-top') navContentTop = '0px'
 
   protected images = ['../assets/images/yoiin_2.jpg', '../assets/images/Triip_1.webp']
   protected selectedImage = 0
@@ -95,6 +96,7 @@ export class MainComponentComponent implements OnInit {
 
   innerHeightChanged(height: number) {
     this.navContentHeight = `${height !== 0 ? height + 55 : 0}px`
+    this.navContentTop = `${height !== 0 ? height : 0}px`
     const back2 = document.getElementById('back2')
     if (this._orientation === 'portrait') {
       setTimeout(() => {
