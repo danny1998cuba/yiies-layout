@@ -72,18 +72,18 @@ export class MainComponentComponent implements OnInit {
   }
 
   innerHeightChanged(height: number) {
-    this.navContentHeight = `${height}px`
+    this.navContentHeight = `${height !== 0 ? height + 55 : 0}px`
     const back2 = document.getElementById('back2')
-    if (height !== 0 && this._orientation === 'portrait') {
+    if (this._orientation === 'portrait') {
       setTimeout(() => {
         if (back2) {
-          back2.style.zIndex = '0'
+          // back2.style.zIndex = '0'
           back2.style.opacity = '1'
         }
       }, 10);
     } else {
       if (back2) {
-        back2.style.zIndex = '-1'
+        // back2.style.zIndex = '-1'
         back2.style.opacity = '0'
       }
     }

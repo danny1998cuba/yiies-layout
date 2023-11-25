@@ -120,6 +120,7 @@ export class NavigationLateralComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         if (this.activeButton) this.selectedButton?.adaptContentHeight(null)
+        this.emitHeight.emit(0);
         this.activeButton = null
         setTimeout(() => {
           this.activeButton = token
@@ -131,7 +132,6 @@ export class NavigationLateralComponent implements OnInit {
             const options_pane = document.getElementById(`options_${this.position}`)
             if (options_pane) {
               options_pane.scrollIntoView({ behavior: 'smooth' })
-              this.emitHeight.emit(parseFloat(getComputedStyle(options_pane).height));
             }
           }, 350);
         }, 50);
@@ -147,6 +147,7 @@ export class NavigationLateralComponent implements OnInit {
   }
 
   updateHeightAfterContentChange(height: number) {
+    this.emitHeight.emit(height);
     const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
     this.selectedButton?.adaptContentHeight(h)
   }
