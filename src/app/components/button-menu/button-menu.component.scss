@@ -8,7 +8,7 @@
     cursor: pointer;
     border-radius: 0.375rem;
 
-    transition: opacity 400ms 200ms, transform 200ms, border-radius 200ms, background-color 100ms;
+    transition: opacity 400ms 200ms, transform 200ms, border-radius 200ms, background-color 100ms, width 200ms;
 
     .bm-main-icon {
         color: #5f5f5f;
@@ -25,7 +25,7 @@
     .bm-options {
         opacity: 0;
         overflow: hidden;
-        transition: opacity 100ms, height 200ms;
+        transition: opacity 100ms, height 200ms, width 200ms;
 
         .bm-option {
             transition: color 200ms, transform 200ms;
@@ -117,7 +117,7 @@
         }
 
         &.ellapsed {
-            width: 100%;
+            width: auto;
             margin: 0;
             justify-content: unset;
 

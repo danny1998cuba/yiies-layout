@@ -90,8 +90,10 @@ export class NavigationSuperiorComponent implements OnInit {
       clearActive(this._menu)
       this.toggleContent(null)
       this.selectedButton = null
+      this.centerButtons()
     } else {
       if (button) this.selectedButton = button
+      this.isCentered = true
     }
 
     this.buttons.forEach(bt => {
@@ -131,6 +133,7 @@ export class NavigationSuperiorComponent implements OnInit {
     if (!!token) {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
+        if (this.activeButton) this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
         this.activeButton = null
         setTimeout(() => {
@@ -143,6 +146,7 @@ export class NavigationSuperiorComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         this.activeButton = null
+        this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
       }, 200);
     }
@@ -150,6 +154,7 @@ export class NavigationSuperiorComponent implements OnInit {
 
   updateHeightAfterContentChange(height: number) {
     this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
+    this.selectedButton?.adaptContentWidth(false)
   }
 
 }
