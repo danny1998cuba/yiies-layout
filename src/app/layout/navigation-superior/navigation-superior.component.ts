@@ -18,6 +18,7 @@ export class NavigationSuperiorComponent implements OnInit {
   }
   @HostListener('document:click') clickOut() {
     this.opened = false
+    if (this._isSide) this.ref.nativeElement.classList.add('side')
     clearActive(this._menu)
     this.toggleContent(null)
     this.clicked.emit({ position: this.position, opened: false })
@@ -26,6 +27,11 @@ export class NavigationSuperiorComponent implements OnInit {
   protected _menu!: IButtonMenuData[]
   @Input() set menu(value: IButtonMenuData[]) {
     this._menu = value
+  }
+
+  _isSide!: boolean
+  @Input() set isSide(value: boolean) {
+    this._isSide = value
   }
 
   _orientation!: 'portrait' | 'landscape'
@@ -74,6 +80,9 @@ export class NavigationSuperiorComponent implements OnInit {
     if (!this.opened) {
       clearActive(this._menu)
       this.toggleContent(null)
+      if (this._isSide) this.ref.nativeElement.classList.add('side')
+    } else {
+      if (this._isSide) this.ref.nativeElement.classList.remove('side')
     }
     this.clicked.emit({ position: this.position, opened: this.opened })
   }

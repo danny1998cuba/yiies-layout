@@ -1,0 +1,30 @@
+.btn-translate {
+    transform: translateY(120px);
+    transition: transform 200ms ease-in-out, padding 200ms;
+    padding: 0 0.25rem;
+
+    &.opened {
+        transform: translateY(0px);
+    }
+}
+
+:host.show-content .btn-translate {
+    padding: 0;
+}
+
+.nav-open-icon {
+    height: 100%;
+    width: 27px;
+    position: absolute;
+    content: '';
+    top: -4px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: width 200ms;
+}
+
+.btn-translate.opened~.nav-open-icon {
+    width: 0px;
+}

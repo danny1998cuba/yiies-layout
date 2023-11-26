@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
+import { remToPixels } from 'src/app/utils/utils';
 
 export interface IButtonMenuData {
   icon: string;
@@ -107,7 +108,8 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   adaptContentWidth(setNull: boolean) {
-    this.optionsStyle['width'] = setNull ? this.expandedWidth : getComputedStyle(document.documentElement).width
+    const w = parseFloat(getComputedStyle(document.documentElement).width) - 60 - remToPixels(1.5) - remToPixels(2 * 0.375)
+    this.optionsStyle['width'] = setNull ? this.expandedWidth : `${w}px`
   }
 
 }

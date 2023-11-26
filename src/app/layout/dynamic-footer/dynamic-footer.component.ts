@@ -1,4 +1,5 @@
 import { Component, OnInit, HostBinding, Input, EventEmitter, Output } from '@angular/core';
+import { POSITION, Position } from 'src/app/data/utils.model';
 
 @Component({
   selector: 'app-dynamic-footer',
@@ -11,6 +12,8 @@ export class DynamicFooterComponent implements OnInit {
   // Logo
   _showingLogo: boolean = false
   @Input() set showingLogo(val: boolean) { this._showingLogo = val }
+  @Input() position: Position = POSITION.BOTTOM
+  @Input('with-navigation') withNavigation: boolean = false
 
   // Action button
   @Input('button-name') buttonName: string = 'Main action'
@@ -19,6 +22,7 @@ export class DynamicFooterComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.class += ` ${this.position}`
   }
 
 }
