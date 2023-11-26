@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
+import { remToPixels } from 'src/app/utils/utils';
 
 export interface IButtonMenuData {
   icon: string;
@@ -39,6 +40,7 @@ export class ButtonMenuComponent implements OnInit {
   isAction: boolean = true
   collapsed: boolean = true
   expandedHeight: string = '0px'
+  expandedWidth: string = '0px'
 
   optionsStyle: any = {}
 
@@ -74,6 +76,9 @@ export class ButtonMenuComponent implements OnInit {
     if (this.direction === 'vertical') {
       this.expandedHeight = getComputedStyle(this.options.nativeElement).height
       this.optionsStyle['height'] = this.expandedHeight
+    } else {
+      this.expandedWidth = getComputedStyle(this.options.nativeElement).width
+      this.optionsStyle['width'] = this.expandedWidth
     }
 
     setTimeout(() => {
@@ -90,6 +95,9 @@ export class ButtonMenuComponent implements OnInit {
     if (this.direction === 'vertical') {
       this.expandedHeight = ''
       delete this.optionsStyle['height']
+    } else {
+      this.expandedWidth = ''
+      delete this.optionsStyle['width']
     }
 
     this.ref.nativeElement.style.overflow = 'visible'
@@ -97,6 +105,11 @@ export class ButtonMenuComponent implements OnInit {
 
   adaptContentHeight(height: number | null) {
     this.optionsStyle['height'] = height ? `${height}px` : this.expandedHeight
+  }
+
+  adaptContentWidth(setNull: boolean) {
+    const w = parseFloat(getComputedStyle(document.documentElement).width) - 60 - remToPixels(1.5) - remToPixels(2 * 0.375)
+    this.optionsStyle['width'] = setNull ? this.expandedWidth : `${w}px`
   }
 
 }

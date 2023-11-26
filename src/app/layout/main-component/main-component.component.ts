@@ -5,6 +5,7 @@ import { menu_example } from 'src/app/data/mock-data';
 import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { POSITION, Position } from 'src/app/data/utils.model';
 import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
+import { NavigationInferiorComponent } from '../navigation-inferior/navigation-inferior.component';
 
 @Component({
   selector: 'app-main-component',
@@ -21,11 +22,13 @@ export class MainComponentComponent implements OnInit {
   @ViewChild('nav_left') navLeft!: NavigationLateralComponent
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
   @ViewChild('nav_top') navTop!: NavigationSuperiorComponent
+  @ViewChild('nav_bottom') navBottom!: NavigationInferiorComponent
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
 
   selectedButton: ButtonMenuComponent | null = null
   protected _orientation!: 'portrait' | 'landscape'
   hideHeader: boolean = false
+  showTopFooter: boolean = false
 
   // Menus
   menus = menu_example
@@ -53,21 +56,35 @@ export class MainComponentComponent implements OnInit {
     if (options.position === POSITION.LEFT && options.opened) {
       if (this.navRight.isOpen) this.navRight.toggleOpen()
       if (this.navTop.isOpen) this.navTop.toggleOpen()
+      if (this.navBottom.isOpen) this.navBottom.toggleOpen()
     }
     if (options.position === POSITION.RIGHT && options.opened) {
       if (this.navLeft.isOpen) this.navLeft.toggleOpen()
       if (this.navTop.isOpen) this.navTop.toggleOpen()
+      if (this.navBottom.isOpen) this.navBottom.toggleOpen()
     }
     if (options.position === POSITION.TOP) {
       if (options.opened) {
         if (this.navRight.isOpen) this.navRight.toggleOpen()
         if (this.navLeft.isOpen) this.navLeft.toggleOpen()
+        if (this.navBottom.isOpen) this.navBottom.toggleOpen()
         this.hideHeader = true
       } else {
         this.hideHeader = false
       }
     }
-    // TODO: Sync the rest of the navigations.
+    if (options.position === POSITION.BOTTOM) {
+      if (options.opened) {
+        if (this.navRight.isOpen) this.navRight.toggleOpen()
+        if (this.navLeft.isOpen) this.navLeft.toggleOpen()
+        if (this.navTop.isOpen) this.navTop.toggleOpen()
+        this.hideHeader = true
+        this.showTopFooter = true
+      } else {
+        this.hideHeader = false
+        this.showTopFooter = false
+      }
+    }
   }
 
   interact() {
@@ -75,21 +92,26 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
-    // TODO: Sync the rest of the navigations.
     switch (options.src) {
       case POSITION.LEFT:
         this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.RIGHT:
         this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
         this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.TOP:
         this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
         this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.BOTTOM:
+        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
     }
   }

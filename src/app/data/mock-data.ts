@@ -4063,5 +4063,5 @@ export const menu_example: IButtonMenuData[] = [
         show: true,
         active: false,
         index: 6
-    }
+    },
 ]

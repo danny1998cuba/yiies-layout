@@ -1,5 +1,5 @@
 <!-- Begin::Header -->
-<div class="w-100 header py-1 flex-center" [ngClass]="{'hidden' : hideHeader}">
+<div class="w-100 header py-1 flex-center" [class.hidden]="hideHeader">
     <img src="../assets/logo/logo_slogan_hd.png" alt="" style="height: 35px;">
 </div>
 <!-- End::Header -->
@@ -11,18 +11,19 @@
 <app-navigation-lateral class="navigation lateral right" [position]="'right'" [orientation]="_orientation" #nav_right
     (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-<!-- <app-navigation-inferior class="navigation bottom"></app-navigation-inferior> -->
-<app-navigation-superior class="navigation top" [orientation]="_orientation" #nav_top
-    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+<app-navigation-superior class="navigation top" [orientation]="_orientation" #nav_top [class.side]="showTopFooter"
+    [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-superior>
+<app-navigation-inferior class="navigation bottom side" [orientation]="_orientation" #nav_bottom
+    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+    (emitHeight)="innerHeightChanged($event)"></app-navigation-inferior>
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->
 <div class="background-component" [style.background-image]="'url(' + images[selectedImage] + ')'" id="back2"
-    (click)="interact()">
-</div>
-<div class="secondary-background" [style.background-image]="'url(' + images[selectedImage] + ')'">
-</div>
+    (click)="interact()"></div>
+<div class="secondary-background" [style.background-image]="'url(' + images[selectedImage] + ')'"></div>
 <!-- End::Background -->
 
 <!-- Begin::Content -->
@@ -32,7 +33,8 @@
 <!-- End::Content -->
 
 <!-- Begin::Footer -->
-<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage(); $event.stopPropagation()">Change
-    image</button>
-<app-dynamic-footer></app-dynamic-footer>
+<app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
+    [with-navigation]="true" [class.hidden-footer]="showTopFooter"></app-dynamic-footer>
+<app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
+    [position]="'top'" [with-navigation]="true" [class.hidden-footer]="!showTopFooter"></app-dynamic-footer>
 <!-- End::Footer -->

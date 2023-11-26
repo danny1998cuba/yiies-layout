@@ -11,3 +11,24 @@
 :host.show-content .btn-translate {
     padding: 0;
 }
+
+.nav-open-icon {
+    height: 100%;
+    width: 27px;
+    position: absolute;
+    content: '';
+    top: -2px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: width 200ms;
+
+    &.hidden-side {
+        width: 0px;
+    }
+}
+
+.btn-translate.opened~.nav-open-icon:not(.hidden-side) {
+    width: 0px;
+}

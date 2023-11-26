@@ -18,6 +18,7 @@ export class NavigationSuperiorComponent implements OnInit {
   }
   @HostListener('document:click') clickOut() {
     this.opened = false
+    if (this._isSide) this.ref.nativeElement.classList.add('side')
     clearActive(this._menu)
     this.toggleContent(null)
     this.clicked.emit({ position: this.position, opened: false })
@@ -26,6 +27,11 @@ export class NavigationSuperiorComponent implements OnInit {
   protected _menu!: IButtonMenuData[]
   @Input() set menu(value: IButtonMenuData[]) {
     this._menu = value
+  }
+
+  _isSide!: boolean
+  @Input() set isSide(value: boolean) {
+    this._isSide = value
   }
 
   _orientation!: 'portrait' | 'landscape'
@@ -74,6 +80,9 @@ export class NavigationSuperiorComponent implements OnInit {
     if (!this.opened) {
       clearActive(this._menu)
       this.toggleContent(null)
+      if (this._isSide) this.ref.nativeElement.classList.add('side')
+    } else {
+      if (this._isSide) this.ref.nativeElement.classList.remove('side')
     }
     this.clicked.emit({ position: this.position, opened: this.opened })
   }
@@ -90,8 +99,10 @@ export class NavigationSuperiorComponent implements OnInit {
       clearActive(this._menu)
       this.toggleContent(null)
       this.selectedButton = null
+      this.centerButtons()
     } else {
       if (button) this.selectedButton = button
+      this.isCentered = true
     }
 
     this.buttons.forEach(bt => {
@@ -131,6 +142,7 @@ export class NavigationSuperiorComponent implements OnInit {
     if (!!token) {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
+        if (this.activeButton) this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
         this.activeButton = null
         setTimeout(() => {
@@ -143,6 +155,7 @@ export class NavigationSuperiorComponent implements OnInit {
       this.ref.nativeElement.classList.remove('show-content')
       setTimeout(() => {
         this.activeButton = null
+        this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
       }, 200);
     }
@@ -150,6 +163,7 @@ export class NavigationSuperiorComponent implements OnInit {
 
   updateHeightAfterContentChange(height: number) {
     this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
+    this.selectedButton?.adaptContentWidth(false)
   }
 
 }

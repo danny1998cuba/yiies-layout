@@ -41,11 +41,28 @@ body {
     position: absolute;
     content: '';
     width: 100%;
-    bottom: calc(100svh - 100dvh);
     left: 0;
     height: 55px;
     display: flex;
     align-items: flex-end;
+    transition: transform 200ms;
+
+    &.bottom {
+        bottom: calc(100svh - 100dvh);
+
+        &.hidden-footer {
+            transform: translateX(-100%);
+        }
+    }
+
+    &.top {
+        top: calc(100svh - 100dvh);
+
+        &.hidden-footer {
+            transform: translateX(-100%);
+        }
+    }
+
 }
 
 // Font Sizes
