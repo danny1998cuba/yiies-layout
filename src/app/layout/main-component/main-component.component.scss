@@ -10,7 +10,7 @@
     transition: transform 200ms;
 
     &.hidden {
-        transform: translateY(-70px);
+        transform: translateY(-50px);
     }
 }
 
@@ -38,14 +38,6 @@
     height: 1dvh;
     transition: filter 200ms;
     z-index: -1;
-}
-
-.change-btn {
-    position: absolute;
-    bottom: calc(100svh - 100dvh);
-    right: 5px;
-    content: '';
-    z-index: 10;
 }
 
 .layout-content {

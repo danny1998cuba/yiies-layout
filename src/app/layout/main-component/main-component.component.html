@@ -1,5 +1,5 @@
 <!-- Begin::Header -->
-<div class="w-100 header py-1 flex-center" [ngClass]="{'hidden' : hideHeader}">
+<div class="w-100 header py-1 flex-center" [class.hidden]="hideHeader">
     <img src="../assets/logo/logo_slogan_hd.png" alt="" style="height: 35px;">
 </div>
 <!-- End::Header -->
@@ -32,7 +32,6 @@
 <!-- End::Content -->
 
 <!-- Begin::Footer -->
-<button class="change-btn btn text-dark glass-btn my-1" (click)="changeImage(); $event.stopPropagation()">Change
-    image</button>
-<app-dynamic-footer></app-dynamic-footer>
+<app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()"
+    [showingLogo]="hideHeader"></app-dynamic-footer>
 <!-- End::Footer -->

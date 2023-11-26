@@ -1,3 +1,14 @@
+.ft-logo {
+    width: 0px;
+    height: 45px;
+    transition: width 200ms;
+
+    &.showing {
+        width: 45px;
+        margin-right: 0.5rem;
+    }
+}
+
 .text-block {
     display: flex;
     flex-direction: column;
@@ -12,4 +23,8 @@
     .description {
         font-size: 0.70rem;
     }
+}
+
+.change-btn {
+    z-index: 10;
 }
