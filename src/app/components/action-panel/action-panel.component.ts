@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 
 @Component({
@@ -7,6 +7,8 @@ import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
   styleUrls: ['./action-panel.component.scss']
 })
 export class ActionPanelComponent implements OnInit, AfterViewInit {
+  @HostBinding('style.height') height = '100%'
+
   @Input() data!: IActionButton
 
   _position!: Position
@@ -80,16 +82,16 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
 
         if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
           height = contentHeight > max ? max : contentHeight
-          this.emitHeight.emit(height)
         } else if (parseFloat(this.minHeightOpened) < min) {
           height = min
-          this.emitHeight.emit(height)
         } else {
           height = parseFloat(this.minHeightOpened)
         }
+        this.emitHeight.emit(height)
 
         this.styleInner['height'] = `${height}px`
         this.styleInner['bottom'] = `-${translate}px`
+        this.height = `${height}px`
       }, 150);
     } else {
       setTimeout(() => {
@@ -121,6 +123,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
         this.styleInner['left'] = `-${translate}px`
         this.styleInner['width'] = `${this.vpWidth}px`
         this.styleInner['minWidth'] = `${this.vpWidth}px`
+        this.height = `${height}px`
       }, 150);
     }
   }

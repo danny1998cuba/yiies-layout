@@ -10,8 +10,7 @@
         </div>
     </div>
 
-    <button class="change-btn btn text-dark glass-btn my-1"
-        (click)="buttonAction.emit($event);$event.stopPropagation()">
+    <button class="change-btn btn text-dark glass-btn" (click)="buttonAction.emit($event);$event.stopPropagation()">
         {{buttonName}}
     </button>
 </div>

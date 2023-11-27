@@ -99,6 +99,8 @@ export class ButtonMenuComponent implements OnInit {
       this.expandedWidth = ''
       delete this.optionsStyle['width']
     }
+    delete this.optionsStyle['margin']
+    delete this.optionsStyle['justifyContent']
 
     this.ref.nativeElement.style.overflow = 'visible'
   }
@@ -108,7 +110,18 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   adaptContentWidth(setNull: boolean) {
-    const w = parseFloat(getComputedStyle(document.documentElement).width) - 60 - remToPixels(1.5) - remToPixels(2 * 0.375)
+    let w = parseFloat(getComputedStyle(document.documentElement).width) - 60 - remToPixels(1.5) - remToPixels(2 * 0.375)
+    const centered = parseFloat(this.expandedWidth) < w
+
+    if (!setNull && centered) {
+      w += remToPixels(1.5)
+      this.optionsStyle['margin'] = '0'
+      this.optionsStyle['justifyContent'] = 'center'
+    } else {
+      delete this.optionsStyle['margin']
+      delete this.optionsStyle['justifyContent']
+    }
+
     this.optionsStyle['width'] = setNull ? this.expandedWidth : `${w}px`
   }
 

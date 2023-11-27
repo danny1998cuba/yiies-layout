@@ -29,12 +29,12 @@
 
 :host {
     &.top .ft-logo.showing {
-        top: 50px;
+        top: 55px;
         align-items: flex-start;
     }
 
     &.bottom .ft-logo.showing {
-        top: -50px;
+        top: -45px;
         align-items: flex-end;
     }
 }
