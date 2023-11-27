@@ -6,6 +6,7 @@ import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-
 import { POSITION, Position } from 'src/app/data/utils.model';
 import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
 import { NavigationInferiorComponent } from '../navigation-inferior/navigation-inferior.component';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-main-component',
@@ -33,11 +34,26 @@ export class MainComponentComponent implements OnInit {
 
   // Menus
   menus = menu_example
+  form: FormGroup
+  positions = [POSITION.TOP, POSITION.BOTTOM, 'lateral']
+  activeNavigations = [true, true, true]
 
   constructor(
     private _route: ActivatedRoute,
     private _cdr: ChangeDetectorRef
-  ) { }
+  ) {
+    this.form = new FormGroup({
+      navigations: new FormArray([
+        new FormControl(true),
+        new FormControl(true),
+        new FormControl(true)
+      ])
+    })
+
+    this.form.get('navigations')?.valueChanges.subscribe(change => {
+      this.activeNavigations = change
+    })
+  }
 
   ngOnInit(): void {
     this._orientation = window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape'
@@ -55,20 +71,20 @@ export class MainComponentComponent implements OnInit {
 
   syncLateralnavigations(options: { position: Position, opened: boolean }) {
     if (options.position === POSITION.LEFT && options.opened) {
-      if (this.navRight.isOpen) this.navRight.toggleOpen()
-      if (this.navTop.isOpen) this.navTop.toggleOpen()
-      if (this.navBottom.isOpen) this.navBottom.toggleOpen()
+      if (this.navRight && this.navRight.isOpen) this.navRight.toggleOpen()
+      if (this.navTop && this.navTop.isOpen) this.navTop.toggleOpen()
+      if (this.navBottom && this.navBottom.isOpen) this.navBottom.toggleOpen()
     }
     if (options.position === POSITION.RIGHT && options.opened) {
-      if (this.navLeft.isOpen) this.navLeft.toggleOpen()
-      if (this.navTop.isOpen) this.navTop.toggleOpen()
-      if (this.navBottom.isOpen) this.navBottom.toggleOpen()
+      if (this.navLeft && this.navLeft.isOpen) this.navLeft.toggleOpen()
+      if (this.navTop && this.navTop.isOpen) this.navTop.toggleOpen()
+      if (this.navBottom && this.navBottom.isOpen) this.navBottom.toggleOpen()
     }
     if (options.position === POSITION.TOP) {
       if (options.opened) {
-        if (this.navRight.isOpen) this.navRight.toggleOpen()
-        if (this.navLeft.isOpen) this.navLeft.toggleOpen()
-        if (this.navBottom.isOpen) this.navBottom.toggleOpen()
+        if (this.navRight && this.navRight.isOpen) this.navRight.toggleOpen()
+        if (this.navLeft && this.navLeft.isOpen) this.navLeft.toggleOpen()
+        if (this.navBottom && this.navBottom.isOpen) this.navBottom.toggleOpen()
         this.hideHeader = true
       } else {
         this.hideHeader = false
@@ -76,9 +92,9 @@ export class MainComponentComponent implements OnInit {
     }
     if (options.position === POSITION.BOTTOM) {
       if (options.opened) {
-        if (this.navRight.isOpen) this.navRight.toggleOpen()
-        if (this.navLeft.isOpen) this.navLeft.toggleOpen()
-        if (this.navTop.isOpen) this.navTop.toggleOpen()
+        if (this.navRight && this.navRight.isOpen) this.navRight.toggleOpen()
+        if (this.navLeft && this.navLeft.isOpen) this.navLeft.toggleOpen()
+        if (this.navTop && this.navTop.isOpen) this.navTop.toggleOpen()
         this.hideHeader = true
         this.showTopFooter = true
       } else {
@@ -95,24 +111,24 @@ export class MainComponentComponent implements OnInit {
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
     switch (options.src) {
       case POSITION.LEFT:
-        this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navTop) this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navBottom) this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.RIGHT:
-        this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navTop) this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navBottom) this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.TOP:
-        this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navBottom) this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
       case POSITION.BOTTOM:
-        this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
-        this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navTop) this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
     }
   }
@@ -138,5 +154,12 @@ export class MainComponentComponent implements OnInit {
         back2.style.opacity = '0'
       }
     }
+  }
+
+  isActiveNavigation(nav: string): boolean {
+    if (nav === POSITION.TOP) return this.activeNavigations[0]
+    if (nav === POSITION.BOTTOM) return this.activeNavigations[1]
+    if (nav === 'lateral') return this.activeNavigations[2]
+    return false
   }
 }
