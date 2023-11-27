@@ -25,9 +25,8 @@ export class MainComponentComponent implements OnInit {
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
   @ViewChild('nav_top') navTop!: NavigationSuperiorComponent
   @ViewChild('nav_bottom') navBottom!: NavigationInferiorComponent
-  @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
 
-  selectedButton: ButtonMenuComponent | null = null
+  selectedButton: IButtonMenuData | null = null
   protected _orientation!: 'portrait' | 'landscape'
   hideHeader: boolean = false
   showTopFooter: boolean = false
@@ -52,6 +51,15 @@ export class MainComponentComponent implements OnInit {
 
     this.form.get('navigations')?.valueChanges.subscribe(change => {
       this.activeNavigations = change
+
+      setTimeout(() => {
+        if (this.selectedButton) {
+          if (!!this.navRight) this.navRight.remoteOpen(this.selectedButton.token || '', false)
+          if (!!this.navLeft) this.navLeft.remoteOpen(this.selectedButton.token || '', false)
+          if (!!this.navTop) this.navTop.remoteOpen(this.selectedButton.token || '', false)
+          if (!!this.navBottom) this.navBottom.remoteOpen(this.selectedButton.token || '', false)
+        }
+      }, 200);
     })
   }
 
@@ -109,6 +117,8 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
+    this.selectedButton = options.isColladpsed ? null : options.data
+
     switch (options.src) {
       case POSITION.LEFT:
         if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
