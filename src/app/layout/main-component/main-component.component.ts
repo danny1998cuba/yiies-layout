@@ -113,7 +113,7 @@ export class MainComponentComponent implements OnInit {
   }
 
   interact() {
-    console.log('back Int');
+    console.log('Action');
   }
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
