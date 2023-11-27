@@ -37,6 +37,10 @@ body {
     outline: none;
 }
 
+.navigation.show-content~.custom-footer .ft-logo {
+    z-index: 11;
+}
+
 .custom-footer {
     position: absolute;
     content: '';

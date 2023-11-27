@@ -1,8 +1,6 @@
 <div class="d-flex align-items-center justify-content-between w-100 ft-container"
     [class.with-navigation]="withNavigation">
     <div class="d-flex align-items-center">
-        <img src="../../../assets/logo/symbol.png" alt="logo" class="ft-logo" [class.showing]="_showingLogo">
-
         <div class="btn btn-icon glass-btn p-1 me-2" (click)="$event.stopPropagation()">
             <img src="./assets/images/volvo.webp" alt="" class="h-100">
         </div>
@@ -12,8 +10,11 @@
         </div>
     </div>
 
-    <button class="change-btn btn text-dark glass-btn my-1"
-        (click)="buttonAction.emit($event);$event.stopPropagation()">
+    <button class="change-btn btn text-dark glass-btn" (click)="buttonAction.emit($event);$event.stopPropagation()">
         {{buttonName}}
     </button>
+</div>
+
+<div class="ft-logo" [class.showing]="_showingLogo" (click)="$event.stopPropagation()">
+    <img src="../../../assets/logo/symbol.png" alt="logo">
 </div>

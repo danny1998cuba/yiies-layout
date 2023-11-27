@@ -5,18 +5,21 @@
 <!-- End::Header -->
 
 <!-- Begin::Navigation -->
-<app-navigation-lateral class="navigation lateral left" [position]="'left'" [orientation]="_orientation" #nav_left
-    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+<app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral left" [position]="'left'"
+    [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-<app-navigation-lateral class="navigation lateral right" [position]="'right'" [orientation]="_orientation" #nav_right
-    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+<app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral right" [position]="'right'"
+    [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-<app-navigation-superior class="navigation top" [orientation]="_orientation" #nav_top [class.side]="showTopFooter"
-    [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
+<app-navigation-superior *ngIf="isActiveNavigation('top')" class="navigation top" [orientation]="_orientation" #nav_top
+    [class.side]="showTopFooter" [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
     (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-superior>
-<app-navigation-inferior class="navigation bottom side" [orientation]="_orientation" #nav_bottom
-    (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
+<app-navigation-inferior *ngIf="isActiveNavigation('bottom')" class="navigation bottom side"
+    [orientation]="_orientation" #nav_bottom (clicked)="syncLateralnavigations($event)"
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
     (emitHeight)="innerHeightChanged($event)"></app-navigation-inferior>
 <!-- End::Navigation -->
 
@@ -28,13 +31,20 @@
 
 <!-- Begin::Content -->
 <div class="content">
-    <router-outlet></router-outlet>
+    <form [formGroup]="form" class="form">
+        Select the active navigations
+        <label formArrayName="navigations" *ngFor="let position of positions; let i = index">
+            <input type="checkbox" [formControlName]="i">
+            {{position}}
+        </label>
+    </form>
 </div>
 <!-- End::Content -->
 
 <!-- Begin::Footer -->
 <app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
-    [with-navigation]="true" [class.hidden-footer]="showTopFooter"></app-dynamic-footer>
+    [with-navigation]="isActiveNavigation('bottom')" [class.hidden-footer]="showTopFooter"></app-dynamic-footer>
 <app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
-    [position]="'top'" [with-navigation]="true" [class.hidden-footer]="!showTopFooter"></app-dynamic-footer>
+    [position]="'top'" [with-navigation]="isActiveNavigation('top')"
+    [class.hidden-footer]="!showTopFooter"></app-dynamic-footer>
 <!-- End::Footer -->
