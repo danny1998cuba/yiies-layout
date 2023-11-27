@@ -8,5 +8,5 @@
 </div>
 
 <app-action-panel *ngIf="!!activeButton" class="action-panel" [position]="position" [data]="activeButton"
-    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
+    [ngStyle]="styleContent" [min-heigh-opened]="minHeighOpened"
     (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>

@@ -8,6 +8,7 @@
 body {
     overflow: hidden;
     min-height: 100dvh;
+    min-height: -webkit-fill-available;
 }
 
 .flex-center {
@@ -52,7 +53,8 @@ body {
     transition: transform 200ms;
 
     &.bottom {
-        bottom: calc(100svh - 100dvh);
+        bottom: calc(100svh - 100dvh) !important;
+        bottom: 0;
 
         &.hidden-footer {
             transform: translateX(-100%);
@@ -60,7 +62,8 @@ body {
     }
 
     &.top {
-        top: calc(100svh - 100dvh);
+        top: calc(100svh - 100dvh) !important;
+        top: 0;
 
         &.hidden-footer {
             transform: translateX(-100%);

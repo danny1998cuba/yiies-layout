@@ -8,6 +8,7 @@ import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 })
 export class ActionPanelComponent implements OnInit, AfterViewInit {
   @HostBinding('style.height') height = '100%'
+  @HostBinding('style.min-height') minHeight = '100%'
 
   @Input() data!: IActionButton
 
@@ -51,15 +52,15 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
     if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
       const translate = (this.vpHeight - 55 - this.data.bound.bottom)
 
-      this.styleInner['--translate'] = `-${translate}px`
-      this.styleInner['minHeight'] = `${this.data.bound.height}px`
-      this.styleInner['height'] = `${this.data.bound.height}px`
+      this.styleInner['--translate'] = `${translate * -1}px`
+      this.styleInner['min-height.px'] = this.data.bound.height
+      this.styleInner['height.px'] = this.data.bound.height
     } else {
       const translate = this.data.bound.left
 
       this.styleInner['--translate'] = `${translate}px`
-      this.styleInner['minWidth'] = `${this.data.bound.height}px`
-      this.styleInner['width'] = `${this.data.bound.height}px`
+      this.styleInner['min-width.px'] = this.data.bound.height
+      this.styleInner['width.px'] = this.data.bound.height
     }
   }
 
@@ -89,9 +90,10 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
         }
         this.emitHeight.emit(height)
 
-        this.styleInner['height'] = `${height}px`
-        this.styleInner['bottom'] = `-${translate}px`
+        this.styleInner['height.px'] = height
+        this.styleInner['bottom.px'] = translate * -1
         this.height = `${height}px`
+        this.minHeight = `${height}px`
       }, 150);
     } else {
       setTimeout(() => {
@@ -119,11 +121,12 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
           height = parseFloat(this.minHeightOpened)
         }
 
-        this.styleInner['height'] = `${height - 45}px`
-        this.styleInner['left'] = `-${translate}px`
-        this.styleInner['width'] = `${this.vpWidth}px`
-        this.styleInner['minWidth'] = `${this.vpWidth}px`
+        this.styleInner['height.px'] = height - 45
+        this.styleInner['left.px'] = translate * -1
+        this.styleInner['width.px'] = this.vpWidth
+        this.styleInner['min-width.px'] = this.vpWidth
         this.height = `${height}px`
+        this.minHeight = `${height}px`
       }, 150);
     }
   }

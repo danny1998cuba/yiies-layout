@@ -75,10 +75,10 @@ export class ButtonMenuComponent implements OnInit {
 
     if (this.direction === 'vertical') {
       this.expandedHeight = getComputedStyle(this.options.nativeElement).height
-      this.optionsStyle['height'] = this.expandedHeight
+      this.optionsStyle['height.px'] = parseFloat(this.expandedHeight)
     } else {
       this.expandedWidth = getComputedStyle(this.options.nativeElement).width
-      this.optionsStyle['width'] = this.expandedWidth
+      this.optionsStyle['width.px'] = parseFloat(this.expandedWidth)
     }
 
     setTimeout(() => {
@@ -94,11 +94,14 @@ export class ButtonMenuComponent implements OnInit {
 
     if (this.direction === 'vertical') {
       this.expandedHeight = ''
+      delete this.optionsStyle['height.px']
       delete this.optionsStyle['height']
     } else {
       this.expandedWidth = ''
+      delete this.optionsStyle['width.px']
       delete this.optionsStyle['width']
     }
+    delete this.optionsStyle['margin.px']
     delete this.optionsStyle['margin']
     delete this.optionsStyle['justifyContent']
 
@@ -106,7 +109,7 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   adaptContentHeight(height: number | null) {
-    this.optionsStyle['height'] = height ? `${height}px` : this.expandedHeight
+    this.optionsStyle['height.px'] = height ? height : parseFloat(this.expandedHeight)
   }
 
   adaptContentWidth(setNull: boolean) {
@@ -115,14 +118,15 @@ export class ButtonMenuComponent implements OnInit {
 
     if (!setNull && centered) {
       w += remToPixels(1.5)
-      this.optionsStyle['margin'] = '0'
+      this.optionsStyle['margin.px'] = '0'
       this.optionsStyle['justifyContent'] = 'center'
     } else {
+      delete this.optionsStyle['margin.px']
       delete this.optionsStyle['margin']
       delete this.optionsStyle['justifyContent']
     }
 
-    this.optionsStyle['width'] = setNull ? this.expandedWidth : `${w}px`
+    this.optionsStyle['width.px'] = setNull ? parseFloat(this.expandedWidth) : w
   }
 
 }

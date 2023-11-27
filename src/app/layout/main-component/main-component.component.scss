@@ -1,7 +1,8 @@
 :host {
     overflow: hidden;
     display: block;
-    min-height: 100dvh;
+    min-height: 100dvh !important;
+    min-height: 100vh;
 }
 
 .header {
@@ -18,7 +19,8 @@
 .secondary-background {
     width: 100%;
     height: 100%;
-    min-height: 100dvh;
+    min-height: 100dvh !important;
+    min-height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
@@ -35,15 +37,9 @@
 }
 
 .secondary-background {
-    height: 1dvh;
+    height: 1vh;
     transition: filter 200ms;
     z-index: -1;
-}
-
-.layout-content {
-    height: calc(calc(100svh - 100dvh) - 43px);
-    padding-bottom: 65px;
-    position: relative;
 }
 
 .navigation {
@@ -53,7 +49,8 @@
     &.lateral {
         position: absolute !important;
         content: '';
-        bottom: calc(calc(100svh - 100dvh) + 55px);
+        bottom: calc(calc(100svh - 100dvh) + 55px) !important;
+        bottom: 55px;
         width: calc(45px + 0.5rem);
         overflow-x: hidden;
         overflow-y: auto;
@@ -83,8 +80,10 @@
             overflow: hidden;
 
             &~.background-component {
-                height: calc(100dvh - var(--navigation-content-height));
-                min-height: calc(100dvh - var(--navigation-content-height));
+                height: calc(100dvh - var(--navigation-content-height)) !important;
+                min-height: calc(100dvh - var(--navigation-content-height)) !important;
+                height: calc(100vh - var(--navigation-content-height));
+                min-height: calc(100vh - var(--navigation-content-height));
                 border-bottom-left-radius: 0.75rem;
                 border-bottom-right-radius: 0.75rem;
             }
@@ -113,14 +112,17 @@
         transition: height 200ms, padding 200ms;
 
         &.show-content {
-            height: calc(100dvh - 55px);
+            height: calc(100dvh - 55px) !important;
+            height: calc(100vh - 55px);
             padding: 0;
             z-index: 10;
             overflow: hidden;
 
             &~.background-component {
-                height: calc(100dvh - var(--navigation-content-height));
-                min-height: calc(100dvh - var(--navigation-content-height));
+                height: calc(100dvh - var(--navigation-content-height)) !important;
+                min-height: calc(100dvh - var(--navigation-content-height)) !important;
+                height: calc(100vh - var(--navigation-content-height));
+                min-height: calc(100vh - var(--navigation-content-height));
                 border-radius: 0.75rem;
                 top: calc(var(--navigation-content-top));
             }
@@ -148,14 +150,17 @@
         transition: height 200ms, padding 200ms;
 
         &.show-content {
-            height: calc(100dvh - 55px);
+            height: calc(100dvh - 55px) !important;
+            height: calc(100vh - 55px);
             padding: 0;
             z-index: 10;
             overflow: hidden;
 
             &~.background-component {
-                height: calc(100dvh - var(--navigation-content-top));
-                min-height: calc(100dvh - var(--navigation-content-top));
+                height: calc(100dvh - var(--navigation-content-top)) !important; 
+                min-height: calc(100dvh - var(--navigation-content-top)) !important;
+                height: calc(100vh - var(--navigation-content-top));
+                min-height: calc(100vh - var(--navigation-content-top));
                 border-bottom-left-radius: 0.75rem;
                 border-bottom-right-radius: 0.75rem;
             }

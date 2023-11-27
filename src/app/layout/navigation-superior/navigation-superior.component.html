@@ -11,7 +11,7 @@
 </div>
 
 <app-action-panel *ngIf="!!activeButton" class="action-panel" [position]="position" [data]="activeButton"
-    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
-    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>
+    [ngStyle]="styleContent" [min-heigh-opened]="minHeighOpened" (emitHeight)="updateHeightAfterContentChange($event)"
+    [orientation]="_orientation"></app-action-panel>
 
 <app-icon [icon]="'other'" class="svg-icon svg-icon-2x nav-open-icon" [class.hidden-side]="!_isSide"></app-icon>

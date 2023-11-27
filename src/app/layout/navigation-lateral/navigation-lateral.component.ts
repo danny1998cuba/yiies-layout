@@ -50,6 +50,7 @@ export class NavigationLateralComponent implements OnInit {
   protected activeButton: IActionButton | null = null
   protected selectedButton: ButtonMenuComponent | null = null
   protected styleContent: any = {}
+  minHeighOpened: string = ''
 
   constructor(
     private ref: ElementRef
@@ -125,7 +126,8 @@ export class NavigationLateralComponent implements OnInit {
         setTimeout(() => {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
-          this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
+          this.styleContent['min-height.px'] = parseFloat(getComputedStyle(this.options.nativeElement).height)
+          this.minHeighOpened = getComputedStyle(this.options.nativeElement).height
 
           setTimeout(() => {
             // Scroll to the bottom when opening

@@ -46,7 +46,8 @@
         top: 0;
 
         .ap-content {
-            height: calc(100dvh - 98px);
+            height: calc(100dvh - 98px) !important;
+            height: calc(100vh - 98px);
             left: 0;
             top: 45px;
             border-bottom-right-radius: 0.75rem;
@@ -62,7 +63,8 @@
         bottom: 0;
 
         .ap-content {
-            height: calc(100dvh - 98px);
+            height: calc(100dvh - 98px) !important;
+            height: calc(100vh - 98px);
             left: 0;
             bottom: 45px;
             border-top-right-radius: 0.75rem;
