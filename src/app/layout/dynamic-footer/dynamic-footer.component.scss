@@ -3,13 +3,39 @@
 }
 
 .ft-logo {
-    width: 0px;
+    position: absolute;
+    content: '';
+    width: 45px;
     height: 45px;
-    transition: width 200ms;
+    top: 0;
+    left: 0.25rem;
+    transition: opacity 200ms, top 200ms;
+    opacity: 0;
+    z-index: 1;
+
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+
+    img {
+        width: 80%;
+        height: 80%;
+    }
 
     &.showing {
-        width: 45px;
-        margin-right: 0.5rem;
+        opacity: 1;
+    }
+}
+
+:host {
+    &.top .ft-logo.showing {
+        top: 50px;
+        align-items: flex-start;
+    }
+
+    &.bottom .ft-logo.showing {
+        top: -50px;
+        align-items: flex-end;
     }
 }
 
