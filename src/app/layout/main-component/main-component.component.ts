@@ -2,11 +2,11 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChil
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
 import { menu_example } from 'src/app/data/mock-data';
-import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { POSITION, Position } from 'src/app/data/utils.model';
 import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
 import { NavigationInferiorComponent } from '../navigation-inferior/navigation-inferior.component';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { IButtonMenuData } from 'src/app/data/button-menu.model';
 
 @Component({
   selector: 'app-main-component',

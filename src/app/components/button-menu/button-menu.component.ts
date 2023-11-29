@@ -1,16 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { IButtonMenuData } from 'src/app/data/button-menu.model';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
-
-export interface IButtonMenuData {
-  icon: string;
-  token: string;
-  index: number;
-  name?: string;
-  show: boolean;
-  active: boolean;
-  subOptions?: IButtonMenuData[];
-}
 
 @Component({
   selector: 'app-button-menu',

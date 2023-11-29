@@ -1,4 +1,4 @@
-import { IButtonMenuData } from "../components/button-menu/button-menu.component"
+import { IButtonMenuData } from "./button-menu.model"
 
 export const auth_user = {
     "free_bonus": {

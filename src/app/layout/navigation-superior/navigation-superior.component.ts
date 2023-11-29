@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { IButtonMenuData, ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
+import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
+import { IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
-import { clearActive, remToPixels } from 'src/app/utils/utils';
+import { remToPixels } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-superior',
