@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ButtonMenuType } from 'src/app/data/button-menu.model';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 
 @Component({
@@ -49,82 +50,94 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
 
   initialize() {
     if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
-      const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+      if (this.data.button.type === ButtonMenuType.SIDEBAR) {
 
-      this.styleInner['--translate'] = `-${translate}px`
-      this.styleInner['minHeight'] = `${this.data.bound.height}px`
-      this.styleInner['height'] = `${this.data.bound.height}px`
+      } else {
+        const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+
+        this.styleInner['--translate'] = `-${translate}px`
+        this.styleInner['minHeight'] = `${this.data.bound.height}px`
+        this.styleInner['height'] = `${this.data.bound.height}px`
+      }
     } else {
-      const translate = this.data.bound.left
+      if (this.data.button.type === ButtonMenuType.SIDEBAR) {
 
-      this.styleInner['--translate'] = `${translate}px`
-      this.styleInner['minWidth'] = `${this.data.bound.height}px`
-      this.styleInner['width'] = `${this.data.bound.height}px`
+      } else {
+        const translate = this.data.bound.left
+
+        this.styleInner['--translate'] = `${translate}px`
+        this.styleInner['minWidth'] = `${this.data.bound.height}px`
+        this.styleInner['width'] = `${this.data.bound.height}px`
+      }
     }
   }
 
   adjustHeight() {
-    if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
-      setTimeout(() => {
-        const translate = (this.vpHeight - 55 - this.data.bound.bottom)
-        const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
-        const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
+    if (this.data.button.type !== ButtonMenuType.SIDEBAR) {
+      if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
+        setTimeout(() => {
+          const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+          const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
+          const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
 
-        let contentHeight = this.component.nativeElement.offsetHeight
-        if (this.component.nativeElement?.style?.height) {
-          contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-        } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-          contentHeight = this.component.nativeElement.offsetHeight
-        } else {
-          contentHeight = this.component.nativeElement.scrollHeight
-        }
-        let height = 0
+          let contentHeight = this.component.nativeElement.offsetHeight
+          if (this.component.nativeElement?.style?.height) {
+            contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+          } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+            contentHeight = this.component.nativeElement.offsetHeight
+          } else {
+            contentHeight = this.component.nativeElement.scrollHeight
+          }
+          let height = 0
 
-        if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
-          height = contentHeight > max ? max : contentHeight
-        } else if (parseFloat(this.minHeightOpened) < min) {
-          height = min
-        } else {
-          height = parseFloat(this.minHeightOpened)
-        }
-        this.emitHeight.emit(height)
+          if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
+            height = contentHeight > max ? max : contentHeight
+          } else if (parseFloat(this.minHeightOpened) < min) {
+            height = min
+          } else {
+            height = parseFloat(this.minHeightOpened)
+          }
+          this.emitHeight.emit(height)
 
-        this.styleInner['height'] = `${height}px`
-        this.styleInner['bottom'] = `-${translate}px`
-        this.height = `${height}px`
-      }, 150);
+          this.styleInner['height'] = `${height}px`
+          this.styleInner['bottom'] = `-${translate}px`
+          this.height = `${height}px`
+        }, 150);
+      } else {
+        setTimeout(() => {
+          const translate = this.data.bound.left
+          const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+          const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+
+          let contentHeight = this.component.nativeElement.offsetHeight
+          if (this.component.nativeElement?.style?.height) {
+            contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+          } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+            contentHeight = this.component.nativeElement.offsetHeight
+          } else {
+            contentHeight = this.component.nativeElement.scrollHeight
+          }
+          let height = 0
+
+          if (contentHeight > min) {
+            height = contentHeight > max ? max : contentHeight
+            this.emitHeight.emit(height)
+          } else if (parseFloat(this.minHeightOpened) < min) {
+            height = min
+            this.emitHeight.emit(height)
+          } else {
+            height = parseFloat(this.minHeightOpened)
+          }
+
+          this.styleInner['height'] = `${height - 45}px`
+          this.styleInner['left'] = `-${translate}px`
+          this.styleInner['width'] = `${this.vpWidth}px`
+          this.styleInner['minWidth'] = `${this.vpWidth}px`
+          this.height = `${height}px`
+        }, 150);
+      }
     } else {
-      setTimeout(() => {
-        const translate = this.data.bound.left
-        const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-        const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-
-        let contentHeight = this.component.nativeElement.offsetHeight
-        if (this.component.nativeElement?.style?.height) {
-          contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-        } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-          contentHeight = this.component.nativeElement.offsetHeight
-        } else {
-          contentHeight = this.component.nativeElement.scrollHeight
-        }
-        let height = 0
-
-        if (contentHeight > min) {
-          height = contentHeight > max ? max : contentHeight
-          this.emitHeight.emit(height)
-        } else if (parseFloat(this.minHeightOpened) < min) {
-          height = min
-          this.emitHeight.emit(height)
-        } else {
-          height = parseFloat(this.minHeightOpened)
-        }
-
-        this.styleInner['height'] = `${height - 45}px`
-        this.styleInner['left'] = `-${translate}px`
-        this.styleInner['width'] = `${this.vpWidth}px`
-        this.styleInner['minWidth'] = `${this.vpWidth}px`
-        this.height = `${height}px`
-      }, 150);
+      
     }
   }
 

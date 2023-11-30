@@ -12,6 +12,8 @@ export class DynamicFooterComponent implements OnInit {
   // Logo
   _showingLogo: boolean = false
   @Input() set showingLogo(val: boolean) { this._showingLogo = val }
+  _overlapLogo: boolean = false
+  @Input() set overlapLogo(val: boolean) { this._overlapLogo = val }
   @Input() position: Position = POSITION.BOTTOM
   @Input('with-navigation') withNavigation: boolean = false
 

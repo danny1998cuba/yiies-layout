@@ -50,6 +50,7 @@ export class ButtonMenuComponent implements OnInit {
     this.index = this.buttonData.index
     this.class += (this.position === POSITION.TOP || this.position === POSITION.BOTTOM) ? ' flex-row' : ' flex-column-reverse'
     this.class += ` ${this.position}`
+    this.class += ` ${this.buttonData.type}`
   }
 
   action(data: IButtonMenuData, $event: Event) {
@@ -76,14 +77,8 @@ export class ButtonMenuComponent implements OnInit {
         this.checkAction(emmiter, emmiter, $event)
         break;
       case ButtonMenuType.ACTION:
-      case ButtonMenuType.SIDEBAR:
         console.log(this.buttonData.token);
         break;
-      default:
-        this.selectedAction.emit({
-          button: emmiter,
-          bound: target.getBoundingClientRect()
-        })
     }
   }
 

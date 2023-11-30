@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
-import { IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
 import { Position, IActionButton } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
 
@@ -23,6 +23,11 @@ export class NavigationInferiorComponent implements OnInit {
     clearActive(this._menu)
     this.toggleContent(null)
     this.clicked.emit({ position: this.position, opened: false })
+
+    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+      this.remoteOpen(this.activeButton.button.token, true)
+      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
+    }
   }
 
   protected _menu!: IButtonMenuData[]
@@ -74,6 +79,11 @@ export class NavigationInferiorComponent implements OnInit {
   public toggleOpen() {
     this.opened = !this.opened
     if (!this.opened) {
+      if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+        this.remoteOpen(this.activeButton.button.token, true)
+        this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
+      }
+
       clearActive(this._menu)
       this.toggleContent(null)
       this.ref.nativeElement.classList.add('side')
@@ -97,8 +107,21 @@ export class NavigationInferiorComponent implements OnInit {
       this.selectedButton = null
       this.centerButtons()
     } else {
-      if (button) this.selectedButton = button
-      this.isCentered = true
+      if (button) {
+        this.selectedButton = button
+
+        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+          this.toggleContent({
+            button: button.buttonData,
+            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+          })
+          this.isCentered = false
+        } else {
+          this.isCentered = true
+        }
+      } else {
+        this.isCentered = true
+      }
     }
 
     this.buttons.forEach(bt => {

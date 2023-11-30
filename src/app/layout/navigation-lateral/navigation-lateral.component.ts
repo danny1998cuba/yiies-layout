@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
-import { IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
 
@@ -21,6 +21,11 @@ export class NavigationLateralComponent implements OnInit {
     this.opened = false
     clearActive(this._menu)
     this.toggleContent(null)
+
+    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+      this.remoteOpen(this.activeButton.button.token, true)
+      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
+    }
   }
 
   @Input() position: Position = 'left'
@@ -61,6 +66,11 @@ export class NavigationLateralComponent implements OnInit {
   public toggleOpen() {
     this.opened = !this.opened
     if (!this.opened) {
+      if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+        this.remoteOpen(this.activeButton.button.token, true)
+        this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
+      }
+
       clearActive(this._menu)
       this.toggleContent(null)
     }
@@ -80,7 +90,16 @@ export class NavigationLateralComponent implements OnInit {
       this.toggleContent(null)
       this.selectedButton = null
     } else {
-      if (button) this.selectedButton = button
+      if (button) {
+        this.selectedButton = button
+
+        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+          this.toggleContent({
+            button: button.buttonData,
+            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+          })
+        }
+      }
     }
 
     this.buttons.forEach(bt => {

@@ -28,13 +28,13 @@ export function clearSelected(menus: SelectionOptionButtonMenu[]) {
 }
 
 export enum ButtonMenuType {
-    SIMPLE_SELECTION = 'simple-selection',
-    SELECTION_OPTION = 'selection-option',
-    ACTION = 'action',
-    SIDEBAR = 'sidebar',
-    MENU = 'menu',
-    WITH_CONTENT = 'with-content',
-    WITH_CONTENT_AND_MENU = 'with-content-and-menu' // mainly for filters (search, my-lists)
+    SIMPLE_SELECTION = 'simple-selection',          // done    
+    SELECTION_OPTION = 'selection-option',          // done
+    ACTION = 'action',                              // pending
+    SIDEBAR = 'sidebar',                            // pending
+    MENU = 'menu',                                  // pending submenus
+    WITH_CONTENT = 'with-content',                  // done
+    WITH_CONTENT_AND_MENU = 'with-content-and-menu' // pending
 }
 
 export type AllButtonMenuTypes = ActionButtonMenu | MenuButtonMenu | ContentButtonMenu | ContentAndMenuButtonMenu |
