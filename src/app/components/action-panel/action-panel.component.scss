@@ -2,7 +2,6 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    left: 0;
     z-index: -1;
 
     display: flex;
@@ -83,5 +82,32 @@
         flex-direction: column;
 
         overflow: hidden;
+    }
+
+    &.sidebar {
+        width: 70%;
+        padding: 0;
+        
+        .ap-content {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0.75rem;
+        }
+
+        &.top {
+            height: calc(100dvh - 55px) !important;
+
+            .ap-content {
+                top: 0;
+            }
+        }
+
+        &.bottom {
+            height: calc(100dvh - 55px) !important;
+
+            .ap-content {
+                bottom: 0;
+            }
+        }
     }
 }

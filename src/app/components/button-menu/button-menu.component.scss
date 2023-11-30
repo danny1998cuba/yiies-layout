@@ -158,6 +158,38 @@
             margin: 0 !important;
         }
     }
+
+    &.sidebar.ellapsed {
+        padding: 0;
+
+        &.left {
+            border-top-right-radius: 0.75rem;
+            border-top-left-radius: 0 !important;
+        }
+
+        &.right {
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0 !important;
+        }
+
+        &.top {
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+        &.bottom {
+            border-bottom-right-radius: 0 !important;
+            border-top-right-radius: 0.75rem;
+        }
+
+        .bm-main-icon {
+            transform: translateY(0);
+        }
+
+        .bm-collapse-wrapper {
+            display: none;
+        }
+    }
 }
 
 .show-content :host.ellapsed {

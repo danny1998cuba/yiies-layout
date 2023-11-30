@@ -2,11 +2,11 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChil
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
 import { menu_example } from 'src/app/data/mock-data';
-import { ButtonMenuComponent, IButtonMenuData } from 'src/app/components/button-menu/button-menu.component';
 import { POSITION, Position } from 'src/app/data/utils.model';
 import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
 import { NavigationInferiorComponent } from '../navigation-inferior/navigation-inferior.component';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ButtonMenuType, IButtonMenuData } from 'src/app/data/button-menu.model';
 
 @Component({
   selector: 'app-main-component',
@@ -36,6 +36,7 @@ export class MainComponentComponent implements OnInit {
   form: FormGroup
   positions = [POSITION.TOP, POSITION.BOTTOM, 'lateral']
   activeNavigations = [true, true, true]
+  ButtonMenuType = ButtonMenuType
 
   constructor(
     private _route: ActivatedRoute,
@@ -148,7 +149,8 @@ export class MainComponentComponent implements OnInit {
     this.navContentTop = `${height !== 0 ? height : 0}px`
 
     const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    this.navHeight = `${height !== 0 ? height : vpHeight - 98}px`
+    const factor = this.selectedButton?.type === ButtonMenuType.SIDEBAR ? 55 : 98
+    this.navHeight = `${height !== 0 ? height : vpHeight - factor}px`
 
     const back2 = document.getElementById('back2')
     if (this._orientation === 'portrait') {

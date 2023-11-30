@@ -3,7 +3,13 @@
         'flex-column': direction === 'vertical',
         'flex-row-reverse': direction !== 'vertical'
     }">
-        <app-icon [icon]="buttonData.icon" class="svg-icon svg-icon-2x"></app-icon>
+        <app-icon [icon]="buttonData.icon" class="svg-icon svg-icon-2x"
+            *ngIf="buttonData.type !== ButtonMenuType.SIMPLE_SELECTION || 
+            (buttonData.type === ButtonMenuType.SIMPLE_SELECTION && !buttonData.selected); else iconSelected"></app-icon>
+        <ng-template #iconSelected>
+            <app-icon *ngIf="!!buttonData.selected" [icon]="buttonData.selected.icon"
+                class="svg-icon svg-icon-2x"></app-icon>
+        </ng-template>
         <app-icon [icon]="direction === 'vertical' ? 'bottomArrow' : 'arrowLeft'" class="main-icon svg-icon svg-icon-1"
             *ngIf="!collapsed" (click)="collapse($event, 'click')"></app-icon>
     </div>

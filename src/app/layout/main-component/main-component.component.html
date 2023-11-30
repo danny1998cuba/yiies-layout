@@ -43,8 +43,10 @@
 
 <!-- Begin::Footer -->
 <app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
+    [overlapLogo]="!selectedButton || (selectedButton && selectedButton.type !== ButtonMenuType.SIDEBAR)"
     [with-navigation]="isActiveNavigation('bottom')" [class.hidden-footer]="showTopFooter"></app-dynamic-footer>
 <app-dynamic-footer button-name="Change image" (buttonAction)="changeImage()" [showingLogo]="hideHeader"
+    [overlapLogo]="!selectedButton || (selectedButton && selectedButton.type !== ButtonMenuType.SIDEBAR)"
     [position]="'top'" [with-navigation]="isActiveNavigation('top')"
     [class.hidden-footer]="!showTopFooter"></app-dynamic-footer>
 <!-- End::Footer -->

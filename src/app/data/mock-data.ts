@@ -1,4 +1,4 @@
-import { IButtonMenuData } from "../components/button-menu/button-menu.component"
+import { ButtonMenuType, ContentAndMenuButtonMenu, ContentButtonMenu, IButtonMenuData, MenuButtonMenu, SelectionButtonMenu, SelectionOptionButtonMenu, SidebarOptionButtonMenu } from "./button-menu.model"
 
 export const auth_user = {
     "free_bonus": {
@@ -3790,278 +3790,49 @@ export const auth_user = {
 }
 
 export const menu_example: IButtonMenuData[] = [
-    {
-        icon: 'yiies',
-        token: 'functionalities',
-        show: true,
-        active: false,
-        index: 0,
-        subOptions: [
-            {
-                icon: 'tooliit',
-                token: 'tooliit',
-                show: true,
-                active: false,
-                index: 0
-            },
-            {
-                icon: 'serviice',
-                token: 'serviice',
-                show: true,
-                active: false,
-                index: 1
-            },
-            {
-                icon: 'pharmii',
-                token: 'pharmii',
-                show: true,
-                active: false,
-                index: 2
-            },
-            {
-                icon: 'listiit',
-                token: 'listiit',
-                show: true,
-                active: false,
-                index: 3
-            },
-            {
-                icon: 'yummii',
-                token: 'yummii',
-                show: true,
-                active: false,
-                index: 4
-            },
-            {
-                icon: 'propertiiWelcomii',
-                token: 'welcomii',
-                show: true,
-                active: false,
-                index: 5
-            },
-            {
-                icon: 'riidePiiople',
-                token: 'riidePiiople',
-                show: true,
-                active: false,
-                index: 6
-            },
-            {
-                icon: 'riideThiings',
-                token: 'riideThiings',
-                show: true,
-                active: false,
-                index: 6
-            },
-            {
-                icon: 'yoiin',
-                token: 'yoiin',
-                show: true,
-                active: false,
-                index: 7
-            }
-        ]
-    },
-    {
-        icon: 'other',
-        token: 'other',
-        show: true,
-        active: false,
-        index: 1,
-        subOptions: [
-            {
-                icon: 'info',
-                token: 'info',
-                show: true,
-                active: false,
-                index: 0
-            },
-            {
-                icon: 'editItem',
-                token: 'in',
-                show: true,
-                active: false,
-                index: 1
-            },
-            {
-                icon: 'deleteItem',
-                token: 'out',
-                show: true,
-                active: false,
-                index: 2
-            },
-            {
-                icon: 'text',
-                token: 'chat',
-                show: true,
-                active: false,
-                index: 3
-            },
-            {
-                icon: 'share',
-                token: 'share',
-                show: true,
-                active: false,
-                index: 4
-            },
-            {
-                icon: 'alertTriangle',
-                token: 'report',
-                show: true,
-                active: false,
-                index: 5
-            },
-            {
-                icon: 'date',
-                token: 'calendar',
-                show: true,
-                active: false,
-                index: 6
-            }
-        ]
-    },
-    {
-        icon: 'addItem',
-        token: 'posting',
-        show: true,
-        active: false,
-        index: 2,
-        subOptions: [
-            {
-                icon: 'addItem',
-                token: 'add',
-                show: true,
-                active: false,
-                index: 0
-            },
-            {
-                icon: 'editItem',
-                token: 'edit',
-                show: true,
-                active: false,
-                index: 1
-            },
-            {
-                icon: 'deleteItem',
-                token: 'delete',
-                show: true,
-                active: false,
-                index: 2
-            }
-        ]
-    },
-    {
-        icon: 'settings',
-        token: 'settings',
-        show: true,
-        active: false,
-        index: 3,
-        subOptions: [
-            {
-                icon: 'gridFill',   // Change icon
-                token: 'menu-location',
-                name: 'Menu Location',
-                show: true,
-                active: false,
-                index: 0
-            },
-            {
-                icon: 'gridFill',   // Change icon
-                token: 'gestures',
-                name: 'Gestures',
-                show: true,
-                active: false,
-                index: 1
-            },
-            {
-                icon: 'adExtend',   // Change icon
-                token: 'posting-position',
-                name: 'Posting Options',
-                show: true,
-                active: false,
-                index: 2
-            },
-            {
-                icon: 'settings',
-                token: 'settings1',
-                name: 'Setting A',
-                show: true,
-                active: false,
-                index: 3
-            },
-            {
-                icon: 'settings',
-                token: 'settings2',
-                name: 'Setting B',
-                show: true,
-                active: false,
-                index: 4
-            }
-        ]
-    },
-    {
-        icon: 'search',
-        token: 'search',
-        show: true,
-        active: false,
-        index: 4
-    },
-    {
-        icon: 'user',
-        token: 'user',
-        show: true,
-        active: false,
-        index: 5,
-        subOptions: [
-            {
-                icon: 'bag',
-                token: 'mylist',
-                show: true,
-                active: false,
-                index: 0
-            },
-            {
-                icon: 'text',
-                token: 'chat',
-                show: true,
-                active: false,
-                index: 1
-            },
-            {
-                icon: 'date',
-                token: 'calendar',
-                show: true,
-                active: false,
-                index: 2
-            },
-            {
-                icon: 'graphPie',
-                token: 'data',
-                show: true,
-                active: false,
-                index: 3
-            },
-            {
-                icon: 'tuggles',
-                token: 'inout',
-                show: true,
-                active: false,
-                index: 4
-            },
-            {
-                icon: 'qrCode',
-                token: 'qr',
-                show: true,
-                active: false,
-                index: 5
-            }
-        ]
-    },
-    {
-        icon: 'showList',
-        token: 'navbar',
-        show: true,
-        active: false,
-        index: 6
-    },
+    new SelectionButtonMenu('yiies', 'functionalities', 0, true, false, [
+        new SelectionOptionButtonMenu('tooliit', 'tooliit', 0, true, false),
+        new SelectionOptionButtonMenu('serviice', 'serviice', 1, true, false),
+        new SelectionOptionButtonMenu('pharmii', 'pharmii', 2, true, false),
+        new SelectionOptionButtonMenu('listiit', 'listiit', 3, true, false),
+        new SelectionOptionButtonMenu('yummii', 'yummii', 4, true, false),
+        new SelectionOptionButtonMenu('propertiiWelcomii', 'welcomii', 5, true, false),
+        new SelectionOptionButtonMenu('riidePiiople', 'riidePiiople', 6, true, false),
+        new SelectionOptionButtonMenu('riideThiings', 'riideThiings', 7, true, false),
+        new SelectionOptionButtonMenu('yoiin', 'yoiin', 0, true, false)
+    ]),
+    new MenuButtonMenu('other', 'other', 1, true, false, [
+        new ContentButtonMenu('info', 'info', 0, true, false),
+        new ContentButtonMenu('editItem', 'in', 1, true, false),
+        new ContentButtonMenu('deleteItem', 'out', 2, true, false),
+        new ContentAndMenuButtonMenu('text', 'chat', 3, true, false, []),
+        new ContentButtonMenu('share', 'share', 4, true, false),
+        new ContentButtonMenu('alertTriangle', 'report', 5, true, false),
+        new ContentAndMenuButtonMenu('date', 'calendar', 6, true, false, []),
+    ]),
+    new MenuButtonMenu('addItem', 'posting', 2, true, false, [
+        new ContentButtonMenu('addItem', 'add', 0, true, false),
+        new ContentButtonMenu('editItem', 'edit', 1, true, false),
+        new ContentButtonMenu('deleteItem', 'delete', 2, true, false),
+    ]),
+    new MenuButtonMenu('settings', 'settings', 3, true, false, [
+        new ContentButtonMenu('gridFill', 'menu-location', 0, true, false, 'Menu Location'),
+        new ContentButtonMenu('gridFill', 'gestures', 1, true, false, 'Gestures'),
+        new ContentButtonMenu('adExtend', 'posting-position', 2, true, false, 'Posting Options'),
+        new ContentButtonMenu('settings', 'settings1', 3, true, false, 'Setting A'),
+        new ContentButtonMenu('settings', 'settings2', 4, true, false, 'Setting B')
+    ]),
+    new ContentAndMenuButtonMenu('search', 'search', 4, true, false, [
+        new ContentButtonMenu('filter', 'filters', 0, true, false),
+        new ContentButtonMenu('location', 'locations', 1, true, false),
+    ]),
+    new MenuButtonMenu('user', 'profile', 5, true, false, [
+        new ContentAndMenuButtonMenu('bag', 'mylist', 0, true, false, []),
+        new ContentAndMenuButtonMenu('text', 'chat', 1, true, false, []),
+        new ContentAndMenuButtonMenu('date', 'calendar', 2, true, false, []),
+        new ContentButtonMenu('graphPie', 'data', 3, true, false),
+        new ContentButtonMenu('tuggles', 'inout', 4, true, false),
+        new ContentButtonMenu('qrCode', 'qr', 5, true, false),
+    ]),
+    new SidebarOptionButtonMenu('showList', 'navbar', 6, true, false)
 ]
