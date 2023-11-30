@@ -1,0 +1,180 @@
+<div *ngIf="!!userData" class="my-2">
+  <div class="toggle">
+    <ng-container *ngFor="let profile of accessProfileToggle$ | async">
+      <div class="label" (click)="selectProfile(profile)"
+        [ngClass]="selectedProfile.style === profile.style ? profile.class : ''">
+        <label class="mt-2">{{profile.name | slice: 0 : 8}}</label>
+      </div>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="(accessProfileMenu$ | async).length > 0"> -->
+    <div class="label other">
+      <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-gray-600 btn-active-gray-200"
+        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+        <span class="svg-icon svg-icon-2 svg-icon-2 svg-icon-gray-600"
+          style="width: 24px; height: 24px; margin-right: 1.25rem;">
+          <app-icon [icon]="'other'" class="svg-icon-gray-600"></app-icon>
+        </span>
+      </button>
+    </div>
+    <!-- </ng-container> -->
+
+  </div>
+</div>
+
+
+<div id="kt_search_menu my-2">
+  <input placeholder="MENU.INPUT.SEARCH" [formControl]="searchForm" class="form-control w-100"/>
+</div>
+
+<div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y" data-kt-scroll="true"
+  data-kt-scroll-activate="true" data-kt-scroll-height="auto"
+  data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_search_menu, #kt_app_sidebar_footer"
+  data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+
+  <div id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="true"
+    class="menu menu-column menu-rounded menu-sub-indention px-3
+      menu-title-gray-700 menu-icon-gray-400 menu-arrow-gray-400 menu-bullet-gray-400 menu-arrow-gray-400 menu-state-bg fw-semibold">
+
+
+    <ng-container *ngIf="(menu$ | async) as menus; else noMenu">
+      <ng-container *ngFor="let menu of menus">
+
+        <ng-container *ngIf="menu.type === 'SYSTEMS'; else otherType">
+          <div class="menu-item ml-1">
+            <span class="ml-15">
+              <span class="menu-icon mr-12">
+                <app-icon [icon]="menu.icon" [class]="'svg-icon svg-icon-2'"></app-icon>
+              </span><span class="menu-title text-uppercase ">{{menu.menuTitle}}</span>
+            </span>
+          </div>
+
+          <ng-container *ngFor="let item of menu.itemMenu">
+            <div class="menu-item menu-accordion menu-link-indention ml-15" data-kt-menu-trigger="click">
+              <a class="menu-link" routerLink="{{item.routerLink}}" routerLinkActive="active">
+                <span class="menu-icon">
+                  <app-icon [icon]="item.icon" [class]="'svg-icon svg-icon-2'"></app-icon>
+                </span>
+                <span class="menu-title">{{item.menuTitle}}</span>
+              </a>
+              <div class="menu-sub menu-sub-accordion"></div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #otherType>
+
+          <ng-container *ngIf="menu.itemMenu.length === 0 && menu.show; else withItems">
+            <div class="menu-item menu-accordion menu-link-indention" data-kt-menu-trigger="click">
+              <a class="menu-link" routerLink="{{menu.routerLink}}" routerLinkActive="active">
+                <span class="menu-icon">
+                  <app-icon [icon]="menu.icon" [class]="'svg-icon svg-icon-2'"></app-icon>
+                </span>
+                <span class="menu-title text-uppercase">{{menu.menuTitle}}</span>
+              </a>
+              <div class="menu-sub menu-sub-accordion"></div>
+            </div>
+          </ng-container>
+
+          <ng-template #withItems>
+            <div class="menu-item menu-link-indention menu-accordion" data-kt-menu-trigger="click">
+              <span class="menu-link">
+                <span class="menu-icon">
+                  <app-icon [icon]="menu.icon" [class]="'svg-icon svg-icon-1'"></app-icon>
+                </span>
+                <span class="menu-title text-uppercase ">{{menu.menuTitle}}</span>
+                <span class="menu-arrow"></span>
+              </span>
+
+              <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+                <ng-container *ngFor="let item of menu.itemMenu">
+                  <ng-container>
+                    <div *ngIf="item.subMenu.length === 0 && item.show" class="menu-item">
+                      <a class="menu-link" routerLink="{{item.routerLink}}" routerLinkActive="active">
+                        <span class="menu-icon">
+                          <app-icon [icon]="item.icon" [class]="'svg-icon svg-icon-1'"></app-icon>
+                        </span>
+                        <span class="menu-title">{{item.menuTitle}}</span>
+                      </a>
+                    </div>
+
+                    <div *ngIf="item.subMenu.length > 0 && item.show" class="menu-item menu-accordion"
+                      data-kt-menu-trigger="click">
+                      <span class="menu-link">
+                        <span class="menu-icon">
+                          <app-icon [icon]="item.icon" [class]="'svg-icon svg-icon-1'"></app-icon>
+                        </span>
+                        <span class="menu-title">{{item.menuTitle}}</span>
+                        <span class="menu-arrow"></span>
+                      </span>
+                      <div class="menu-sub menu-sub-accordion">
+                        <ng-container *ngFor="let sibItem of item.subMenu">
+                          <ng-container>
+                            <div *ngIf="sibItem.show" class="menu-item">
+                              <a class="menu-link" routerLink="{{sibItem.routerLink}}" routerLinkActive="active">
+                                <span class="menu-bullet">
+                                  <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">{{sibItem.menuTitle}}</span>
+                              </a>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </ng-template>
+
+        </ng-template>
+
+        <!--#region--MY_POSTS---->
+
+        <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+          <ng-container *ngFor="let item of menu.itemMenu">
+            <div *ngIf="item.subMenu.length === 0 && item.show" class="menu-item">
+              <a class="menu-link" routerLink="{{item.routerLink}}" routerLinkActive="active">
+                <span class="menu-icon">
+                  <app-icon [icon]="item.icon" [class]="'svg-icon svg-icon-1'"></app-icon>
+                </span>
+                <span class="menu-title">{{item.menuTitle}}</span>
+              </a>
+            </div>
+
+            <div *ngIf="item.subMenu.length > 0 && item.show" class="menu-item menu-accordion"
+              data-kt-menu-trigger="click">
+              <span class="menu-link">
+                <span class="menu-icon">
+                  <app-icon [icon]="item.icon" [class]="'svg-icon svg-icon-1'"></app-icon>
+                </span>
+                <span class="menu-title">{{item.menuTitle}}</span>
+                <span class="menu-arrow"></span>
+              </span>
+              <div class="menu-sub menu-sub-accordion">
+                <ng-container *ngFor="let sibItem of item.subMenu">
+                  <ng-container *ngIf="sibItem.show">
+                    <div class="menu-item" [ngClass]="{'disabled-link': !sibItem.enabled}">
+                      <a class="menu-link" routerLink="{{sibItem.routerLink}}" routerLinkActive="active">
+                        <span class="menu-bullet">
+                          <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title"
+                          [ngClass]="{'disabled-menu-title': !sibItem.enabled}">{{sibItem.menuTitle}}</span>
+                      </a>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+
+          </ng-container>
+        </div>
+
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noMenu>
+      <span class="menu-title">{{'MENU.TITLES.NO_RESULT'}}</span>
+    </ng-template>

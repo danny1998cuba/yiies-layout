@@ -31,7 +31,7 @@ export enum ButtonMenuType {
     SIMPLE_SELECTION = 'simple-selection',          // done    
     SELECTION_OPTION = 'selection-option',          // done
     ACTION = 'action',                              // pending
-    SIDEBAR = 'sidebar',                            // pending
+    SIDEBAR = 'sidebar',                            // done
     MENU = 'menu',                                  // pending submenus
     WITH_CONTENT = 'with-content',                  // done
     WITH_CONTENT_AND_MENU = 'with-content-and-menu' // pending

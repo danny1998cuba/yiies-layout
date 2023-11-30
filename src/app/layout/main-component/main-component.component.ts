@@ -119,6 +119,7 @@ export class MainComponentComponent implements OnInit {
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
     this.selectedButton = options.isColladpsed ? null : options.data
+    console.log('selected', this.selectedButton);
 
     switch (options.src) {
       case POSITION.LEFT:
@@ -149,7 +150,19 @@ export class MainComponentComponent implements OnInit {
     this.navContentTop = `${height !== 0 ? height : 0}px`
 
     const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    const factor = this.selectedButton?.type === ButtonMenuType.SIDEBAR ? 55 : 98
+    let factor = 98
+
+    if (this.selectedButton?.type === ButtonMenuType.SIDEBAR) {
+      if ((this.navLeft.isOpen || this.navRight.isOpen)) {
+        factor = 55
+      } else {
+        if (this._orientation === 'portrait') {
+          factor = 55
+        } else {
+          factor = 0
+        }
+      }
+    }
     this.navHeight = `${height !== 0 ? height : vpHeight - factor}px`
 
     const back2 = document.getElementById('back2')

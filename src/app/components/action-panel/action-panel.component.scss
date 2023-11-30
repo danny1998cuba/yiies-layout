@@ -85,9 +85,9 @@
     }
 
     &.sidebar {
-        width: 70%;
+        width: 260px;
         padding: 0;
-        
+
         .ap-content {
             width: 100% !important;
             height: 100% !important;
@@ -95,18 +95,15 @@
         }
 
         &.top {
-            height: calc(100dvh - 55px) !important;
-
             .ap-content {
                 top: 0;
             }
         }
 
         &.bottom {
-            height: calc(100dvh - 55px) !important;
-
             .ap-content {
                 bottom: 0;
+                padding-bottom: 45px;
             }
         }
     }

@@ -9,4 +9,6 @@
 
 <app-action-panel *ngIf="!!activeButton" class="action-panel {{activeButton.button.type}}" [position]="position"
     [data]="activeButton" [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
-    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>
+    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation">
+    <ng-content></ng-content>
+</app-action-panel>

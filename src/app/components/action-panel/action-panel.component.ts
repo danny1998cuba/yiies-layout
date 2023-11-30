@@ -9,6 +9,7 @@ import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 })
 export class ActionPanelComponent implements OnInit, AfterViewInit {
   @HostBinding('style.height') height = '100%'
+  @HostBinding('class') class = ''
 
   @Input() data!: IActionButton
 
@@ -137,7 +138,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
         }, 150);
       }
     } else {
-      
+
     }
   }
 

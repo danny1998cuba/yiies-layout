@@ -74,6 +74,10 @@ export class NavigationInferiorComponent implements OnInit {
     const btnsCount = this._menu.length
 
     this.isCentered = vpWidth > btnWidht * btnsCount
+
+    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+      this.isCentered = false
+    }
   }
 
   public toggleOpen() {

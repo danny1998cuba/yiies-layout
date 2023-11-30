@@ -7,20 +7,24 @@
 <!-- Begin::Navigation -->
 <app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral left" [position]="'left'"
     [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_left.isOpen"></ng-container>
+</app-navigation-lateral>
 <app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral right" [position]="'right'"
     [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_right.isOpen"></ng-container>
+</app-navigation-lateral>
 <app-navigation-superior *ngIf="isActiveNavigation('top')" class="navigation top" [orientation]="_orientation" #nav_top
     [class.side]="showTopFooter" [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-superior>
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_top.isOpen"></ng-container>
+</app-navigation-superior>
 <app-navigation-inferior *ngIf="isActiveNavigation('bottom')" class="navigation bottom side"
     [orientation]="_orientation" #nav_bottom (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-inferior>
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_bottom.isOpen"></ng-container>
+</app-navigation-inferior>
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->
@@ -50,3 +54,44 @@
     [position]="'top'" [with-navigation]="isActiveNavigation('top')"
     [class.hidden-footer]="!showTopFooter"></app-dynamic-footer>
 <!-- End::Footer -->
+
+
+<ng-template #navigationContent>
+    <app-sidebar *ngIf="selectedButton && selectedButton.type === ButtonMenuType.SIDEBAR;else other"></app-sidebar>
+    <ng-template #other>
+        <ng-container *ngIf="!!selectedButton">
+            <!-- FIXME: In landscape it doesn't work very good when it's smaller -->
+            {{selectedButton.token}}
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                {{selectedButton.token}}
+            </ng-container>
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                {{selectedButton.token}}
+            </ng-container>
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                {{selectedButton.token}}
+            </ng-container>
+            <br><br><br>
+        </ng-container>
+        <ng-container *ngIf="!selectedButton">
+            <!-- FIXME: In landscape it doesn't work very good when it's smaller -->
+            Test
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                Test
+            </ng-container>
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                Test
+            </ng-container>
+            <ng-container *ngIf="true">
+                <br><br><br><br><br><br><br><br>
+                Test
+            </ng-container>
+            <br><br><br>
+        </ng-container>
+    </ng-template>
+</ng-template>
