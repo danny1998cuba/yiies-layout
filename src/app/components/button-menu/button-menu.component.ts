@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { IButtonMenuData } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, SelectionButtonMenu, SelectionOptionButtonMenu } from 'src/app/data/button-menu.model';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
 
@@ -19,12 +19,13 @@ export class ButtonMenuComponent implements OnInit {
     if (this.isAction) this.action(this.buttonData, $event)
   }
 
-  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true, active: false }
+  @Input('button-data') buttonData: IButtonMenuData = { icon: 'default', token: 'default', index: 0, show: true, active: false, type: ButtonMenuType.WITH_CONTENT }
   @Input() direction: 'vertical' | 'horizontal' = 'vertical'
   @Input() position: Position = 'left'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean }> = new EventEmitter()
   @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
+  @Output() selectionEvent: EventEmitter<IButtonMenuData | null> = new EventEmitter()
 
   @ViewChild('options') options!: ElementRef
 
@@ -34,6 +35,7 @@ export class ButtonMenuComponent implements OnInit {
   expandedWidth: string = '0px'
 
   optionsStyle: any = {}
+  ButtonMenuType = ButtonMenuType
 
   constructor(
     private ref: ElementRef
@@ -52,11 +54,37 @@ export class ButtonMenuComponent implements OnInit {
 
   action(data: IButtonMenuData, $event: Event) {
     $event.stopPropagation()
+    this.checkAction(data, this.buttonData, $event)
+  }
+
+  checkAction(emmiter: IButtonMenuData, parent: IButtonMenuData, $event: Event) {
     const target = $event.currentTarget as Element
-    this.selectedAction.emit({
-      button: data,
-      bound: target.getBoundingClientRect()
-    })
+    switch (parent.type) {
+      case ButtonMenuType.WITH_CONTENT:
+      case ButtonMenuType.WITH_CONTENT_AND_MENU:
+        this.selectedAction.emit({
+          button: emmiter,
+          bound: target.getBoundingClientRect()
+        })
+        break;
+      case ButtonMenuType.SIMPLE_SELECTION:
+        const btn = this.buttonData as SelectionButtonMenu
+        btn._change(emmiter as SelectionOptionButtonMenu, s => this.selectionEvent.emit(s))
+        this.collapse(null, 'click')
+        break;
+      case ButtonMenuType.MENU:
+        this.checkAction(emmiter, emmiter, $event)
+        break;
+      case ButtonMenuType.ACTION:
+      case ButtonMenuType.SIDEBAR:
+        console.log(this.buttonData.token);
+        break;
+      default:
+        this.selectedAction.emit({
+          button: emmiter,
+          bound: target.getBoundingClientRect()
+        })
+    }
   }
 
   expand(from: 'click' | 'remote') {
@@ -70,6 +98,10 @@ export class ButtonMenuComponent implements OnInit {
     } else {
       this.expandedWidth = getComputedStyle(this.options.nativeElement).width
       this.optionsStyle['width'] = this.expandedWidth
+    }
+
+    if (this.buttonData.type === ButtonMenuType.SIMPLE_SELECTION && !!this.buttonData.selected) {
+      this.buttonData.selected.active = true
     }
 
     setTimeout(() => {

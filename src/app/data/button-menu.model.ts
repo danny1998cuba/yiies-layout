@@ -8,7 +8,9 @@ export interface IButtonMenuData {
     active: boolean;
     subOptions?: IButtonMenuData[];
 
-    type?: ButtonMenuType
+    type: ButtonMenuType
+    selected?: SelectionOptionButtonMenu | null;
+    isSelected?: boolean
 }
 
 // Functions
@@ -191,17 +193,24 @@ export class SelectionButtonMenu implements IButtonMenuData {
         callback: (selected: SelectionOptionButtonMenu | null) => void
     ) {
         if (selected) {
-            if (selected.token) {
+            if (!this.selected || selected.token !== this.selected.token) {
                 selected.isSelected = true
+                selected.active = true
                 this.selected = selected
+                clearActive(this.subOptions.filter(s => s.token !== selected.token))
                 clearSelected(this.subOptions.filter(s => s.token !== selected.token))
                 callback(selected)
             } else {
+                this.selected = null
+                clearActive(this.subOptions)
                 clearSelected(this.subOptions)
                 callback(null)
             }
+        } else {
+            callback(null)
+            clearActive(this.subOptions)
+            clearSelected(this.subOptions)
         }
-        callback(null)
     }
 }
 
