@@ -1,3 +1,7 @@
+import { ElementRef } from "@angular/core";
+import { IActionButton } from "./utils.model";
+import { ButtonMenuComponent } from "../components/button-menu/button-menu.component";
+
 // Model
 export interface IButtonMenuData {
     icon: string;
@@ -268,3 +272,12 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
     }
 }
 
+export interface INavigation {
+    selectedButton: ButtonMenuComponent | null
+    activeButton: IActionButton | null
+
+    toggleOpen(): void
+    toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote'): void
+    remoteOpen(token: string, isColladpsed: boolean): void
+    toggleContent(token: IActionButton | null): void
+}

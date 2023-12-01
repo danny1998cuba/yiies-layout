@@ -7,24 +7,35 @@
 <!-- Begin::Navigation -->
 <app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral left" [position]="'left'"
     [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)">
     <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_left.isOpen"></ng-container>
 </app-navigation-lateral>
 <app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral right" [position]="'right'"
     [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)">
     <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_right.isOpen"></ng-container>
 </app-navigation-lateral>
 <app-navigation-superior *ngIf="isActiveNavigation('top')" class="navigation top" [orientation]="_orientation" #nav_top
     [class.side]="showTopFooter" [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)">
     <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_top.isOpen"></ng-container>
 </app-navigation-superior>
 <app-navigation-inferior *ngIf="isActiveNavigation('bottom')" class="navigation bottom side"
     [orientation]="_orientation" #nav_bottom (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)">
+    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)">
     <ng-container [ngTemplateOutlet]="navigationContent" *ngIf="nav_bottom.isOpen"></ng-container>
 </app-navigation-inferior>
+
+<app-action-panel
+    class="action-panel {{!!activeButton ? activeButton.button.type : ''}} {{!!openedPosition ? openedPosition : ''}}"
+    [position]="openedPosition" (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"
+    [data]="activeButton" [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']" #content>
+    <ng-container [ngTemplateOutlet]="navigationContent"></ng-container>
+</app-action-panel>
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->
