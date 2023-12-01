@@ -15,6 +15,7 @@ export interface IButtonMenuData {
     type: ButtonMenuType
     selected?: SelectionOptionButtonMenu | null;
     isSelected?: boolean
+    componentId?: string
 }
 
 // Functions
@@ -254,6 +255,7 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
     active: boolean;
     type: ButtonMenuType = ButtonMenuType.SIDEBAR;
     // Inject sidebar component
+    componentId: string
 
     constructor(
         icon: string,
@@ -261,6 +263,7 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
         index: number,
         show: boolean,
         active: boolean,
+        componentId: string,
         name?: string,
     ) {
         this.icon = icon
@@ -268,6 +271,7 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
         this.index = index
         this.show = show
         this.active = active
+        this.componentId = componentId
         this.name = !!name ? name : undefined
     }
 }

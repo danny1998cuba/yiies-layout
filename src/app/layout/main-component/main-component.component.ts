@@ -93,6 +93,16 @@ export class MainComponentComponent implements OnInit {
     if (options.opened) this.previousOpenedPosition = cloneDeep(this.openedPosition)
     this.openedPosition = options.opened ? options.position : options.position === this.previousOpenedPosition ? this.openedPosition : null
 
+    if (!options.opened || (options.opened && options.position !== this.previousOpenedPosition)) {
+      this.onActiveButtonChange(this.activeButton)
+      if (this.selectedButton && this.selectedButton.type === ButtonMenuType.SIDEBAR) {
+        if (!!this.navTop) this.navTop.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navLeft) this.navLeft.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navRight) this.navRight.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navBottom) this.navBottom.remoteOpen(this.selectedButton.token || '', true)
+      }
+    }
+
     if (options.position === POSITION.LEFT && options.opened) {
       if (this.navRight && this.navRight.isOpen) this.navRight.toggleOpen()
       if (this.navTop && this.navTop.isOpen) this.navTop.toggleOpen()
@@ -133,7 +143,6 @@ export class MainComponentComponent implements OnInit {
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
     this.selectedButton = options.isColladpsed ? null : options.data
-    console.log('selected', this.selectedButton);
 
     switch (options.src) {
       case POSITION.LEFT:
@@ -156,6 +165,11 @@ export class MainComponentComponent implements OnInit {
         if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
         if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
+      default:
+        if (!!this.navTop) this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navBottom) this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
     }
   }
 
@@ -234,23 +248,30 @@ export class MainComponentComponent implements OnInit {
     const nav = this.getNavigationByPosition(this.openedPosition)
 
     if (nav) {
+      console.log('I have nav');
       if (data) {
         if (!this.activeButton) {
+          console.log('No active');
           this.activeButton = data
           nav.activeButton = data
           data.button.active = true
+          this.loadContent()
           nav.toggleContent(data)
         } else {
           if (data.button.token !== this.activeButton.button.token) {
+            console.log('Different token');
             clearActive(this.menus)
             this.activeButton = data
             nav.activeButton = data
             data.button.active = true
+            this.loadContent()
             nav.toggleContent(data)
           } else {
+            console.log('Same token');
             this.activeButton = null
             nav.activeButton = null
             data.button.active = false
+            this.loadContent()
             nav.toggleContent(null)
           }
         }
@@ -265,5 +286,24 @@ export class MainComponentComponent implements OnInit {
       this.styleContent['minHeight'] = `${height}px`
       this.content.adjustHeight()
     }
+  }
+
+  loadContent() {
+    const contents = document.getElementsByClassName('ap-inner-block')
+    for (let index = 0; index < contents.length; index++) {
+      const elem = contents.item(index)
+      elem?.classList.add('d-none')
+    }
+
+    if (this.activeButton) {
+      if (this.activeButton.button.componentId && !!contents.namedItem(this.activeButton.button.componentId)) {
+        contents.namedItem(this.activeButton.button.componentId)?.classList.remove('d-none')
+      } else {
+        contents.namedItem('default')?.classList.remove('d-none')
+      }
+    } else {
+      document.getElementById('default')?.classList.remove('d-none')
+    }
+
   }
 }

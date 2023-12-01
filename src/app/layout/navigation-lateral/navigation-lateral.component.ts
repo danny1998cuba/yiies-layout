@@ -21,11 +21,6 @@ export class NavigationLateralComponent implements OnInit, INavigation {
     this.opened = false
     clearActive(this._menu)
     this.toggleContent(null)
-
-    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
-      this.remoteOpen(this.activeButton.button.token, true)
-      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
-    }
   }
 
   @Input() position: Position = 'left'
@@ -86,6 +81,15 @@ export class NavigationLateralComponent implements OnInit, INavigation {
       src: this.position
     })
 
+    if (button) {
+      if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+        this.activeButtonChange.emit({
+          button: button.buttonData,
+          bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+        })
+      }
+    }
+
     if (options.isColladpsed) {
       clearActive(this._menu)
       this.toggleContent(null)
@@ -93,13 +97,6 @@ export class NavigationLateralComponent implements OnInit, INavigation {
     } else {
       if (button) {
         this.selectedButton = button
-
-        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
-          this.toggleContent({
-            button: button.buttonData,
-            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
-          })
-        }
       }
     }
 

@@ -23,11 +23,6 @@ export class NavigationSuperiorComponent implements OnInit, INavigation {
     clearActive(this._menu)
     this.toggleContent(null)
     this.clicked.emit({ position: this.position, opened: false })
-
-    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
-      this.remoteOpen(this.activeButton.button.token, true)
-      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
-    }
   }
 
   protected _menu!: IButtonMenuData[]
@@ -74,14 +69,14 @@ export class NavigationSuperiorComponent implements OnInit, INavigation {
     this.centerButtons()
   }
 
-  centerButtons() {
+  centerButtons(uncheckSidebar?: boolean) {
     const vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
     const btnWidht = (45 + remToPixels(0.5))
     const btnsCount = this._menu.length
 
     this.isCentered = vpWidth > btnWidht * btnsCount
 
-    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+    if (uncheckSidebar && this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
       this.isCentered = false
     }
   }
@@ -119,18 +114,17 @@ export class NavigationSuperiorComponent implements OnInit, INavigation {
     } else {
       if (button) {
         this.selectedButton = button
+        this.centerButtons()
+      }
+    }
 
-        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
-          this.toggleContent({
-            button: button.buttonData,
-            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
-          })
-          this.isCentered = false
-        } else {
-          this.isCentered = true
-        }
-      } else {
-        this.isCentered = true
+    if (button) {
+      if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+        this.activeButtonChange.emit({
+          button: button.buttonData,
+          bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+        })
+        options.isColladpsed ? this.centerButtons(true) : this.isCentered = false
       }
     }
 
