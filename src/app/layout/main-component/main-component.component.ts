@@ -2,11 +2,14 @@ import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChil
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
 import { menu_example } from 'src/app/data/mock-data';
-import { POSITION, Position } from 'src/app/data/utils.model';
+import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 import { NavigationSuperiorComponent } from '../navigation-superior/navigation-superior.component';
 import { NavigationInferiorComponent } from '../navigation-inferior/navigation-inferior.component';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { ButtonMenuType, IButtonMenuData } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
+import { cloneDeep } from 'lodash-es';
+import { remToPixels } from 'src/app/utils/utils';
+import { ActionPanelComponent } from 'src/app/components/action-panel/action-panel.component';
 
 @Component({
   selector: 'app-main-component',
@@ -25,6 +28,7 @@ export class MainComponentComponent implements OnInit {
   @ViewChild('nav_right') navRight!: NavigationLateralComponent
   @ViewChild('nav_top') navTop!: NavigationSuperiorComponent
   @ViewChild('nav_bottom') navBottom!: NavigationInferiorComponent
+  @ViewChild('content') content!: ActionPanelComponent
 
   selectedButton: IButtonMenuData | null = null
   protected _orientation!: 'portrait' | 'landscape'
@@ -37,6 +41,13 @@ export class MainComponentComponent implements OnInit {
   positions = [POSITION.TOP, POSITION.BOTTOM, 'lateral']
   activeNavigations = [true, true, true]
   ButtonMenuType = ButtonMenuType
+
+  // For content
+  previousOpenedPosition: Position | null = null
+  openedPosition: Position | null = null
+  styleContent: any = {}
+
+  activeButton!: IActionButton | null
 
   constructor(
     private _route: ActivatedRoute,
@@ -79,6 +90,19 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigations(options: { position: Position, opened: boolean }) {
+    if (options.opened) this.previousOpenedPosition = cloneDeep(this.openedPosition)
+    this.openedPosition = options.opened ? options.position : options.position === this.previousOpenedPosition ? this.openedPosition : null
+
+    if (!options.opened || (options.opened && options.position !== this.previousOpenedPosition)) {
+      this.onActiveButtonChange(this.activeButton)
+      if (this.selectedButton && this.selectedButton.type === ButtonMenuType.SIDEBAR) {
+        if (!!this.navTop) this.navTop.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navLeft) this.navLeft.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navRight) this.navRight.remoteOpen(this.selectedButton.token || '', true)
+        if (!!this.navBottom) this.navBottom.remoteOpen(this.selectedButton.token || '', true)
+      }
+    }
+
     if (options.position === POSITION.LEFT && options.opened) {
       if (this.navRight && this.navRight.isOpen) this.navRight.toggleOpen()
       if (this.navTop && this.navTop.isOpen) this.navTop.toggleOpen()
@@ -141,6 +165,11 @@ export class MainComponentComponent implements OnInit {
         if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
         if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
         break;
+      default:
+        if (!!this.navTop) this.navTop.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navLeft) this.navLeft.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navRight) this.navRight.remoteOpen(options.data?.token || '', options.isColladpsed)
+        if (!!this.navBottom) this.navBottom.remoteOpen(options.data?.token || '', options.isColladpsed)
     }
   }
 
@@ -149,7 +178,19 @@ export class MainComponentComponent implements OnInit {
     this.navContentTop = `${height !== 0 ? height : 0}px`
 
     const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    const factor = this.selectedButton?.type === ButtonMenuType.SIDEBAR ? 55 : 98
+    let factor = 98
+
+    if (this.selectedButton?.type === ButtonMenuType.SIDEBAR) {
+      if ((this.navLeft.isOpen || this.navRight.isOpen)) {
+        factor = 55
+      } else {
+        if (this._orientation === 'portrait') {
+          factor = 55
+        } else {
+          factor = 0
+        }
+      }
+    }
     this.navHeight = `${height !== 0 ? height : vpHeight - factor}px`
 
     const back2 = document.getElementById('back2')
@@ -173,5 +214,96 @@ export class MainComponentComponent implements OnInit {
     if (nav === POSITION.BOTTOM) return this.activeNavigations[1]
     if (nav === 'lateral') return this.activeNavigations[2]
     return false
+  }
+
+  getNavigationByPosition(pos: Position | null): INavigation | null {
+    switch (pos) {
+      case POSITION.BOTTOM:
+        return this.navBottom
+      case POSITION.TOP:
+        return this.navTop
+      case POSITION.LEFT:
+        return this.navLeft
+      case POSITION.RIGHT:
+        return this.navRight
+      default:
+        return null
+    }
+  }
+
+  // Content Pane
+  updateHeightAfterContentChange(height: number) {
+    this.innerHeightChanged(height); // FIXME: Safari doesn't calculate it right when changing orientation.
+    const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
+    const nav = this.getNavigationByPosition(this.openedPosition)
+
+    if (this.openedPosition === POSITION.TOP || this.openedPosition === POSITION.BOTTOM) {
+      nav?.selectedButton?.adaptContentWidth(false)
+    } else {
+      nav?.selectedButton?.adaptContentHeight(h)
+    }
+  }
+
+  onActiveButtonChange(data: IActionButton | null) {
+    const nav = this.getNavigationByPosition(this.openedPosition)
+
+    if (nav) {
+      console.log('I have nav');
+      if (data) {
+        if (!this.activeButton) {
+          console.log('No active');
+          this.activeButton = data
+          nav.activeButton = data
+          data.button.active = true
+          this.loadContent()
+          nav.toggleContent(data)
+        } else {
+          if (data.button.token !== this.activeButton.button.token) {
+            console.log('Different token');
+            clearActive(this.menus)
+            this.activeButton = data
+            nav.activeButton = data
+            data.button.active = true
+            this.loadContent()
+            nav.toggleContent(data)
+          } else {
+            console.log('Same token');
+            this.activeButton = null
+            nav.activeButton = null
+            data.button.active = false
+            this.loadContent()
+            nav.toggleContent(null)
+          }
+        }
+      }
+    }
+  }
+
+  onContentStyleChange(height: number) {
+    if (height === 0) {
+      this.styleContent = {}
+    } else {
+      this.styleContent['minHeight'] = `${height}px`
+      this.content.adjustHeight()
+    }
+  }
+
+  loadContent() {
+    const contents = document.getElementsByClassName('ap-inner-block')
+    for (let index = 0; index < contents.length; index++) {
+      const elem = contents.item(index)
+      elem?.classList.add('d-none')
+    }
+
+    if (this.activeButton) {
+      if (this.activeButton.button.componentId && !!contents.namedItem(this.activeButton.button.componentId)) {
+        contents.namedItem(this.activeButton.button.componentId)?.classList.remove('d-none')
+      } else {
+        contents.namedItem('default')?.classList.remove('d-none')
+      }
+    } else {
+      document.getElementById('default')?.classList.remove('d-none')
+    }
+
   }
 }

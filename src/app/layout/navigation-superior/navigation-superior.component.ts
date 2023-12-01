@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
-import { ButtonMenuType, IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
 
@@ -11,7 +11,7 @@ import { remToPixels } from 'src/app/utils/utils';
   styleUrls: ['./navigation-superior.component.scss'],
   animations: [animations]
 })
-export class NavigationSuperiorComponent implements OnInit {
+export class NavigationSuperiorComponent implements OnInit, INavigation {
   @HostListener('click', ['$event'])
   click($event: PointerEvent) {
     $event.stopPropagation()
@@ -23,11 +23,6 @@ export class NavigationSuperiorComponent implements OnInit {
     clearActive(this._menu)
     this.toggleContent(null)
     this.clicked.emit({ position: this.position, opened: false })
-
-    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
-      this.remoteOpen(this.activeButton.button.token, true)
-      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
-    }
   }
 
   protected _menu!: IButtonMenuData[]
@@ -50,6 +45,8 @@ export class NavigationSuperiorComponent implements OnInit {
   @Output() clicked: EventEmitter<{ position: Position, opened: boolean }> = new EventEmitter()
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: Position }> = new EventEmitter()
   @Output() emitHeight: EventEmitter<number> = new EventEmitter()
+  @Output() emitContentHeight: EventEmitter<number> = new EventEmitter()
+  @Output() activeButtonChange: EventEmitter<IActionButton | null> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
   @ViewChild('options') options!: ElementRef
@@ -59,9 +56,8 @@ export class NavigationSuperiorComponent implements OnInit {
     return this.opened
   }
 
-  protected activeButton: IActionButton | null = null
-  protected selectedButton: ButtonMenuComponent | null = null
-  protected styleContent: any = {}
+  activeButton: IActionButton | null = null
+  selectedButton: ButtonMenuComponent | null = null
   position: Position = 'top'
   isCentered: boolean = true
 
@@ -73,12 +69,16 @@ export class NavigationSuperiorComponent implements OnInit {
     this.centerButtons()
   }
 
-  centerButtons() {
+  centerButtons(uncheckSidebar?: boolean) {
     const vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
     const btnWidht = (45 + remToPixels(0.5))
     const btnsCount = this._menu.length
 
     this.isCentered = vpWidth > btnWidht * btnsCount
+
+    if (uncheckSidebar && this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
+      this.isCentered = false
+    }
   }
 
   public toggleOpen() {
@@ -114,18 +114,17 @@ export class NavigationSuperiorComponent implements OnInit {
     } else {
       if (button) {
         this.selectedButton = button
+        this.centerButtons()
+      }
+    }
 
-        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
-          this.toggleContent({
-            button: button.buttonData,
-            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
-          })
-          this.isCentered = false
-        } else {
-          this.isCentered = true
-        }
-      } else {
-        this.isCentered = true
+    if (button) {
+      if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+        this.activeButtonChange.emit({
+          button: button.buttonData,
+          bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+        })
+        options.isColladpsed ? this.centerButtons(true) : this.isCentered = false
       }
     }
 
@@ -168,11 +167,12 @@ export class NavigationSuperiorComponent implements OnInit {
       setTimeout(() => {
         if (this.activeButton) this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
+        this.emitContentHeight.emit(0)
         this.activeButton = null
         setTimeout(() => {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
-          this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
+          this.emitContentHeight.emit(parseFloat(getComputedStyle(this.options.nativeElement).height))
         }, 50);
       }, 200);
     } else {
@@ -181,13 +181,8 @@ export class NavigationSuperiorComponent implements OnInit {
         this.activeButton = null
         this.selectedButton?.adaptContentWidth(true)
         this.emitHeight.emit(0);
+        this.emitContentHeight.emit(0)
       }, 200);
     }
   }
-
-  updateHeightAfterContentChange(height: number) {
-    this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
-    this.selectedButton?.adaptContentWidth(false)
-  }
-
 }

@@ -6,12 +6,8 @@
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
             [@hideMenuHorizontal]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
-            (selectedAction)="optionSelected($event)" [direction]="'horizontal'"></app-button-menu>
+            (selectedAction)="activeButtonChange.emit($event)" [direction]="'horizontal'"></app-button-menu>
     </ng-container>
 </div>
-
-<app-action-panel *ngIf="!!activeButton" class="action-panel {{activeButton.button.type}}" [position]="position" [data]="activeButton"
-    [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']"
-    (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"></app-action-panel>
 
 <app-icon [icon]="'other'" class="svg-icon svg-icon-2x nav-open-icon"></app-icon>

@@ -13,6 +13,9 @@ import { IconComponent } from './components/icon/icon.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonMenuComponent } from './components/button-menu/button-menu.component';
 import { ActionPanelComponent } from './components/action-panel/action-panel.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { SidebarLogoComponent } from './components/sidebar/sidebar-logo/sidebar-logo.component';
+import { SidebarMenuComponent } from './components/sidebar/sidebar-menu/sidebar-menu.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,11 @@ import { ActionPanelComponent } from './components/action-panel/action-panel.com
     MainComponentComponent,
     IconComponent,
     ButtonMenuComponent,
-    ActionPanelComponent
+    ActionPanelComponent,
+
+    SidebarComponent,
+    SidebarLogoComponent,
+    SidebarMenuComponent
   ],
   imports: [
     BrowserModule,

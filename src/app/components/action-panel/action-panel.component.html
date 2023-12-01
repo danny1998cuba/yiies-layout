@@ -1,19 +1,5 @@
 <div class="ap-content" [ngStyle]="styleInner" (click)="click($event)">
-    <div class="flex-center w-100 overflow-scroll" #component>
-        {{data.button.token}} - {{data.button.name? data.button.name : data.button.index}}
-        <ng-container *ngIf="true">
-            <br><br><br><br><br><br><br><br>
-            {{data.button.token}} - {{data.button.name? data.button.name : data.button.index}}
-        </ng-container>
-        <!-- FIXME: In landscape it doesn't work very good when it's smaller -->
-        <ng-container *ngIf="true"> 
-            <br><br><br><br><br><br><br><br>
-            {{data.button.token}} - {{data.button.name? data.button.name : data.button.index}}
-        </ng-container>
-        <ng-container *ngIf="true">
-            <br><br><br><br><br><br><br><br>
-            {{data.button.token}} - {{data.button.name? data.button.name : data.button.index}}
-        </ng-container>
-        <br><br><br>
+    <div class="d-flex align-items-start justify-content-center w-100 overflow-scroll" #component>
+        <ng-content></ng-content>
     </div>
 </div>

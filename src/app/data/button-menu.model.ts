@@ -1,3 +1,7 @@
+import { ElementRef } from "@angular/core";
+import { IActionButton } from "./utils.model";
+import { ButtonMenuComponent } from "../components/button-menu/button-menu.component";
+
 // Model
 export interface IButtonMenuData {
     icon: string;
@@ -11,6 +15,7 @@ export interface IButtonMenuData {
     type: ButtonMenuType
     selected?: SelectionOptionButtonMenu | null;
     isSelected?: boolean
+    componentId?: string
 }
 
 // Functions
@@ -31,7 +36,7 @@ export enum ButtonMenuType {
     SIMPLE_SELECTION = 'simple-selection',          // done    
     SELECTION_OPTION = 'selection-option',          // done
     ACTION = 'action',                              // pending
-    SIDEBAR = 'sidebar',                            // pending
+    SIDEBAR = 'sidebar',                            // done
     MENU = 'menu',                                  // pending submenus
     WITH_CONTENT = 'with-content',                  // done
     WITH_CONTENT_AND_MENU = 'with-content-and-menu' // pending
@@ -250,6 +255,7 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
     active: boolean;
     type: ButtonMenuType = ButtonMenuType.SIDEBAR;
     // Inject sidebar component
+    componentId: string
 
     constructor(
         icon: string,
@@ -257,6 +263,7 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
         index: number,
         show: boolean,
         active: boolean,
+        componentId: string,
         name?: string,
     ) {
         this.icon = icon
@@ -264,7 +271,17 @@ export class SidebarOptionButtonMenu implements IButtonMenuData {
         this.index = index
         this.show = show
         this.active = active
+        this.componentId = componentId
         this.name = !!name ? name : undefined
     }
 }
 
+export interface INavigation {
+    selectedButton: ButtonMenuComponent | null
+    activeButton: IActionButton | null
+
+    toggleOpen(): void
+    toggleVisibilityOnCollapse(options: { token: string, isColladpsed: boolean }, src: 'event' | 'remote'): void
+    remoteOpen(token: string, isColladpsed: boolean): void
+    toggleContent(token: IActionButton | null): void
+}

@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { cloneDeep } from 'lodash-es';
 import { ButtonMenuType } from 'src/app/data/button-menu.model';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
 
@@ -8,19 +9,34 @@ import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
   styleUrls: ['./action-panel.component.scss']
 })
 export class ActionPanelComponent implements OnInit, AfterViewInit {
-  @HostBinding('style.height') height = '100%'
+  @HostBinding('style.height') height = ''
+  @HostBinding('class') class = ''
 
-  @Input() data!: IActionButton
+  _data!: IActionButton | null
+  @Input() set data(val: IActionButton | null) {
+    if (!!val && !!this._data) {
+      this.styleInner = {}
+      this.height = ''
+    }
+    this._data = val
+    this.initialize()
+  }
 
-  _position!: Position
-  @Input() set position(val: Position) {
-    this.ref.nativeElement.classList.add(val)
+  _position!: Position | null
+  @Input() set position(val: Position | null) {
     this._position = val
   }
 
   _orientation!: 'portrait' | 'landscape'
   @Input() set orientation(val: 'portrait' | 'landscape') {
+    if (!!this._data) {
+      this.styleInner = {}
+      this.height = ''
+      this.initialize()
+    }
     this._orientation = val
+    this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+    this.vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
   }
 
   @Input('min-heigh-opened') minHeightOpened: string = ''
@@ -35,7 +51,8 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   maxPercent = { portrait: 0.75, landscape: 1 }
 
   constructor(
-    private ref: ElementRef
+    private ref: ElementRef,
+    private _cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -49,96 +66,105 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   }
 
   initialize() {
-    if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
-      if (this.data.button.type === ButtonMenuType.SIDEBAR) {
+    if (!!this._data) {
+      if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
+        if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
+          const translate = (this.vpHeight - 55 - this._data.bound.bottom)
 
+          this.styleInner['--translate'] = `-${translate}px`
+          this.styleInner['minHeight'] = `${this._data.bound.height}px`
+          this.styleInner['height'] = `${this._data.bound.height}px`
+        }
       } else {
-        const translate = (this.vpHeight - 55 - this.data.bound.bottom)
+        if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
+          const translate = this._data.bound.left
 
-        this.styleInner['--translate'] = `-${translate}px`
-        this.styleInner['minHeight'] = `${this.data.bound.height}px`
-        this.styleInner['height'] = `${this.data.bound.height}px`
+          this.styleInner['--translate'] = `${translate}px`
+          this.styleInner['minWidth'] = `${this._data.bound.width}px`
+          this.styleInner['width'] = `${this._data.bound.width}px`
+        }
       }
     } else {
-      if (this.data.button.type === ButtonMenuType.SIDEBAR) {
-
-      } else {
-        const translate = this.data.bound.left
-
-        this.styleInner['--translate'] = `${translate}px`
-        this.styleInner['minWidth'] = `${this.data.bound.height}px`
-        this.styleInner['width'] = `${this.data.bound.height}px`
+      const translate = cloneDeep(this.styleInner['--translate'])
+      this.styleInner = {
+        '--translate': translate
       }
+      setTimeout(() => {
+        this.styleInner = {}
+        this.height = ''
+      }, 200);
     }
+    this._cdr.detectChanges()
   }
 
   adjustHeight() {
-    if (this.data.button.type !== ButtonMenuType.SIDEBAR) {
-      if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
-        setTimeout(() => {
-          const translate = (this.vpHeight - 55 - this.data.bound.bottom)
-          const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
-          const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
+    if (!!this._data) {
+      if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
+        if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
+          setTimeout(() => {
+            const translate = (this.vpHeight - 55 - (this._data ? this._data.bound.bottom : 0))
+            const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
+            const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
 
-          let contentHeight = this.component.nativeElement.offsetHeight
-          if (this.component.nativeElement?.style?.height) {
-            contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-          } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-            contentHeight = this.component.nativeElement.offsetHeight
-          } else {
-            contentHeight = this.component.nativeElement.scrollHeight
-          }
-          let height = 0
+            let contentHeight = this.component.nativeElement.offsetHeight
+            if (this.component.nativeElement?.style?.height) {
+              contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+            } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+              contentHeight = this.component.nativeElement.offsetHeight
+            } else {
+              contentHeight = this.component.nativeElement.scrollHeight
+            }
+            let height = 0
 
-          if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
-            height = contentHeight > max ? max : contentHeight
-          } else if (parseFloat(this.minHeightOpened) < min) {
-            height = min
-          } else {
-            height = parseFloat(this.minHeightOpened)
-          }
-          this.emitHeight.emit(height)
-
-          this.styleInner['height'] = `${height}px`
-          this.styleInner['bottom'] = `-${translate}px`
-          this.height = `${height}px`
-        }, 150);
-      } else {
-        setTimeout(() => {
-          const translate = this.data.bound.left
-          const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-          const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-
-          let contentHeight = this.component.nativeElement.offsetHeight
-          if (this.component.nativeElement?.style?.height) {
-            contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-          } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-            contentHeight = this.component.nativeElement.offsetHeight
-          } else {
-            contentHeight = this.component.nativeElement.scrollHeight
-          }
-          let height = 0
-
-          if (contentHeight > min) {
-            height = contentHeight > max ? max : contentHeight
+            if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
+              height = contentHeight > max ? max : contentHeight
+            } else if (parseFloat(this.minHeightOpened) < min) {
+              height = min
+            } else {
+              height = parseFloat(this.minHeightOpened)
+            }
             this.emitHeight.emit(height)
-          } else if (parseFloat(this.minHeightOpened) < min) {
-            height = min
-            this.emitHeight.emit(height)
-          } else {
-            height = parseFloat(this.minHeightOpened)
-          }
 
-          this.styleInner['height'] = `${height - 45}px`
-          this.styleInner['left'] = `-${translate}px`
-          this.styleInner['width'] = `${this.vpWidth}px`
-          this.styleInner['minWidth'] = `${this.vpWidth}px`
-          this.height = `${height}px`
-        }, 150);
+            this.styleInner['height'] = `${height}px`
+            this.styleInner['bottom'] = this.styleInner['--translate'] ? this.styleInner['--translate'] : `-${translate}px`
+            this.height = `${height}px`
+          }, 150);
+        } else {
+          setTimeout(() => {
+            const translate = this._data ? this._data.bound.left : 0
+            const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+            const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+
+            let contentHeight = this.component.nativeElement.offsetHeight
+            if (this.component.nativeElement?.style?.height) {
+              contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+            } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+              contentHeight = this.component.nativeElement.offsetHeight
+            } else {
+              contentHeight = this.component.nativeElement.scrollHeight
+            }
+            let height = 0
+
+            if (contentHeight > min) {
+              height = contentHeight > max ? max : contentHeight
+              this.emitHeight.emit(height)
+            } else if (parseFloat(this.minHeightOpened) < min) {
+              height = min
+              this.emitHeight.emit(height)
+            } else {
+              height = parseFloat(this.minHeightOpened)
+            }
+
+            this.styleInner['height'] = `${height - 45}px`
+            this.styleInner['left'] = `-${translate}px`
+            this.styleInner['width'] = `${this.vpWidth}px`
+            this.styleInner['minWidth'] = `${this.vpWidth}px`
+            this.height = `${height}px`
+          }, 150);
+        }
       }
-    } else {
-      
     }
+    this._cdr.detectChanges()
   }
 
   click($event: Event) {

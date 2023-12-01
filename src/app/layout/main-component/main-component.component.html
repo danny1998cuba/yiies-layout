@@ -5,22 +5,46 @@
 <!-- End::Header -->
 
 <!-- Begin::Navigation -->
-<app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral left" [position]="'left'"
+<app-navigation-lateral *ngIf="isActiveNavigation('lateral')"
+    class="navigation lateral left {{!!activeButton ? activeButton.button.type : ''}}" [position]="'left'"
     [orientation]="_orientation" #nav_left (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-<app-navigation-lateral *ngIf="isActiveNavigation('lateral')" class="navigation lateral right" [position]="'right'"
+    (menuSelected)="syncLateralnavigationsOptions($event)" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)"
+    [menu]="menus"></app-navigation-lateral>
+<app-navigation-lateral *ngIf="isActiveNavigation('lateral')"
+    class="navigation lateral right {{!!activeButton ? activeButton.button.type : ''}}" [position]="'right'"
     [orientation]="_orientation" #nav_right (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-lateral>
-<app-navigation-superior *ngIf="isActiveNavigation('top')" class="navigation top" [orientation]="_orientation" #nav_top
+    (menuSelected)="syncLateralnavigationsOptions($event)" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)"
+    [menu]="menus"></app-navigation-lateral>
+<app-navigation-superior *ngIf="isActiveNavigation('top')"
+    class="navigation top {{!!activeButton ? activeButton.button.type : ''}}" [orientation]="_orientation" #nav_top
     [class.side]="showTopFooter" [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-superior>
-<app-navigation-inferior *ngIf="isActiveNavigation('bottom')" class="navigation bottom side"
-    [orientation]="_orientation" #nav_bottom (clicked)="syncLateralnavigations($event)"
-    (menuSelected)="syncLateralnavigationsOptions($event)" [menu]="menus"
-    (emitHeight)="innerHeightChanged($event)"></app-navigation-inferior>
+    (menuSelected)="syncLateralnavigationsOptions($event)" (emitHeight)="innerHeightChanged($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)"
+    [menu]="menus"></app-navigation-superior>
+<app-navigation-inferior *ngIf="isActiveNavigation('bottom')"
+    class="navigation bottom side {{!!activeButton ? activeButton.button.type : ''}}" [orientation]="_orientation"
+    #nav_bottom (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)"
+    (emitHeight)="innerHeightChanged($event)" (activeButtonChange)="onActiveButtonChange($event)"
+    (emitContentHeight)="onContentStyleChange($event)" [menu]="menus"></app-navigation-inferior>
+
+<app-action-panel
+    class="action-panel {{!!activeButton ? activeButton.button.type : ''}} {{!!openedPosition ? openedPosition : ''}}"
+    [position]="openedPosition" (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"
+    [data]="activeButton" [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']" #content>
+    <app-sidebar id="sidebar" class="ap-inner-block"></app-sidebar>
+    <div id="default" class="ap-inner-block">
+        {{!!activeButton ? activeButton.button.token : ''}}
+        <br><br><br><br><br><br><br><br><br><br>
+        {{!!activeButton ? activeButton.button.token : ''}}
+        <br><br><br><br><br><br><br><br><br><br>
+        {{!!activeButton ? activeButton.button.token : ''}}
+        <br><br><br><br><br><br><br><br><br><br>
+        {{!!activeButton ? activeButton.button.token : ''}}
+        <br><br><br>
+    </div>
+</app-action-panel>
 <!-- End::Navigation -->
 
 <!-- Begin::Background -->

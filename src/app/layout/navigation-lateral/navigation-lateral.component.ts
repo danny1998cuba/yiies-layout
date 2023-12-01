@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter, QueryList, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.component';
 import { animations } from 'src/app/data/animations';
-import { ButtonMenuType, IButtonMenuData, clearActive } from 'src/app/data/button-menu.model';
+import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
 import { remToPixels } from 'src/app/utils/utils';
 
@@ -11,7 +11,7 @@ import { remToPixels } from 'src/app/utils/utils';
   styleUrls: ['./navigation-lateral.component.scss'],
   animations: [animations]
 })
-export class NavigationLateralComponent implements OnInit {
+export class NavigationLateralComponent implements OnInit, INavigation {
   @HostListener('click', ['$event'])
   click($event: PointerEvent) {
     $event.stopPropagation()
@@ -21,11 +21,6 @@ export class NavigationLateralComponent implements OnInit {
     this.opened = false
     clearActive(this._menu)
     this.toggleContent(null)
-
-    if (this.activeButton && this.activeButton.button.type === ButtonMenuType.SIDEBAR) {
-      this.remoteOpen(this.activeButton.button.token, true)
-      this.menuSelected.emit({ data: this.activeButton.button, isColladpsed: true, src: this.position })
-    }
   }
 
   @Input() position: Position = 'left'
@@ -44,6 +39,8 @@ export class NavigationLateralComponent implements OnInit {
   @Output() clicked: EventEmitter<{ position: Position, opened: boolean }> = new EventEmitter()
   @Output() menuSelected: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: Position }> = new EventEmitter()
   @Output() emitHeight: EventEmitter<number> = new EventEmitter()
+  @Output() emitContentHeight: EventEmitter<number> = new EventEmitter()
+  @Output() activeButtonChange: EventEmitter<IActionButton | null> = new EventEmitter()
 
   @ViewChildren(ButtonMenuComponent) buttons!: QueryList<ButtonMenuComponent>;
   @ViewChild('options') options!: ElementRef
@@ -53,9 +50,8 @@ export class NavigationLateralComponent implements OnInit {
     return this.opened
   }
 
-  protected activeButton: IActionButton | null = null
-  protected selectedButton: ButtonMenuComponent | null = null
-  protected styleContent: any = {}
+  activeButton: IActionButton | null = null
+  selectedButton: ButtonMenuComponent | null = null
 
   constructor(
     private ref: ElementRef
@@ -85,6 +81,15 @@ export class NavigationLateralComponent implements OnInit {
       src: this.position
     })
 
+    if (button) {
+      if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
+        this.activeButtonChange.emit({
+          button: button.buttonData,
+          bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
+        })
+      }
+    }
+
     if (options.isColladpsed) {
       clearActive(this._menu)
       this.toggleContent(null)
@@ -92,13 +97,6 @@ export class NavigationLateralComponent implements OnInit {
     } else {
       if (button) {
         this.selectedButton = button
-
-        if (button.buttonData.type === ButtonMenuType.SIDEBAR && src === 'event') {
-          this.toggleContent({
-            button: button.buttonData,
-            bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
-          })
-        }
       }
     }
 
@@ -141,11 +139,12 @@ export class NavigationLateralComponent implements OnInit {
       setTimeout(() => {
         if (this.activeButton) this.selectedButton?.adaptContentHeight(null)
         this.emitHeight.emit(0);
+        this.emitContentHeight.emit(0)
         this.activeButton = null
         setTimeout(() => {
           this.activeButton = token
           this.ref.nativeElement.classList.add('show-content')
-          this.styleContent['minHeight'] = getComputedStyle(this.options.nativeElement).height
+          this.emitContentHeight.emit(parseFloat(getComputedStyle(this.options.nativeElement).height))
 
           setTimeout(() => {
             // Scroll to the bottom when opening
@@ -162,13 +161,8 @@ export class NavigationLateralComponent implements OnInit {
         this.activeButton = null
         this.selectedButton?.adaptContentHeight(null)
         this.emitHeight.emit(0);
+        this.emitContentHeight.emit(0)
       }, 200);
     }
-  }
-
-  updateHeightAfterContentChange(height: number) {
-    this.emitHeight.emit(height); // FIXME: Safari doesn't calculate it right when changing orientation.
-    const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
-    this.selectedButton?.adaptContentHeight(h)
   }
 }

@@ -3834,5 +3834,5 @@ export const menu_example: IButtonMenuData[] = [
         new ContentButtonMenu('tuggles', 'inout', 4, true, false),
         new ContentButtonMenu('qrCode', 'qr', 5, true, false),
     ]),
-    new SidebarOptionButtonMenu('showList', 'navbar', 6, true, false)
+    new SidebarOptionButtonMenu('showList', 'navbar', 6, true, false, 'sidebar')
 ]
