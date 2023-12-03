@@ -62,6 +62,12 @@ export class NavigationInferiorComponent implements OnInit, INavigation {
 
   ngOnInit(): void {
     this.centerButtons()
+    window.addEventListener('resize', () => {
+      if (this.activeButton) {
+        this.emitContentHeight.emit(parseFloat(getComputedStyle(this.options.nativeElement).height))
+        this.centerButtons()
+      }
+    })
   }
 
   centerButtons(uncheckSidebar?: boolean) {

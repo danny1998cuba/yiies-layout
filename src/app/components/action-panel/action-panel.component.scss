@@ -9,7 +9,7 @@
 
     &.left {
         flex-direction: column-reverse;
-        bottom: 55px;
+        bottom: calc(calc(100svh - 100dvh) + 55px);
         left: 0;
         z-index: 11;
         transition: width 200ms;
@@ -18,7 +18,7 @@
             width: calc(100% - 45px) !important;
             height: 0;
             right: 0;
-            bottom: 0;
+            bottom: calc(100svh - 100dvh);
             border-top-right-radius: 0.75rem;
             border-bottom-right-radius: 0.75rem;
 
@@ -28,7 +28,7 @@
 
     &.right {
         flex-direction: column-reverse;
-        bottom: 55px;
+        bottom: calc(calc(100svh - 100dvh) + 55px);
         right: 0;
         z-index: 11;
         transition: width 200ms;
@@ -37,7 +37,7 @@
             width: calc(100% - 45px) !important;
             height: 0;
             left: 0;
-            bottom: 0;
+            bottom: calc(100svh - 100dvh);
             border-top-left-radius: 0.75rem;
             border-bottom-left-radius: 0.75rem;
 
@@ -66,7 +66,7 @@
     &.bottom {
         padding-bottom: 45px;
         flex-direction: column;
-        bottom: 0;
+        bottom: calc(100svh - 100dvh);
         left: 0;
         z-index: 11;
         transition: height 200ms;
@@ -74,7 +74,7 @@
         .ap-content {
             height: 75dvh;
             left: 0;
-            bottom: 45px;
+            bottom: calc(calc(100svh - 100dvh) + 45px);
             border-top-right-radius: 0.75rem;
             border-top-left-radius: 0.75rem;
 
@@ -110,7 +110,7 @@
 
         &.bottom {
             .ap-content {
-                bottom: 0;
+                bottom: calc(100svh - 100dvh);
                 padding-bottom: 45px;
             }
         }

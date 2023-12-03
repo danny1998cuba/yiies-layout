@@ -60,7 +60,7 @@ body {
     }
 
     &.top {
-        top: calc(100svh - 100dvh);
+        top: 0;
 
         &.hidden-footer {
             transform: translateX(-100%);

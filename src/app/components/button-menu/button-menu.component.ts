@@ -14,8 +14,10 @@ export class ButtonMenuComponent implements OnInit {
 
   @HostListener('click', ['$event'])
   click($event: PointerEvent) {
+    console.log('clicked', this.isAction);
     $event.stopPropagation()
-    this.expand('click')
+    if (this.collapsed) this.expand('click')
+    else this.collapse(null, 'click')
     if (this.isAction) this.action(this.buttonData, $event)
   }
 
@@ -46,7 +48,7 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isAction = !this.buttonData.subOptions || this.buttonData.subOptions.length === 0
+    this.isAction = this.buttonData.type === ButtonMenuType.ACTION
     this.index = this.buttonData.index
     this.class += (this.position === POSITION.TOP || this.position === POSITION.BOTTOM) ? ' flex-row' : ' flex-column-reverse'
     this.class += ` ${this.position}`
@@ -83,6 +85,7 @@ export class ButtonMenuComponent implements OnInit {
   }
 
   expand(from: 'click' | 'remote') {
+    console.log('expanding');
     this.collapsed = false
     this.element.nativeElement.classList.add('ellapsed')
     if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: false })

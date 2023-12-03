@@ -57,7 +57,11 @@ export class NavigationLateralComponent implements OnInit, INavigation {
     private ref: ElementRef
   ) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    window.addEventListener('resize', () => {
+      if (this.activeButton) this.emitContentHeight.emit(parseFloat(getComputedStyle(this.options.nativeElement).height))
+    })
+  }
 
   public toggleOpen() {
     this.opened = !this.opened

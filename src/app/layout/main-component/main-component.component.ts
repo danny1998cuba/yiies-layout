@@ -81,6 +81,24 @@ export class MainComponentComponent implements OnInit {
       this._orientation = e.matches ? 'portrait' : 'landscape'
     });
 
+    window.addEventListener('resize', () => {
+      const vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+      let factor = 98
+
+      if (this.selectedButton?.type === ButtonMenuType.SIDEBAR) {
+        if ((this.navLeft.isOpen || this.navRight.isOpen)) {
+          factor = 55
+        } else {
+          if (this._orientation === 'portrait') {
+            factor = 55
+          } else {
+            factor = 0
+          }
+        }
+      }
+      this.navHeight = `${vpHeight - factor}px`
+    })
+
     this._cdr.detectChanges()
   }
 
