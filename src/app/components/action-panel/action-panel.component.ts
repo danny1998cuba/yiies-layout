@@ -29,14 +29,16 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
 
   _orientation!: 'portrait' | 'landscape'
   @Input() set orientation(val: 'portrait' | 'landscape') {
+    this._orientation = val
+    this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+    this.vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
+
     if (!!this._data) {
       this.styleInner = {}
       this.height = ''
       this.initialize()
+      this.adjustHeight()
     }
-    this._orientation = val
-    this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
-    this.vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
   }
 
   @Input('min-heigh-opened') minHeightOpened: string = ''
@@ -56,8 +58,19 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+    window.addEventListener('resize', () => {
+      this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
+      this.vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
+
+      if (!!this._data) {
+      }
+
+      this.adjustHeight()
+    })
+
     this.vpHeight = parseFloat(getComputedStyle(document.documentElement).height)
     this.vpWidth = parseFloat(getComputedStyle(document.documentElement).width)
+
     this.initialize();
   }
 
@@ -71,7 +84,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
         if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
           const translate = (this.vpHeight - 55 - this._data.bound.bottom)
 
-          this.styleInner['--translate'] = `-${translate}px`
+          this.styleInner['--translate'] = `${translate * -1}px`
           this.styleInner['minHeight'] = `${this._data.bound.height}px`
           this.styleInner['height'] = `${this._data.bound.height}px`
         }
@@ -102,69 +115,77 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
       if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
         if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
           setTimeout(() => {
-            const translate = (this.vpHeight - 55 - (this._data ? this._data.bound.bottom : 0))
-            const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
-            const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
-
-            let contentHeight = this.component.nativeElement.offsetHeight
-            if (this.component.nativeElement?.style?.height) {
-              contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-            } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-              contentHeight = this.component.nativeElement.offsetHeight
-            } else {
-              contentHeight = this.component.nativeElement.scrollHeight
-            }
-            let height = 0
-
-            if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
-              height = contentHeight > max ? max : contentHeight
-            } else if (parseFloat(this.minHeightOpened) < min) {
-              height = min
-            } else {
-              height = parseFloat(this.minHeightOpened)
-            }
-            this.emitHeight.emit(height)
-
-            this.styleInner['height'] = `${height}px`
-            this.styleInner['bottom'] = this.styleInner['--translate'] ? this.styleInner['--translate'] : `-${translate}px`
-            this.height = `${height}px`
+            this._resizeLateral()
           }, 150);
         } else {
           setTimeout(() => {
-            const translate = this._data ? this._data.bound.left : 0
-            const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-            const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
-
-            let contentHeight = this.component.nativeElement.offsetHeight
-            if (this.component.nativeElement?.style?.height) {
-              contentHeight = parseFloat(this.component.nativeElement?.style?.height)
-            } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
-              contentHeight = this.component.nativeElement.offsetHeight
-            } else {
-              contentHeight = this.component.nativeElement.scrollHeight
-            }
-            let height = 0
-
-            if (contentHeight > min) {
-              height = contentHeight > max ? max : contentHeight
-              this.emitHeight.emit(height)
-            } else if (parseFloat(this.minHeightOpened) < min) {
-              height = min
-              this.emitHeight.emit(height)
-            } else {
-              height = parseFloat(this.minHeightOpened)
-            }
-
-            this.styleInner['height'] = `${height - 45}px`
-            this.styleInner['left'] = `-${translate}px`
-            this.styleInner['width'] = `${this.vpWidth}px`
-            this.styleInner['minWidth'] = `${this.vpWidth}px`
-            this.height = `${height}px`
+            this._resizeTopBottom()
           }, 150);
         }
       }
     }
     this._cdr.detectChanges()
+  }
+
+  private _resizeTopBottom() {
+    const translate = this._data ? this._data.bound.left : 0
+    const min = this.minPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+    const max = this.maxPercent[this._orientation] * (this.vpHeight - 55 - (this._position === POSITION.LEFT || this._position === POSITION.RIGHT ? 43 : 0))
+
+    let contentHeight = this.component.nativeElement.offsetHeight
+    if (this.component.nativeElement?.style?.height) {
+      contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+    } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+      contentHeight = this.component.nativeElement.offsetHeight
+    } else {
+      contentHeight = this.component.nativeElement.scrollHeight
+    }
+    let height = 0
+
+    if (contentHeight > min) {
+      height = contentHeight > max ? max : contentHeight
+    } else if (parseFloat(this.minHeightOpened) < min) {
+      height = min
+    } else {
+      height = parseFloat(this.minHeightOpened)
+    }
+    this.emitHeight.emit(height)
+
+    this.styleInner['height'] = `${height - 45}px`
+    this.styleInner['left'] = `-${translate}px`
+    this.styleInner['width'] = `${this.vpWidth}px`
+    this.styleInner['minWidth'] = `${this.vpWidth}px`
+    this.styleInner['bottom.px'] = 45
+    this.height = `${height}px`
+  }
+
+  private _resizeLateral() {
+    const translate = (this.vpHeight - 55 - (this._data ? this._data.bound.bottom : 0))
+    const min = this.minPercent[this._orientation] * (this.vpHeight - 98)
+    const max = this.maxPercent[this._orientation] * (this.vpHeight - 98)
+
+    let contentHeight = this.component.nativeElement.offsetHeight
+    if (this.component.nativeElement?.style?.height) {
+      contentHeight = parseFloat(this.component.nativeElement?.style?.height)
+    } else if (this.component.nativeElement.offsetHeight > this.component.nativeElement.scroll) {
+      contentHeight = this.component.nativeElement.offsetHeight
+    } else {
+      contentHeight = this.component.nativeElement.scrollHeight
+    }
+    let height = 0
+
+    if (contentHeight > min && contentHeight > parseFloat(this.minHeightOpened)) {
+      height = contentHeight > max ? max : contentHeight
+    } else if (parseFloat(this.minHeightOpened) < min) {
+      height = min
+    } else {
+      height = parseFloat(this.minHeightOpened)
+    }
+    this.emitHeight.emit(height)
+
+    this.styleInner['height'] = `${height}px`
+    this.styleInner['bottom'] = this.styleInner['--translate'] ? this.styleInner['--translate'] : `${translate * -1}px`
+    this.height = `${height}px`
   }
 
   click($event: Event) {
