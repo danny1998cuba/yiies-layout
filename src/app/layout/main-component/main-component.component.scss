@@ -99,7 +99,7 @@
         position: absolute !important;
         content: '';
         top: 0;
-        left: calc(100svw - 100dvw);
+        left: 0;
         height: calc(45px + 0.5rem);
         width: 100%;
         overflow-x: auto;
@@ -134,7 +134,7 @@
         position: absolute !important;
         content: '';
         bottom: calc(100svh - 100dvh);
-        left: calc(100svw - 100dvw);
+        left: 0;
         height: calc(45px + 0.5rem);
         width: 100%;
         overflow-x: auto;
@@ -213,7 +213,7 @@
 
     &.side {
         left: unset;
-        right: calc(100svw - 100dvw);
+        right: 0;
         width: 20px;
         height: 55px;
         display: flex;
@@ -228,7 +228,7 @@
     width: calc(100% - 110px);
     top: 55px;
     bottom: 55px;
-    left: calc(100svw - 100dvw);
+    left: 0;
     margin: 0 55px;
 
     .form {
