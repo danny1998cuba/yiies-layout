@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, 
 import { cloneDeep } from 'lodash-es';
 import { ButtonMenuType } from 'src/app/data/button-menu.model';
 import { IActionButton, POSITION, Position } from 'src/app/data/utils.model';
-const actual = require('actual')
 
 @Component({
   selector: 'app-action-panel',
