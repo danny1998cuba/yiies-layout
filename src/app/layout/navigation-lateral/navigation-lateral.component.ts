@@ -154,7 +154,7 @@ export class NavigationLateralComponent implements OnInit, INavigation {
             // Scroll to the bottom when opening
             const options_pane = document.getElementById(`options_${this.position}`)
             if (options_pane) {
-              options_pane.scrollIntoView({ behavior: 'smooth' }) // FIXME: Safari scrolls different
+              options_pane.scrollIntoView({ behavior: 'smooth' }) // FIXME: Chrome iPhone scrolls different
             }
           }, 350);
         }, 50);

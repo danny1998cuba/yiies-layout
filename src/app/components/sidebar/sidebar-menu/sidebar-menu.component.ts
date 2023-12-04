@@ -134,14 +134,11 @@ export class SidebarMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     private _fb: FormBuilder,
     private _service: ServiceService
   ) {
-    console.log('building menus');
-
     this.menu$ = new BehaviorSubject<any[]>([]);
     this.accessProfileMenu$ = new BehaviorSubject<any[]>([]);
     this.accessProfileToggle$ = new BehaviorSubject<any[]>([]);
 
     _service.getAuthUser().pipe(tap((data: any) => {
-      console.log('got user');
       this.userData = data;
       this.accountSellerCompleted = !!data ? this.userData?.seller_data?.active : null;
       this.fruvegType = !!data ? (this.userData?.chain_store_fruveg ? 'CHAIN' : 'SHOP') : null;
@@ -211,12 +208,9 @@ export class SidebarMenuComponent implements OnInit, OnDestroy, AfterViewInit {
           tour: c_a_seller?.tour | 0,
         };
         this.contractAmount = { buyer, seller };
-
-        console.log('load user data');
       } else {
         document.documentElement.style.setProperty('--kt-yiies-active-profile-front-color', 'var(--kt-blue-yiies)');
         document.documentElement.style.setProperty('--kt-yiies-active-profile-bg-color', 'var(--kt-blue-yiies-light)');
-        console.log('no user data');
         this._buildMenu();
       }
       this._cdr.markForCheck();
@@ -244,7 +238,6 @@ export class SidebarMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _buildMenu() {
-    console.log('building menus in method');
     this._buildAccesProfileMenu();
     this._buildMyPostMenu();
     this._buildMyOrderMenu();
@@ -382,7 +375,6 @@ export class SidebarMenuComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }
 
-    console.log('all built');
     this.menu$.next(this.menu);
   }
 

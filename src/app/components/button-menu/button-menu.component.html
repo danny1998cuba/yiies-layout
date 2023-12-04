@@ -15,18 +15,44 @@
     </div>
 </div>
 
-<div class="bm-collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">
-    <div class="d-flex gap-3 bm-options align-items-center" [ngClass]="{
-            'flex-row': direction === 'horizontal',
-            'flex-column-reverse': direction === 'vertical'
-        }" [ngStyle]="optionsStyle" #options (click)="$event.stopPropagation()">
+<div *ngIf="direction === 'horizontal'" class="bm-collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">
+    <div class="d-flex gap-3 bm-options align-items-center flex-row" [ngStyle]="optionsStyle" #options
+        (click)="$event.stopPropagation()">
         <div *ngFor="let item of buttonData.subOptions" (click)="action(item, $event)" class="bm-option"
-            [class.active]="item.active"
+            [class.active]="item.active" [@hideMenuHorizontal]="item.show ? 'opened-menu' : 'hidden-menu'"
             style="--nav-lat-position: {{position === 'left' || position === 'top' ? 1 : -1}}">
-            <div class="bm-icon-wrapper">
-                <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
-            </div>
-            <div class="text" *ngIf="!!item.name">{{item.name}}</div>
+            <ng-container *ngIf="item.type !== ButtonMenuType.MENU; else innerMenu">
+                <div class="bm-icon-wrapper">
+                    <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
+                </div>
+                <div class="text" *ngIf="!!item.name">{{item.name}}</div>
+            </ng-container>
+            <ng-template #innerMenu>
+                <app-button-menu [button-data]="item" [direction]="direction" [position]="position" class="bm-inner"
+                    (expanding)="togglingInner($event, 'event')"
+                    (selectedAction)="selectedAction.emit($event)"></app-button-menu>
+            </ng-template>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="direction === 'vertical'" class="bm-collapse-wrapper" [ngClass]="{'ellapsed': !collapsed}">
+    <div class="d-flex gap-3 bm-options align-items-center flex-column-reverse" [ngStyle]="optionsStyle" #options
+        (click)="$event.stopPropagation()">
+        <div *ngFor="let item of buttonData.subOptions" (click)="action(item, $event)" class="bm-option"
+            [class.active]="item.active" [@hideMenuVartical]="item.show ? 'opened-menu' : 'hidden-menu'"
+            style="--nav-lat-position: {{position === 'left' || position === 'top' ? 1 : -1}}">
+            <ng-container *ngIf="item.type !== ButtonMenuType.MENU; else innerMenu">
+                <div class="bm-icon-wrapper">
+                    <app-icon [icon]="item.icon" class="svg-icon svg-icon-2x"></app-icon>
+                </div>
+                <div class="text" *ngIf="!!item.name">{{item.name}}</div>
+            </ng-container>
+            <ng-template #innerMenu>
+                <app-button-menu [button-data]="item" [direction]="direction" [position]="position" class="bm-inner"
+                    (expanding)="togglingInner($event, 'event')"
+                    (selectedAction)="selectedAction.emit($event)"></app-button-menu>
+            </ng-template>
         </div>
     </div>
 </div>
