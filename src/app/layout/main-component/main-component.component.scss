@@ -225,11 +225,12 @@
     position: absolute;
     z-index: 2;
     content: '';
-    width: calc(100% - 110px);
+    width: calc(100dvw - 110px);
     top: 55px;
-    bottom: 55px;
+    max-height: calc(100dvh - 110px);
     left: 0;
     margin: 0 55px;
+    overflow: scroll;
 
     .form {
         display: flex;

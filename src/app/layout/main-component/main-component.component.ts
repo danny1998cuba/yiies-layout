@@ -108,6 +108,7 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigations(options: { position: Position, opened: boolean }) {
+    // TODO: Sync when opening an inner button
     if (options.opened) this.previousOpenedPosition = cloneDeep(this.openedPosition)
     this.openedPosition = options.opened ? options.position : options.position === this.previousOpenedPosition ? this.openedPosition : null
 
@@ -251,7 +252,7 @@ export class MainComponentComponent implements OnInit {
 
   // Content Pane
   updateHeightAfterContentChange(height: number) {
-    this.innerHeightChanged(height); // FIXME: Safari doesn't calculate it right when changing orientation.
+    this.innerHeightChanged(height); // FIXME: Chrome iPhone doesn't calculate it right when changing orientation.
     const h = height - 60.4 - remToPixels(1.5) - remToPixels(0.375 * 2)
     const nav = this.getNavigationByPosition(this.openedPosition)
 
@@ -266,35 +267,37 @@ export class MainComponentComponent implements OnInit {
     const nav = this.getNavigationByPosition(this.openedPosition)
 
     if (nav) {
-      console.log('I have nav');
       if (data) {
-        if (!this.activeButton) {
-          console.log('No active');
-          this.activeButton = data
-          nav.activeButton = data
-          data.button.active = true
-          this.loadContent()
-          nav.toggleContent(data)
+        if (data.button.type === ButtonMenuType.MENU) {
+          this._nulleable(data, nav)
+        } else if (!this.activeButton) {
+          this._active(data, nav)
         } else {
           if (data.button.token !== this.activeButton.button.token) {
-            console.log('Different token');
             clearActive(this.menus)
-            this.activeButton = data
-            nav.activeButton = data
-            data.button.active = true
-            this.loadContent()
-            nav.toggleContent(data)
+            this._active(data, nav)
           } else {
-            console.log('Same token');
-            this.activeButton = null
-            nav.activeButton = null
-            data.button.active = false
-            this.loadContent()
-            nav.toggleContent(null)
+            this._nulleable(data, nav)
           }
         }
       }
     }
+  }
+
+  private _nulleable(data: IActionButton, nav: INavigation) {
+    this.activeButton = null
+    nav.activeButton = null
+    data.button.active = false
+    this.loadContent()
+    nav.toggleContent(null)
+  }
+
+  private _active(data: IActionButton, nav: INavigation) {
+    this.activeButton = data
+    nav.activeButton = data
+    data.button.active = true
+    this.loadContent()
+    nav.toggleContent(data)
   }
 
   onContentStyleChange(height: number) {

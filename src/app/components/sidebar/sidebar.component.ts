@@ -15,10 +15,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit(): void {
-    console.log('creating sidebar');
-  }
-
+  ngOnInit(): void { }
 
   ngOnDestroy() { }
 }

@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('../node_modules/bootstrap/dist/css/bootstrap.min.css');
+@import './assets/scss/button_menu';
 
 * {
     box-sizing: border-box;
@@ -180,4 +181,47 @@ $font-sizes: (
     --kt-blue-madu-light: #bdecff;
     --kt-yiies-orange: #ff5e00;
     --kt-yiies-orange-light: rgb(255, 218, 196);
+}
+
+// Sidebar
+.app-sidebar-menu {
+    font-size: 0.9rem;
+
+    .app-sidebar-wrapper {
+        margin: 1rem 0;
+
+        .menu {
+            color: var(--bs-gray-700);
+
+            .menu-item {
+                .menu-link {
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    padding: 0;
+                    flex: 0 0 100%;
+                    padding: .65rem 1rem;
+                    transition: none;
+                    outline: none !important;
+                    text-decoration: none;
+                    color: var(--bs-gray-700);
+                    gap: 0.5rem;
+                    overflow: hidden;
+
+                    .menu-title {
+                        overflow: hidden;
+                    }
+                }
+            }
+
+            .menu-sub {
+                // display: none;
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                flex-direction: column;
+                margin-left: 1rem;
+            }
+        }
+    }
 }

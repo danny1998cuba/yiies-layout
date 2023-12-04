@@ -3809,6 +3809,16 @@ export const menu_example: IButtonMenuData[] = [
         new ContentButtonMenu('share', 'share', 4, true, false),
         new ContentButtonMenu('alertTriangle', 'report', 5, true, false),
         new ContentAndMenuButtonMenu('date', 'calendar', 6, true, false, []),
+        new MenuButtonMenu('addItem', 'posting-inner', 7, true, false, [
+            new ContentButtonMenu('editItem', 'edit-3', 0, true, false),
+            new ContentButtonMenu('editItem', 'edit-x', 1, true, false),
+            new ContentButtonMenu('deleteItem', 'delete-3', 2, true, false),
+            new MenuButtonMenu('addItem', 'posting-inner-2', 3, true, false, [
+                new ContentButtonMenu('addItem', 'add-4', 0, true, false),
+                new ContentButtonMenu('editItem', 'edit-4', 1, true, false),
+                new ContentButtonMenu('deleteItem', 'delete-4', 2, true, false),
+            ]),
+        ]),
     ]),
     new MenuButtonMenu('addItem', 'posting', 2, true, false, [
         new ContentButtonMenu('addItem', 'add', 0, true, false),
