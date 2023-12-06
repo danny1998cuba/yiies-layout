@@ -182,11 +182,21 @@
             &.top {
                 width: 100%;
                 height: 100dvh;
+
+                &.sidebar {
+                    height: calc(100dvh - 55px);
+                    bottom: calc(100svh - 100dvh + 55px);
+                }
             }
 
             &.bottom {
                 width: 100%;
                 height: 100dvh;
+
+                &.sidebar {
+                    height: calc(100dvh - 55px);
+                    top: 55px;
+                }
             }
 
             &.sidebar {

@@ -31,6 +31,7 @@ export class ButtonMenuComponent implements OnInit {
   @Input() position: Position = 'left'
 
   @Output() expanding: EventEmitter<{ token: string, isColladpsed: boolean, parentToken?: string }> = new EventEmitter()
+  @Output() syncInnerExpanding: EventEmitter<{ data: IButtonMenuData | null, isColladpsed: boolean, src: Position }> = new EventEmitter()
   @Output() selectedAction: EventEmitter<IActionButton> = new EventEmitter()
   @Output() selectionEvent: EventEmitter<IButtonMenuData | null> = new EventEmitter()
 
@@ -93,7 +94,10 @@ export class ButtonMenuComponent implements OnInit {
   expand(from: 'click' | 'remote') {
     this.collapsed = false
     this.element.nativeElement.classList.add('ellapsed')
-    if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: false })
+    if (from === 'click') {
+      this.expanding.emit({ token: this.buttonData.token, isColladpsed: false })
+      if (this.isInner) this.syncInnerExpanding.emit({ data: this.buttonData, isColladpsed: false, src: this.position })
+    }
 
     if (this.direction === 'vertical') {
       this.expandedHeight = getComputedStyle(this.options.nativeElement).height
@@ -118,7 +122,10 @@ export class ButtonMenuComponent implements OnInit {
     if ($event) $event.stopPropagation()
     this.collapsed = true
     this.element.nativeElement.classList.remove('ellapsed')
-    if (from === 'click') this.expanding.emit({ token: this.buttonData.token, isColladpsed: true })
+    if (from === 'click') {
+      this.expanding.emit({ token: this.buttonData.token, isColladpsed: true })
+      if (this.isInner) this.syncInnerExpanding.emit({ data: this.buttonData, isColladpsed: true, src: this.position })
+    }
 
     if (this.direction === 'vertical') {
       this.expandedHeight = ''
@@ -171,6 +178,15 @@ export class ButtonMenuComponent implements OnInit {
     const bd = this.buttonData as MenuButtonMenu
     const isDirectParent = bd.subOptions.findIndex(op => op.token === options.token) !== -1
 
+    if (src === 'remote') {
+      if (isDirectParent) {
+        const btn = this.innerButtons.find(bt => bt.buttonData.token === options.token)
+        if (btn) {
+          options.isColladpsed ? btn.collapse(null, 'remote') : btn.expand('remote')
+        }
+      }
+    }
+
     if (!options.isColladpsed) {
       if (!isDirectParent) this.innerOpenend = options.parentToken ? options.parentToken : null
       else this.innerOpenend = options.token
@@ -220,10 +236,39 @@ export class ButtonMenuComponent implements OnInit {
         bound: { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0, toJSON() { return 'JSON' } }
       })
     }
+
+    if (src === 'remote' && !isDirectParent) {
+      const tree = this._getTree(options.token, this.buttonData.subOptions)
+      const btn = this.innerButtons.find(bt => bt.buttonData.token === tree[0])
+      if (btn) {
+        if (options.isColladpsed) {
+          btn.togglingInner(options, 'remote')
+        } else {
+          btn.togglingInner(options, 'remote')
+        }
+      }
+    }
   }
 
   @OnChange('innerOpenend')
   changeInnerOpened() {
     !!this.innerOpenend ? this.ref.nativeElement.classList.add('inner-opened') : this.ref.nativeElement.classList.remove('inner-opened')
+  }
+
+  private _getTree(token: string, list: IButtonMenuData[] | undefined): string[] {
+    if (!list) {
+      return []
+    } else if (list.findIndex(i => i.token === token) !== -1) {
+      return [token]
+    }
+
+    for (let item of list) {
+      const res = this._getTree(token, item.subOptions)
+      if (res.length !== 0) {
+        return [item.token, ...res]
+      }
+    }
+
+    return []
   }
 }
