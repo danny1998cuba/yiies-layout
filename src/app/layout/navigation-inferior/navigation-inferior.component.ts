@@ -142,8 +142,14 @@ export class NavigationInferiorComponent implements OnInit, INavigation {
 
   remoteOpen(token: string, isColladpsed: boolean) {
     const button = this.buttons.find(bt => bt.buttonData.token === token)
-    isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
-    this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+    
+    if (button) {
+      isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
+      this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+    } else {
+      console.log('is inner', token);
+      this.selectedButton?.togglingInner({ token, isColladpsed }, 'remote')
+    }
   }
 
   optionSelected(data: IActionButton) {

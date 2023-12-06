@@ -29,8 +29,8 @@
             </ng-container>
             <ng-template #innerMenu>
                 <app-button-menu [button-data]="item" [direction]="direction" [position]="position" class="bm-inner"
-                    (expanding)="togglingInner($event, 'event')"
-                    (selectedAction)="selectedAction.emit($event)"></app-button-menu>
+                    (expanding)="togglingInner($event, 'event')" (selectedAction)="selectedAction.emit($event)"
+                    (syncInnerExpanding)="syncInnerExpanding.emit($event)"></app-button-menu>
             </ng-template>
         </div>
     </div>
@@ -50,8 +50,8 @@
             </ng-container>
             <ng-template #innerMenu>
                 <app-button-menu [button-data]="item" [direction]="direction" [position]="position" class="bm-inner"
-                    (expanding)="togglingInner($event, 'event')"
-                    (selectedAction)="selectedAction.emit($event)"></app-button-menu>
+                    (expanding)="togglingInner($event, 'event')" (selectedAction)="selectedAction.emit($event)"
+                    (syncInnerExpanding)="syncInnerExpanding.emit($event)"></app-button-menu>
             </ng-template>
         </div>
     </div>

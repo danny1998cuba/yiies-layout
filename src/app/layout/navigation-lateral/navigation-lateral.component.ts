@@ -3,7 +3,6 @@ import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.
 import { animations } from 'src/app/data/animations';
 import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
-import { remToPixels } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -117,8 +116,14 @@ export class NavigationLateralComponent implements OnInit, INavigation {
 
   remoteOpen(token: string, isColladpsed: boolean) {
     const button = this.buttons.find(bt => bt.buttonData.token === token)
-    isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
-    this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+
+    if (button) {
+      isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
+      this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')
+    } else {
+      console.log('is inner', token);
+      this.selectedButton?.togglingInner({ token, isColladpsed }, 'remote')
+    }
   }
 
   optionSelected(data: IActionButton) {

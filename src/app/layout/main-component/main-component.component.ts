@@ -108,7 +108,6 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigations(options: { position: Position, opened: boolean }) {
-    // TODO: Sync when opening an inner button
     if (options.opened) this.previousOpenedPosition = cloneDeep(this.openedPosition)
     this.openedPosition = options.opened ? options.position : options.position === this.previousOpenedPosition ? this.openedPosition : null
 
@@ -161,7 +160,10 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
+    // TODO: Sync when opening an inner button
     this.selectedButton = options.isColladpsed ? null : options.data
+    console.log('sync');
+
 
     switch (options.src) {
       case POSITION.LEFT:

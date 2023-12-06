@@ -6,7 +6,8 @@
     <ng-container *ngFor="let m of _menu">
         <app-button-menu [button-data]="m" (expanding)="toggleVisibilityOnCollapse($event, 'event')"
             [@hideMenuHorizontal]="m.show ? 'opened-menu' : 'hidden-menu'" [position]="position"
-            (selectedAction)="activeButtonChange.emit($event)" [direction]="'horizontal'"></app-button-menu>
+            (selectedAction)="activeButtonChange.emit($event)" [direction]="'horizontal'"
+            (syncInnerExpanding)="menuSelected.emit($event)"></app-button-menu>
     </ng-container>
 </div>
 
