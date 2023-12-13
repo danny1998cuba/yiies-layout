@@ -3,6 +3,7 @@ import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.
 import { animations } from 'src/app/data/animations';
 import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
 import { IActionButton, Position } from 'src/app/data/utils.model';
+import { isDescendant } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-lateral',
@@ -16,10 +17,13 @@ export class NavigationLateralComponent implements OnInit, INavigation {
     $event.stopPropagation()
     this.toggleOpen()
   }
-  @HostListener('document:click') clickOut() {
-    this.opened = false
-    clearActive(this._menu)
-    this.toggleContent(null)
+  @HostListener('document:click', ['$event']) clickOut($event: PointerEvent) {
+    let ap = document.getElementById('action-panel')
+    if (!(ap && isDescendant(ap, $event.target as Element))) {
+      this.opened = false
+      clearActive(this._menu)
+      this.toggleContent(null)
+    }
   }
 
   @Input() position: Position = 'left'
