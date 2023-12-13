@@ -56,6 +56,8 @@ export class NavigationLateralComponent implements OnInit, INavigation {
   activeButton: IActionButton | null = null
   selectedButton: ButtonMenuComponent | null = null
 
+  ButtonMenuType = ButtonMenuType
+
   constructor(
     private ref: ElementRef
   ) { }

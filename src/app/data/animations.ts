@@ -33,4 +33,18 @@ export const animations = [
             animate('0.2s 0.2s')
         ]),
     ]),
+    trigger('buttonBackground', [
+        state('content-closed', style({})),
+        state('content-opened', style({
+            background: 'transparent',
+            backdropFilter: 'brightness(0.7)'
+        })),
+        transition('content-opened => content-closed', [
+            animate('0.2s')
+        ]),
+        transition('content-closed => content-opened', [
+            animate('0.2s 0.25s')
+        ]),
+    ]),
+    
 ]

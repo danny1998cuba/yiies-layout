@@ -16,8 +16,8 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   @Input() set data(val: IActionButton | null) {
     if (!!val && !!this._data) {
       this.styleInner = {}
-      this.height = ''
     }
+    this.height = ''
     this._data = val
     this.initialize()
   }
@@ -52,6 +52,10 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
   minPercent = { portrait: 0.4, landscape: 0.75 }
   maxPercent = { portrait: 0.75, landscape: 1 }
 
+  whenOpenWidth: string = ''
+  whenOpenHeight: string = ''
+  previousType: ButtonMenuType | null = null
+
   constructor(
     private ref: ElementRef,
     private _cdr: ChangeDetectorRef
@@ -80,6 +84,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
 
   initialize() {
     if (!!this._data) {
+      this.previousType = this._data.button.type
       if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
         if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
           const translate = (this.vpHeight - 55 - this._data.bound.bottom)
@@ -87,6 +92,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
           this.styleInner['--translate'] = `${translate * -1}px`
           this.styleInner['minHeight'] = `${this._data.bound.height}px`
           this.styleInner['height'] = `${this._data.bound.height}px`
+          this.whenOpenHeight = `${this._data.bound.height}px`
         }
       } else {
         if (this._data.button.type !== ButtonMenuType.SIDEBAR) {
@@ -95,6 +101,7 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
           this.styleInner['--translate'] = `${translate}px`
           this.styleInner['minWidth'] = `${this._data.bound.width}px`
           this.styleInner['width'] = `${this._data.bound.width}px`
+          this.whenOpenWidth = `${this._data.bound.width}px`
         }
       }
     } else {
@@ -102,10 +109,31 @@ export class ActionPanelComponent implements OnInit, AfterViewInit {
       this.styleInner = {
         '--translate': translate
       }
-      setTimeout(() => {
-        this.styleInner = {}
-        this.height = ''
-      }, 200);
+
+      if (this.previousType !== ButtonMenuType.SIDEBAR) {
+        if (this._position === POSITION.LEFT || this._position === POSITION.RIGHT) {
+          this.styleInner['minHeight'] = this.whenOpenHeight
+          this.styleInner['height'] = this.whenOpenHeight
+        } else {
+          this.styleInner['minWidth'] = this.whenOpenWidth
+          this.styleInner['width'] = this.whenOpenWidth
+        }
+
+        setTimeout(() => {
+          this.height = ''
+          setTimeout(() => {
+            this.styleInner = {}
+            this.whenOpenHeight = ''
+            this.whenOpenWidth = ''
+          }, 200);
+        }, 50);
+      } else {
+        setTimeout(() => {
+          this.styleInner = {}
+          this.height = ''
+        }, 200);
+      }
+      this.previousType = null
     }
     this._cdr.detectChanges()
   }
