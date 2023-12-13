@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChildren, AfterViewInit, AfterContentInit, ViewChildren, HostBinding } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, QueryList, ContentChildren, AfterViewInit, AfterContentInit, ViewChildren, HostBinding, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationLateralComponent } from '../navigation-lateral/navigation-lateral.component';
 import { menu_example } from 'src/app/data/mock-data';
@@ -51,7 +51,8 @@ export class MainComponentComponent implements OnInit {
 
   constructor(
     private _route: ActivatedRoute,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private _ref: ElementRef
   ) {
     this.form = new FormGroup({
       navigations: new FormArray([
@@ -160,10 +161,8 @@ export class MainComponentComponent implements OnInit {
   }
 
   syncLateralnavigationsOptions(options: { data: IButtonMenuData | null, isColladpsed: boolean, src: Position }) {
-    // TODO: Sync when opening an inner button
     this.selectedButton = options.isColladpsed ? null : options.data
-    console.log('sync');
-
+    if (options.isColladpsed && this.activeButton && this.activeButton.button.type !== ButtonMenuType.SIDEBAR) this.onActiveButtonChange(this.activeButton)
 
     switch (options.src) {
       case POSITION.LEFT:
@@ -306,7 +305,15 @@ export class MainComponentComponent implements OnInit {
     if (height === 0) {
       this.styleContent = {}
     } else {
-      this.styleContent['minHeight'] = `${height}px`
+      if (this.activeButton?.button.type !== ButtonMenuType.SIDEBAR) this.styleContent['minHeight'] = `${height}px`
+      this.content.adjustHeight()
+    }
+  }
+
+  onContentStyleChangeTB(height: number) {
+    if (height === 0) {
+      this.styleContent = {}
+    } else {
       this.content.adjustHeight()
     }
   }

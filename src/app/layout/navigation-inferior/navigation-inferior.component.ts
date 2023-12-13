@@ -3,7 +3,7 @@ import { ButtonMenuComponent } from 'src/app/components/button-menu/button-menu.
 import { animations } from 'src/app/data/animations';
 import { ButtonMenuType, IButtonMenuData, INavigation, clearActive } from 'src/app/data/button-menu.model';
 import { Position, IActionButton } from 'src/app/data/utils.model';
-import { remToPixels } from 'src/app/utils/utils';
+import { isDescendant, remToPixels } from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-navigation-inferior',
@@ -17,12 +17,15 @@ export class NavigationInferiorComponent implements OnInit, INavigation {
     $event.stopPropagation()
     this.toggleOpen()
   }
-  @HostListener('document:click') clickOut() {
-    this.opened = false
-    this.ref.nativeElement.classList.add('side')
-    clearActive(this._menu)
-    this.toggleContent(null)
-    this.clicked.emit({ position: this.position, opened: false })
+  @HostListener('document:click', ['$event']) clickOut($event: PointerEvent) {
+    let ap = document.getElementById('action-panel')
+    if (!(ap && isDescendant(ap, $event.target as Element))) {
+      this.opened = false
+      this.ref.nativeElement.classList.add('side')
+      clearActive(this._menu)
+      this.toggleContent(null)
+      this.clicked.emit({ position: this.position, opened: false })
+    }
   }
 
   protected _menu!: IButtonMenuData[]
@@ -142,7 +145,7 @@ export class NavigationInferiorComponent implements OnInit, INavigation {
 
   remoteOpen(token: string, isColladpsed: boolean) {
     const button = this.buttons.find(bt => bt.buttonData.token === token)
-    
+
     if (button) {
       isColladpsed ? button?.collapse(null, 'remote') : button?.expand('remote')
       this.toggleVisibilityOnCollapse({ token, isColladpsed }, 'remote')

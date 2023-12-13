@@ -21,15 +21,15 @@
     class="navigation top {{!!activeButton ? activeButton.button.type : ''}}" [orientation]="_orientation" #nav_top
     [class.side]="showTopFooter" [isSide]="showTopFooter" (clicked)="syncLateralnavigations($event)"
     (menuSelected)="syncLateralnavigationsOptions($event)" (emitHeight)="innerHeightChanged($event)"
-    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChange($event)"
+    (activeButtonChange)="onActiveButtonChange($event)" (emitContentHeight)="onContentStyleChangeTB($event)"
     [menu]="menus"></app-navigation-superior>
 <app-navigation-inferior *ngIf="isActiveNavigation('bottom')"
     class="navigation bottom side {{!!activeButton ? activeButton.button.type : ''}}" [orientation]="_orientation"
     #nav_bottom (clicked)="syncLateralnavigations($event)" (menuSelected)="syncLateralnavigationsOptions($event)"
     (emitHeight)="innerHeightChanged($event)" (activeButtonChange)="onActiveButtonChange($event)"
-    (emitContentHeight)="onContentStyleChange($event)" [menu]="menus"></app-navigation-inferior>
+    (emitContentHeight)="onContentStyleChangeTB($event)" [menu]="menus"></app-navigation-inferior>
 
-<app-action-panel
+<app-action-panel id="action-panel"
     class="action-panel {{!!activeButton ? activeButton.button.type : ''}} {{!!openedPosition ? openedPosition : ''}}"
     [position]="openedPosition" (emitHeight)="updateHeightAfterContentChange($event)" [orientation]="_orientation"
     [data]="activeButton" [ngStyle]="styleContent" [min-heigh-opened]="styleContent['minHeight']" #content>
